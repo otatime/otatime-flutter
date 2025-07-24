@@ -10,10 +10,13 @@ dependencies:
   animations: ^2.0.11
   flutter:
     sdk: flutter
+  flutter_appbar: ^1.6.1
   flutter_cached_transition: ^1.0.1+1
+  flutter_refresh_indicator: ^1.1.1
   flutter_svg: ^2.2.0
   flutter_touch_scale: ^1.1.1+1
   shared_preferences: ^2.5.3
+  transparent_image: ^2.0.1
 
 dev_dependencies:
   flutter_test:

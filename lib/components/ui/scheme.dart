@@ -6,11 +6,13 @@ import 'package:otatime_flutter/components/settings/user/theme_setting.dart';
 abstract class Scheme {
   Color get primary;
   Color get background;
+  Color get deepground;
   Color get rearground;
   Color get foreground;
   Color get foreground2;
   Color get foreground3;
   Color get border;
+  Color get placeholder;
 
   static final Color transparent = Color.fromRGBO(0, 0, 0, 0);
   static final Color white = Color.fromRGBO(255, 255, 255, 1);
@@ -36,19 +38,23 @@ abstract class Scheme {
 class LightScheme extends Scheme {
   @override Color get primary => Color(0xFF0077FF);
   @override Color get background => Color.fromRGBO(255, 255, 255, 1);
-  @override Color get rearground => Color.fromRGBO(240, 240, 240, 1);
+  @override Color get deepground => Color.fromRGBO(245, 245, 245, 1);
+  @override Color get rearground => Color.fromRGBO(235, 235, 235, 1);
   @override Color get foreground => Scheme.black;
   @override Color get foreground2 => Color.fromRGBO(100, 100, 100, 1);
   @override Color get foreground3 => Color.fromRGBO(150, 150, 150, 1);
+  @override Color get placeholder => rearground;
   @override Color get border => Color.fromRGBO(0, 0, 0, 0.1);
 }
 
 class DarkScheme extends Scheme {
   @override Color get primary => Color(0xFF0077FF);
   @override Color get background => Color.fromRGBO(10, 10, 12, 1);
-  @override Color get rearground => Color.fromRGBO(30, 30, 32, 1);
+  @override Color get deepground => Color.fromRGBO(30, 30, 32, 1);
+  @override Color get rearground => Color.fromRGBO(40, 40, 42, 1);
   @override Color get foreground => Scheme.white;
-  @override Color get foreground2 => Color.fromRGBO(200, 200, 200, 1);
-  @override Color get foreground3 => Color.fromRGBO(150, 150, 150, 1);
+  @override Color get foreground2 => Color.fromRGBO(150, 150, 150, 1);
+  @override Color get foreground3 => Color.fromRGBO(100, 100, 100, 1);
+  @override Color get placeholder => rearground;
   @override Color get border => Color.fromRGBO(255, 255, 255, 0.1);
 }

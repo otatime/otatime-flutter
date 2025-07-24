@@ -36,8 +36,8 @@ class _NavigationPageState extends State<NavigationPage> {
       children: [
         Expanded(
           child: CachedTransition(
-            duration: Animes.transition.duration,
-            curve: Animes.transition.curve,
+            duration: Animes.pageTransition.duration,
+            curve: Animes.pageTransition.curve,
             transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
               return SharedAxisTransition(
                 animation: primaryAnimation,
