@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:otatime_flutter/components/settings/settings_binding.dart';
+import 'package:otatime_flutter/components/ui/scheme.dart';
+import 'package:otatime_flutter/pages/navigation.dart';
+import 'package:otatime_flutter/widgets/designed.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SettingsBinding.initializeAll();
+
+  runApp(const MainApp());
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  static TransitionBuilder get defaultBuilder => (context, child) {
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Designed(child: child!),
+    );
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      // 상태 표시줄 스타일은 테마나 사용자 설정에 따라 유동적으로 변경될 수 있으므로,
+      // 이를 적절히 반영하기 위해 루트 위젯이 빌드되면 다음 프레임에서 이를 설정합니다.
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Scheme.transparent,
+        statusBarIconBrightness: Scheme.current is DarkScheme
+          ? Brightness.light
+          : Brightness.dark
+      ));
+    });
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      color: Scheme.current.primary,
+      theme: ThemeData(
+        primaryColor: Scheme.current.primary,
+        primaryColorLight: Scheme.current.primary,
+        primaryColorDark: Scheme.current.primary,
+
+        // 'RefreshIndicator'에 대한 테마 설정.
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: Scheme.current.foreground,
+          refreshBackgroundColor: Scheme.current.rearground,
+        ),
+      ),
+      home: NavigationPage(),
+      builder: defaultBuilder,
+    );
+  }
+}
