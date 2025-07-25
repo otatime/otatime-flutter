@@ -3,47 +3,41 @@ import 'package:flutter_appbar/flutter_appbar.dart';
 import 'package:flutter_refresh_indicator/flutter_refresh_indicator.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
+import 'package:otatime_flutter/components/service/service.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/extensions/string.dart';
+import 'package:otatime_flutter/models/post.dart';
+import 'package:otatime_flutter/pages/home/home_service.dart';
 import 'package:otatime_flutter/widgets/app_image.dart';
 import 'package:otatime_flutter/widgets/circular_button.dart';
+import 'package:otatime_flutter/widgets/disableable.dart';
+import 'package:otatime_flutter/widgets/service_builder.dart';
 import 'package:otatime_flutter/widgets/skeleton.dart';
-
-class _Model {
-  const _Model({
-    required this.title,
-    required this.descrpition,
-    required this.coverUrl,
-    required this.startedAt,
-    required this.endedAt,
-    required this.tags,
-  });  
-
-  final String title;
-  final String descrpition;
-  final String coverUrl;
-  final String startedAt;
-  final String endedAt;
-  final List<String> tags;
-}
+import 'package:otatime_flutter/widgets/transition.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AppBarConnection(
-      appBars: [
-        AppBar(behavior: _TopAppBar.createAppBarBehavior(), body: _TopAppBar()),
-        AppBar(behavior: _BottomAppBar.createAppBarBehavior(), body: _BottomAppBar()),
-      ],
-      child: RefreshIndicator(
-        onRefresh: () {
-          return Future.delayed(Duration(milliseconds: 300));
-        },
-        child: _ScrollView(),
-      ),
+    return ServiceBuilder(
+      serviceBuilder: (_) => HomeService(),
+      builder: (context, service) {
+        return AppBarConnection(
+          appBars: [
+            AppBar(behavior: _TopAppBar.createAppBarBehavior(), body: _TopAppBar()),
+            AppBar(behavior: _BottomAppBar.createAppBarBehavior(), body: _BottomAppBar()),
+          ],
+          child: RefreshIndicator(
+            onRefresh: service.refresh,
+            child: Disableable(
+              activating: service.status != ServiceStatus.refresh,
+              child: _ScrollView(service: service),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -150,43 +144,32 @@ class _Category extends StatelessWidget {
 }
 
 class _ScrollView extends StatelessWidget {
-  const _ScrollView({super.key});
+  const _ScrollView({
+    super.key,
+    required this.service,
+  });
 
-  // ignore: library_private_types_in_public_api
-  static List<_Model> get items => [
-    _Model(
-      title: "NIKKE - 2025년 8월 9일부터 개최!",
-      descrpition: "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
-      coverUrl: "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_5bf8138c70b052df43c4ab7c39cc8992a2422834-3840x2160-ori_s_80_50_ori_q_80.webp",
-      startedAt: "2025년 8월 9일",
-      endedAt: "2025년 8월 12일",
-      tags: ["태그 1", "태그 2", "태그 3"]
-    ),
-    _Model(
-      title: "NIKKE - 2025년 8월 9일부터 개최!",
-      descrpition: "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
-      coverUrl: "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_18c203ef6354e344cee4db14427fe22b556d025f-3840x2160-ori_s_80_50_ori_q_80.webp",
-      startedAt: "2025년 8월 9일",
-      endedAt: "2025년 8월 12일",
-      tags: ["태그 1", "태그 2", "태그 3"]
-    ),
-    _Model(
-      title: "NIKKE - 2025년 8월 9일부터 개최!",
-      descrpition: "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
-      coverUrl: "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_26527c23c46bce436b83f65f8e9f3c6da3521017-3840x2160-ori_s_80_50_ori_q_80.webp",
-      startedAt: "2025년 8월 9일",
-      endedAt: "2025년 8월 12일",
-      tags: ["태그 1", "태그 2", "태그 3"]
-    ),
-  ];
+  final HomeService service;
 
   @override
   Widget build(BuildContext context) {
-    return wrapperWidget(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return _ScrollItem(model: items[index]);
-      },
+    return Transition(
+      child: Builder(
+        // 로드 상태 여부가 변경될 때 전환 애니메이션 적용.
+        key: ValueKey(service.isLoading),
+        builder: (context) {
+          if (service.isLoading) return skeletonWidget();
+
+          final List<PostModel> posts = service.data.posts;
+
+          return wrapperWidget(
+            itemCount: posts.length,
+            itemBuilder: (context, index) {
+              return _ScrollItem(model: posts[index]);
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -218,7 +201,7 @@ class _ScrollItem extends StatelessWidget {
     required this.model,
   });
 
-  final _Model model;
+  final PostModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +221,7 @@ class _ScrollItem extends StatelessWidget {
             AspectRatio(
               aspectRatio: 3 / 1,
               child: AppImage.network(
-                url: model.coverUrl,
+                url: model.imageUrl,
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: double.infinity,
@@ -262,16 +245,16 @@ class _ScrollItem extends StatelessWidget {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     spacing: 5,
                     children: [
-                      dateWidget(model.startedAt),
+                      dateWidget(model.startDate),
                       Text("부터", style: TextStyle(color: Scheme.current.foreground3)),
-                      dateWidget(model.endedAt),
+                      dateWidget(model.endDate),
                       Text("까지", style: TextStyle(color: Scheme.current.foreground3)),
                     ],
                   ),
 
                   // 행사 소개
                   Text(
-                    model.descrpition,
+                    model.summary,
                     style: TextStyle(fontSize: 12, color: Scheme.current.foreground2),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -281,7 +264,10 @@ class _ScrollItem extends StatelessWidget {
                   Wrap(
                     spacing: 5,
                     runSpacing: 5,
-                    children: model.tags.map(tagWidget).toList(),
+                    children: [
+                      tagWidget(model.sector),
+                      tagWidget(model.type),
+                    ],
                   ),
                 ],
               ),
@@ -352,15 +338,21 @@ class _ScrollItem extends StatelessWidget {
             aspectRatio: 3 / 1,
             child: Skeleton.partOf(),
           ),
-          Skeleton.partOf(height: 40),
+          Skeleton.partOf(height: 25),
+          Skeleton.partOf(height: 25),
           FractionallySizedBox(
             widthFactor: 0.6,
-            child: Skeleton.partOf(height: 40),
+            child: Skeleton.partOf(height: 30),
           ),
-          FractionallySizedBox(
-            widthFactor: 0.3,
-            child: Skeleton.partOf(height: 40),
+          Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            children: [
+              Skeleton.partOf(width: 80, height: 30),
+              Skeleton.partOf(width: 80, height: 30),
+            ],
           ),
+          SizedBox(height: Dimens.innerPadding),
         ],
       ),
     );
