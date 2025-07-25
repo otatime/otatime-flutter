@@ -8,6 +8,7 @@ import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/widgets/app_image.dart';
 import 'package:otatime_flutter/widgets/circular_button.dart';
+import 'package:otatime_flutter/widgets/skeleton.dart';
 
 class _Model {
   const _Model({
@@ -30,34 +31,6 @@ class _Model {
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  // ignore: library_private_types_in_public_api
-  static List<_Model> get items => [
-    _Model(
-      title: "NIKKE - 2025년 8월 9일부터 개최!",
-      descrpition: "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
-      coverUrl: "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_5bf8138c70b052df43c4ab7c39cc8992a2422834-3840x2160-ori_s_80_50_ori_q_80.webp",
-      startedAt: "2025년 8월 9일",
-      endedAt: "2025년 8월 12일",
-      tags: ["태그 1", "태그 2", "태그 3"]
-    ),
-    _Model(
-      title: "NIKKE - 2025년 8월 9일부터 개최!",
-      descrpition: "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
-      coverUrl: "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_18c203ef6354e344cee4db14427fe22b556d025f-3840x2160-ori_s_80_50_ori_q_80.webp",
-      startedAt: "2025년 8월 9일",
-      endedAt: "2025년 8월 12일",
-      tags: ["태그 1", "태그 2", "태그 3"]
-    ),
-    _Model(
-      title: "NIKKE - 2025년 8월 9일부터 개최!",
-      descrpition: "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
-      coverUrl: "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_26527c23c46bce436b83f65f8e9f3c6da3521017-3840x2160-ori_s_80_50_ori_q_80.webp",
-      startedAt: "2025년 8월 9일",
-      endedAt: "2025년 8월 12일",
-      tags: ["태그 1", "태그 2", "태그 3"]
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return AppBarConnection(
@@ -69,14 +42,7 @@ class HomePage extends StatelessWidget {
         onRefresh: () {
           return Future.delayed(Duration(milliseconds: 300));
         },
-        child: ListView.separated(
-          padding: EdgeInsets.all(Dimens.outerPadding),
-          separatorBuilder: (_, _) => SizedBox(height: Dimens.outerPadding),
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return _ScrollItem(model: items[index]);
-          },
-        ),
+        child: _ScrollView(),
       ),
     );
   }
@@ -179,6 +145,69 @@ class _Category extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ScrollView extends StatelessWidget {
+  const _ScrollView({super.key});
+
+  // ignore: library_private_types_in_public_api
+  static List<_Model> get items => [
+    _Model(
+      title: "NIKKE - 2025년 8월 9일부터 개최!",
+      descrpition: "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
+      coverUrl: "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_5bf8138c70b052df43c4ab7c39cc8992a2422834-3840x2160-ori_s_80_50_ori_q_80.webp",
+      startedAt: "2025년 8월 9일",
+      endedAt: "2025년 8월 12일",
+      tags: ["태그 1", "태그 2", "태그 3"]
+    ),
+    _Model(
+      title: "NIKKE - 2025년 8월 9일부터 개최!",
+      descrpition: "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
+      coverUrl: "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_18c203ef6354e344cee4db14427fe22b556d025f-3840x2160-ori_s_80_50_ori_q_80.webp",
+      startedAt: "2025년 8월 9일",
+      endedAt: "2025년 8월 12일",
+      tags: ["태그 1", "태그 2", "태그 3"]
+    ),
+    _Model(
+      title: "NIKKE - 2025년 8월 9일부터 개최!",
+      descrpition: "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
+      coverUrl: "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_26527c23c46bce436b83f65f8e9f3c6da3521017-3840x2160-ori_s_80_50_ori_q_80.webp",
+      startedAt: "2025년 8월 9일",
+      endedAt: "2025년 8월 12일",
+      tags: ["태그 1", "태그 2", "태그 3"]
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return wrapperWidget(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        return _ScrollItem(model: items[index]);
+      },
+    );
+  }
+
+  Widget wrapperWidget({
+    required int itemCount,
+    required IndexedWidgetBuilder itemBuilder,
+  }) {
+    return ListView.separated(
+      padding: EdgeInsets.all(Dimens.outerPadding),
+      separatorBuilder: (_, _) => SizedBox(height: Dimens.outerPadding),
+      itemCount: itemCount,
+      itemBuilder: itemBuilder,
+    );
+  }
+
+  Widget skeletonWidget() {
+    return wrapperWidget(
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return _ScrollItem.skeletonWidget();
+      },
     );
   }
 }
@@ -308,6 +337,31 @@ class _ScrollItem extends StatelessWidget {
           fontSize: 12,
           color: Scheme.current.foreground2,
         ),
+      ),
+    );
+  }
+
+  static Widget skeletonWidget() {
+    return Skeleton(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        spacing: Dimens.columnSpacing,
+        children: [
+          AspectRatio(
+            aspectRatio: 3 / 1,
+            child: Skeleton.partOf(),
+          ),
+          Skeleton.partOf(height: 40),
+          FractionallySizedBox(
+            widthFactor: 0.6,
+            child: Skeleton.partOf(height: 40),
+          ),
+          FractionallySizedBox(
+            widthFactor: 0.3,
+            child: Skeleton.partOf(height: 40),
+          ),
+        ],
       ),
     );
   }

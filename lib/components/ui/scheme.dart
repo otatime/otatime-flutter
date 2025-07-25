@@ -13,6 +13,7 @@ abstract class Scheme {
   Color get foreground3;
   Color get border;
   Color get placeholder;
+  Color get highlight;
 
   static final Color transparent = Color.fromRGBO(0, 0, 0, 0);
   static final Color white = Color.fromRGBO(255, 255, 255, 1);
@@ -43,8 +44,9 @@ class LightScheme extends Scheme {
   @override Color get foreground => Scheme.black;
   @override Color get foreground2 => Color.fromRGBO(100, 100, 100, 1);
   @override Color get foreground3 => Color.fromRGBO(150, 150, 150, 1);
-  @override Color get placeholder => rearground;
   @override Color get border => Color.fromRGBO(0, 0, 0, 0.1);
+  @override Color get placeholder => rearground;
+  @override Color get highlight => Color.fromRGBO(0, 0, 0, 0.2);
 }
 
 class DarkScheme extends Scheme {
@@ -55,6 +57,7 @@ class DarkScheme extends Scheme {
   @override Color get foreground => Scheme.white;
   @override Color get foreground2 => Color.fromRGBO(150, 150, 150, 1);
   @override Color get foreground3 => Color.fromRGBO(100, 100, 100, 1);
-  @override Color get placeholder => rearground;
   @override Color get border => Color.fromRGBO(255, 255, 255, 0.1);
+  @override Color get placeholder => rearground;
+  @override Color get highlight => Color.fromRGBO(255, 255, 255, 0.2);
 }

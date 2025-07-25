@@ -16,6 +16,7 @@ dependencies:
   flutter_svg: ^2.2.0
   flutter_touch_scale: ^1.1.1+1
   shared_preferences: ^2.5.3
+  shimmer: ^3.0.0
   transparent_image: ^2.0.1
 
 dev_dependencies:
