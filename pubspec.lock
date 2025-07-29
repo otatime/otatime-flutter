@@ -126,6 +126,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
+  flutter_rebuildable:
+    dependency: "direct main"
+    description:
+      name: flutter_rebuildable
+      sha256: "2ed85569b810ebb5165b1278408a52997537c022ff30c638e17e6a250cbf7435"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   flutter_refresh_indicator:
     dependency: "direct main"
     description:

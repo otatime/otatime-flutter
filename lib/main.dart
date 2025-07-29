@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rebuildable/flutter_rebuildable.dart';
 import 'package:otatime_flutter/components/settings/settings_binding.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/pages/navigation.dart';
@@ -9,7 +10,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SettingsBinding.initializeAll();
 
-  runApp(const MainApp());
+  // 사용자가 OS 측의 테마를 변경했을 때 앱 내의 전체 위젯들의 상태를 변경하도록 합니다.
+  WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged = () {
+    RebuildableApp.rebuild();
+  };
+
+  runApp(RebuildableApp(child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
