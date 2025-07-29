@@ -403,18 +403,18 @@ class _ScrollItem extends StatelessWidget {
             aspectRatio: 3 / 1,
             child: Skeleton.partOf(),
           ),
-          Skeleton.partOf(height: 25),
-          Skeleton.partOf(height: 25),
+          Skeleton.partOf(height: 23),
+          Skeleton.partOf(height: 23),
           FractionallySizedBox(
             widthFactor: 0.6,
-            child: Skeleton.partOf(height: 30),
+            child: Skeleton.partOf(height: 23),
           ),
           Wrap(
             spacing: 5,
             runSpacing: 5,
             children: [
-              Skeleton.partOf(width: 80, height: 30),
-              Skeleton.partOf(width: 80, height: 30),
+              Skeleton.partOf(width: 70, height: 25),
+              Skeleton.partOf(width: 70, height: 25),
             ],
           ),
           SizedBox(height: Dimens.innerPadding),
