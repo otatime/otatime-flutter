@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_appbar/flutter_appbar.dart';
 import 'package:flutter_refresh_indicator/flutter_refresh_indicator.dart';
@@ -15,6 +17,7 @@ import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/service_builder.dart';
 import 'package:otatime_flutter/widgets/skeleton.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -177,11 +180,20 @@ class _ScrollView extends StatelessWidget {
     required int itemCount,
     required IndexedWidgetBuilder itemBuilder,
   }) {
-    return ListView.separated(
-      padding: EdgeInsets.all(Dimens.outerPadding),
-      separatorBuilder: (_, _) => SizedBox(height: Dimens.outerPadding),
-      itemCount: itemCount,
-      itemBuilder: itemBuilder,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 화면 너비에 따라 아이템의 최소 가로 크기를 400으로 유지하면서 컬럼 개수를 동적으로 계산함.
+        final int crossCount = max(1, (constraints.maxWidth / 400).floor());
+
+        return AlignedGridView.count(
+          crossAxisCount: crossCount,
+          crossAxisSpacing: Dimens.outerPadding,
+          mainAxisSpacing: Dimens.outerPadding,
+          padding: EdgeInsets.all(Dimens.outerPadding),
+          itemCount: itemCount,
+          itemBuilder: itemBuilder,
+        );
+      },
     );
   }
 
