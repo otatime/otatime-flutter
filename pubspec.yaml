@@ -32,3 +32,12 @@ flutter:
   assets:
     - assets/
     - assets/svg/
+    - assets/fonts/
+
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/Pretendard-ExtraBold.otf
+          weight: 400
+        - asset: assets/fonts/Pretendard-Medium.otf
+          weight: 700

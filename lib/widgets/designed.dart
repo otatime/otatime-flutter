@@ -15,7 +15,10 @@ class Designed extends StatelessWidget {
     return Scaffold(
       backgroundColor: Scheme.current.background,
       body: DefaultTextStyle(
-        style: TextStyle(color: Scheme.current.foreground),
+        style: TextStyle(
+          fontFamily: "Pretendard",
+          color: Scheme.current.foreground,
+        ),
         child: SafeArea(
           child: child,
         ),
