@@ -21,7 +21,7 @@ class TestInterceptor extends Interceptor {
             "region": "서울",
             "location": "홍대 AK 5층",
             "isLiked" : true,
-            "D-Day": 6
+            "D-Day": 3
         },
         {
             "postId": 17,
@@ -35,7 +35,7 @@ class TestInterceptor extends Interceptor {
             "region": "서울",
             "location": "홍대 AK 5층",
             "isLiked" : true,
-            "D-Day": 6
+            "D-Day": 5
         },
         {
             "postId": 18,

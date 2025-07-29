@@ -5,6 +5,7 @@ import 'package:flutter_appbar/flutter_appbar.dart';
 import 'package:flutter_refresh_indicator/flutter_refresh_indicator.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:otatime_flutter/components/service/service.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
@@ -217,74 +218,126 @@ class _ScrollItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDDay = model.dDay <= 3;
+
     return TouchScale(
       scale: 0.95,
       onPress: () {},
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Dimens.borderRadius),
-          color: Scheme.current.deepground,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AspectRatio(
-              aspectRatio: 3 / 1,
-              child: AppImage.network(
-                url: model.imageUrl,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              ),
+      child: Stack(
+        children: [
+          Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Dimens.borderRadius),
+              color: Scheme.current.deepground,
             ),
-            Padding(
-              padding: EdgeInsets.all(Dimens.innerPadding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                spacing: Dimens.columnSpacing,
-                children: [
-                  // 행사 제목
-                  Text(
-                    model.title,
-                    style: TextStyle(fontWeight: FontWeight.bold)
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AspectRatio(
+                  aspectRatio: 3 / 1,
+                  child: AppImage.network(
+                    url: model.imageUrl,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
                   ),
-
-                  // 행사 날짜
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 5,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(Dimens.innerPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: Dimens.columnSpacing,
                     children: [
-                      dateWidget(model.startDate),
-                      Text("부터", style: TextStyle(color: Scheme.current.foreground3)),
-                      dateWidget(model.endDate),
-                      Text("까지", style: TextStyle(color: Scheme.current.foreground3)),
+                      // 행사 제목
+                      Text(
+                        model.title,
+                        style: TextStyle(fontWeight: FontWeight.bold)
+                      ),
+
+                      // 행사 날짜
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 5,
+                        children: [
+                          // D-Day (3일) 임박시 표시.
+                          if (isDDay) dDayWidget(),
+                          dateWidget(model.startDate),
+
+                          // D-Day 표시 없을때만.
+                          if (model.dDay > 3) Text("부터", style: TextStyle(color: Scheme.current.foreground3)),
+
+                          // D-Day 임박시만 표시.
+                          if (isDDay) Text("~", style: TextStyle(color: Scheme.current.foreground3)),
+                          dateWidget(model.endDate),
+
+                          // D-Day 표시 없을때만.
+                          if (model.dDay > 3) Text("까지", style: TextStyle(color: Scheme.current.foreground3)),
+                        ],
+                      ),
+
+                      // 행사 소개
+                      Text(
+                        model.summary,
+                        style: TextStyle(fontSize: 12, color: Scheme.current.foreground2),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+
+                      // 행사 태그
+                      Wrap(
+                        spacing: 5,
+                        runSpacing: 5,
+                        children: [
+                          tagWidget(model.sector),
+                          tagWidget(model.type),
+                        ],
+                      ),
                     ],
                   ),
+                ),
+              ],
+            ),
+          ),
 
-                  // 행사 소개
-                  Text(
-                    model.summary,
-                    style: TextStyle(fontSize: 12, color: Scheme.current.foreground2),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+          // D-Day 임박 시, 별도의 안쪽 여백을 차지하지 않은 형태로 그래디언트 보더 표시.
+          if (isDDay)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Dimens.borderRadius),
+                  border: GradientBoxBorder(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Scheme.transparent,
+                        Scheme.negative,
+                      ],
+                    ),
                   ),
-
-                  // 행사 태그
-                  Wrap(
-                    spacing: 5,
-                    runSpacing: 5,
-                    children: [
-                      tagWidget(model.sector),
-                      tagWidget(model.type),
-                    ],
-                  ),
-                ],
+                ),
               ),
             ),
-          ],
+        ],
+      ),
+    );
+  }
+
+  Widget dDayWidget() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Scheme.negative,
+        borderRadius: BorderRadius.circular(1e10),
+      ),
+      child: Text(
+        "D-DAY",
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
