@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_appbar/flutter_appbar.dart';
@@ -267,14 +268,22 @@ class _ScrollItem extends StatelessWidget {
                           dateWidget(model.startDate),
 
                           // D-Day 표시 없을때만.
-                          if (model.dDay > 3) Text("부터", style: TextStyle(color: Scheme.current.foreground3)),
+                          if (model.dDay > 3)
+                            Text(
+                              "부터",
+                              style: TextStyle(fontSize: 12, color: Scheme.current.foreground3)
+                            ),
 
                           // D-Day 임박시만 표시.
                           if (isDDay) Text("~", style: TextStyle(color: Scheme.current.foreground3)),
                           dateWidget(model.endDate),
 
                           // D-Day 표시 없을때만.
-                          if (model.dDay > 3) Text("까지", style: TextStyle(color: Scheme.current.foreground3)),
+                          if (model.dDay > 3)
+                            Text(
+                              "까지",
+                              style: TextStyle(fontSize: 12, color: Scheme.current.foreground3)
+                            ),
                         ],
                       ),
 
