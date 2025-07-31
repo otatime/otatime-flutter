@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_appbar/flutter_appbar.dart';
@@ -16,6 +15,7 @@ import 'package:otatime_flutter/pages/home/home_service.dart';
 import 'package:otatime_flutter/widgets/app_image.dart';
 import 'package:otatime_flutter/widgets/circular_button.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
+import 'package:otatime_flutter/widgets/scroll_edge_fade.dart';
 import 'package:otatime_flutter/widgets/service_builder.dart';
 import 'package:otatime_flutter/widgets/skeleton.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
@@ -77,30 +77,39 @@ class _BottomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.only(
-            left: Dimens.outerPadding,
-            right: Dimens.outerPadding,
-            bottom: Dimens.outerPadding,
-          ),
-          child: ConstrainedBox(
-            constraints: constraints.copyWith(minWidth: constraints.maxWidth),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              spacing: Dimens.rowSpacing,
-              children: [
-                _Category(label: "전체", isSelected: true),
-                _Category(label: "애니메이션", isSelected: false),
-                _Category(label: "게임", isSelected: false),
-              ],
+    return ScrollEdgeFade.horizontal(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.only(
+              left: Dimens.outerPadding,
+              right: Dimens.outerPadding,
+              bottom: Dimens.outerPadding,
             ),
-          ),
-        );
-      },
+            child: ConstrainedBox(
+              constraints: constraints.copyWith(
+                minWidth: constraints.maxWidth,
+                maxWidth: double.infinity,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                spacing: Dimens.rowSpacing,
+                children: [
+                  _Category(label: "전체", isSelected: true),
+                  _Category(label: "애니메이션", isSelected: false),
+                  _Category(label: "게임", isSelected: false),
+                  _Category(label: "행사", isSelected: false),
+                  _Category(label: "공연", isSelected: false),
+                  _Category(label: "캐릭터", isSelected: false),
+                  _Category(label: "성우 행사", isSelected: false),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
