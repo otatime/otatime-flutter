@@ -99,7 +99,7 @@ class _ScrollEdgeFadeState extends State<ScrollEdgeFade> {
                   end: end,
                   colors: [
                     Scheme.current.background,
-                    Scheme.transparent,
+                    Scheme.current.background.withAlpha(0),
                   ]
                 ),
               ),
