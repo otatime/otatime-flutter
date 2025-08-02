@@ -9,6 +9,7 @@ import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:otatime_flutter/components/service/service.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
+import 'package:otatime_flutter/components/ux/select_box.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/models/post.dart';
 import 'package:otatime_flutter/pages/home/home_service.dart';
@@ -31,8 +32,8 @@ class HomePage extends StatelessWidget {
       builder: (context, service) {
         return AppBarConnection(
           appBars: [
-            AppBar(behavior: _TopAppBar.createAppBarBehavior(), body: _TopAppBar()),
-            AppBar(behavior: _BottomAppBar.createAppBarBehavior(), body: _BottomAppBar()),
+            AppBar(behavior: _TopAppBar.createAppBarBehavior(), body: _TopAppBar(service: service)),
+            AppBar(behavior: _BottomAppBar.createAppBarBehavior(), body: _BottomAppBar(service: service)),
           ],
           child: RefreshIndicator(
             onRefresh: service.refresh,
@@ -48,7 +49,21 @@ class HomePage extends StatelessWidget {
 }
 
 class _TopAppBar extends StatelessWidget {
-  const _TopAppBar({super.key});
+  const _TopAppBar({
+    super.key,
+    required this.service,
+  });
+
+  final HomeService service;
+
+  static List<String> locations = [
+    "서울", "부산"
+  ];
+
+  /// 현재 선택된 위치 옵션에 대한 인덱스 값을 반환합니다.
+  int get _currentSelectIndex {
+    return service.location == null ? 0 : locations.indexOf(service.location!) + 1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +72,28 @@ class _TopAppBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            "LOGO",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          // 왼쪽 영역.
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: Dimens.innerPadding,
+            children: [
+              Text(
+                "LOGO",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              _LocationSelectBox(
+                index: _currentSelectIndex,
+                items: ["전체", ...locations],
+                onChanged: (newValue) {
+                  // 전체(0)는 null, 그 외는 기존 정의된 리스트 값을 참조합니다.
+                  service.location = newValue == 0 ? null : locations[newValue - 1];
+                  service.refresh();
+                },
+              ),
+            ],
           ),
+
+          // 오른쪽 영역.
           CircularButton(iconPath: "search".svg, onTap: () {})
         ],
       ),
@@ -73,7 +106,21 @@ class _TopAppBar extends StatelessWidget {
 }
 
 class _BottomAppBar extends StatelessWidget {
-  const _BottomAppBar({super.key});
+  const _BottomAppBar({
+    super.key,
+    required this.service,
+  });
+
+  final HomeService service;
+
+  static List<String> categorys = [
+    "애니메이션",
+    "게임",
+    "행사",
+    "공연",
+    "캐릭터",
+    "성우 행사",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -97,13 +144,26 @@ class _BottomAppBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 spacing: Dimens.rowSpacing,
                 children: [
-                  _Category(label: "전체", isSelected: true),
-                  _Category(label: "애니메이션", isSelected: false),
-                  _Category(label: "게임", isSelected: false),
-                  _Category(label: "행사", isSelected: false),
-                  _Category(label: "공연", isSelected: false),
-                  _Category(label: "캐릭터", isSelected: false),
-                  _Category(label: "성우 행사", isSelected: false),
+                  _Category(
+                    label: "전체",
+                    isSelected: service.category == null,
+                    onTap: () {
+                      service.category = null;
+                      service.refresh();
+                    },
+                  ),
+
+                  // 개별적으로 상위 카테고리 표시.
+                  ...categorys.map((category) {
+                    return _Category(
+                      label: category,
+                      isSelected: service.category == category,
+                      onTap: () {
+                        service.category = category;
+                        service.refresh();
+                      },
+                    );
+                  })
                 ],
               ),
             ),
@@ -123,33 +183,38 @@ class _Category extends StatelessWidget {
     super.key,
     required this.isSelected,
     required this.label,
+    required this.onTap,
   });
 
   final bool isSelected;
   final String label;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return TouchScale(
-      onPress: () {},
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: 7,
-          horizontal: 15,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected
-            ? Scheme.current.foreground
-            : Scheme.current.rearground,
-          borderRadius: BorderRadius.circular(1e10)
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+      onPress: isSelected ? () {} : onTap,
+      child: Transition(
+        child: Container(
+          key: ValueKey(isSelected),
+          padding: EdgeInsets.symmetric(
+            vertical: 7,
+            horizontal: 15,
+          ),
+          decoration: BoxDecoration(
             color: isSelected
-              ? Scheme.current.background
-              : Scheme.current.foreground
+              ? Scheme.current.foreground
+              : Scheme.current.rearground,
+            borderRadius: BorderRadius.circular(1e10)
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: isSelected
+                ? Scheme.current.background
+                : Scheme.current.foreground
+            ),
           ),
         ),
       ),
@@ -437,6 +502,52 @@ class _ScrollItem extends StatelessWidget {
           ),
           SizedBox(height: Dimens.innerPadding),
         ],
+      ),
+    );
+  }
+}
+
+class _LocationSelectBox extends StatelessWidget {
+  const _LocationSelectBox({
+    super.key,
+    required this.index,
+    required this.items,
+    required this.onChanged,
+  });
+
+  final int index;
+  final List<String> items;
+  final ValueChanged<int> onChanged;
+
+  /// 선택용 바텀 시트 열기.
+  void _openBottomSheet(BuildContext context) {
+    SelectBox.open(context, index: index, items: items, onSelected: onChanged);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TouchScale(
+      onPress: () => _openBottomSheet(context),
+      child: Transition(
+        child: Container(
+          key: ValueKey(index),
+          padding: EdgeInsets.symmetric(vertical: 7.5, horizontal: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(1e10),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 12 / 2,
+            children: [
+              SvgPicture.asset(
+                "navigation-filled".svg,
+                width: 12,
+                color: Scheme.current.foreground2,
+              ),
+              Text(items[index], style: TextStyle(color: Scheme.current.foreground2)),
+            ],
+          ),
+        ),
       ),
     );
   }

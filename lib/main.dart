@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rebuildable/flutter_rebuildable.dart';
 import 'package:otatime_flutter/components/settings/settings_binding.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
+import 'package:otatime_flutter/components/ux/bottom_sheet.dart';
 import 'package:otatime_flutter/pages/navigation.dart';
 import 'package:otatime_flutter/widgets/designed.dart';
 
@@ -14,6 +15,8 @@ void main() async {
   WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged = () {
     RebuildableApp.rebuild();
   };
+
+  BottomSheetUX.initialize();
 
   runApp(RebuildableApp(child: const MainApp()));
 }

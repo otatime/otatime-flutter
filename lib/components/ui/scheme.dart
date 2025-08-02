@@ -5,6 +5,7 @@ import 'package:otatime_flutter/components/settings/user/theme_setting.dart';
 /// 해당 클래스는 특정 테마에 대한 색상들을 정의합니다.
 abstract class Scheme {
   Color get primary;
+  Color get deepPrimary;
   Color get background;
   Color get deepground;
   Color get rearground;
@@ -39,6 +40,7 @@ abstract class Scheme {
 
 class LightScheme extends Scheme {
   @override Color get primary => Color(0xFF0077FF);
+  @override Color get deepPrimary => primary.withAlpha(30);
   @override Color get background => Color.fromRGBO(255, 255, 255, 1);
   @override Color get deepground => Color.fromRGBO(245, 245, 245, 1);
   @override Color get rearground => Color.fromRGBO(235, 235, 235, 1);
@@ -52,6 +54,7 @@ class LightScheme extends Scheme {
 
 class DarkScheme extends Scheme {
   @override Color get primary => Color(0xFF0077FF);
+  @override Color get deepPrimary => primary.withAlpha(50);
   @override Color get background => Color.fromRGBO(10, 10, 12, 1);
   @override Color get deepground => Color.fromRGBO(30, 30, 32, 1);
   @override Color get rearground => Color.fromRGBO(40, 40, 42, 1);
