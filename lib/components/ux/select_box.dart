@@ -10,7 +10,6 @@ class SelectBox {
     required List<String> items,
     required ValueChanged<int> onSelected,
   }) {
-    print(items);
     BottomSheet.open(context, ListView.builder(
       padding: EdgeInsets.only(
         top: Dimens.outerPadding * 2,

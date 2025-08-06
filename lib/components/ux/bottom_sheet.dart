@@ -15,7 +15,7 @@ class BottomSheetUX {
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30),
-            )
+            ),
           ),
           child: SafeArea(
             child: Stack(
