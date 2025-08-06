@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:otatime_flutter/components/service/service.dart';
+import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/components/ux/select_box.dart';
@@ -21,6 +22,8 @@ import 'package:otatime_flutter/widgets/service_builder.dart';
 import 'package:otatime_flutter/widgets/skeleton.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:palette_generator/palette_generator.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -39,7 +42,20 @@ class HomePage extends StatelessWidget {
             onRefresh: service.refresh,
             child: Disableable(
               activating: service.status != ServiceStatus.refresh,
-              child: _ScrollView(service: service),
+              child: AppBarConnection(
+                appBars: [
+                  AppBar.builder(
+                    behavior: _Slider.createAppBarBehavior(),
+                    builder: (context, position) {
+                      return Opacity(
+                        opacity: position.expandedPercent,
+                        child: _Slider(),
+                      );
+                    },
+                  ),
+                ],
+                child: _ScrollView(service: service),
+              ),
             ),
           ),
         );
@@ -339,7 +355,7 @@ class _ScrollItem extends StatelessWidget {
                         children: [
                           // D-Day (3일) 임박시 표시.
                           if (isDDay) dDayWidget(),
-                          dateWidget(model.startDate),
+                          _DateButton(date: model.startDate),
 
                           // D-Day 표시 없을때만.
                           if (model.dDay > 3)
@@ -350,7 +366,7 @@ class _ScrollItem extends StatelessWidget {
 
                           // D-Day 임박시만 표시.
                           if (isDDay) Text("~", style: TextStyle(color: Scheme.current.foreground3)),
-                          dateWidget(model.endDate),
+                          _DateButton(date: model.endDate),
 
                           // D-Day 표시 없을때만.
                           if (model.dDay > 3)
@@ -426,38 +442,6 @@ class _ScrollItem extends StatelessWidget {
     );
   }
 
-  Widget dateWidget(String date) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      decoration: BoxDecoration(
-        color: Scheme.current.background,
-        borderRadius: BorderRadius.circular(1e10),
-        border: Border.all(color: Scheme.current.border)
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        spacing: 5,
-        children: [
-          // 달력 아이콘
-          SvgPicture.asset(
-            "calendar".svg,
-            width: 12,
-            color: Scheme.current.foreground2,
-          ),
-
-          // 날짜 표시
-          Text(
-            date,
-            style: TextStyle(
-              fontSize: 12,
-              color: Scheme.current.foreground2,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget tagWidget(String tag) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -507,6 +491,48 @@ class _ScrollItem extends StatelessWidget {
   }
 }
 
+class _DateButton extends StatelessWidget {
+  const _DateButton({
+    super.key,
+    required this.date,
+  });
+
+  final String date;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Scheme.current.background,
+        borderRadius: BorderRadius.circular(1e10),
+        border: Border.all(color: Scheme.current.border)
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 5,
+        children: [
+          // 달력 아이콘
+          SvgPicture.asset(
+            "calendar".svg,
+            width: 12,
+            color: Scheme.current.foreground2,
+          ),
+
+          // 날짜 표시
+          Text(
+            date,
+            style: TextStyle(
+              fontSize: 12,
+              color: Scheme.current.foreground2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _LocationSelectBox extends StatelessWidget {
   const _LocationSelectBox({
     super.key,
@@ -549,6 +575,198 @@ class _LocationSelectBox extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Slider extends StatelessWidget {
+  const _Slider({super.key});
+
+  // TODO: 임시 로직.
+  static final List<String> _images = [
+    "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_1674f255bd218603dfa13a4583fe6ea1378300b4-3840x2160-ori_s_80_50_ori_q_80.webp",
+    "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_95bf380c6cc91097aa19c88d953d20fd0607331e-3840x2160-ori_s_80_50_ori_q_80.webp",
+    "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_6645ecbc2afe80ede75cc933755f4e3765487489-1920x1080-ori_s_80_50_ori_q_80.webp",
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return wrapperWidget(
+      itemCount: _images.length,
+      itemBuilder: (context, index) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(Dimens.borderRadius),
+          child: _SliderItem(
+            url: _images[index],
+            title: "NIKKE - 2025년 8월 9일부터 개최!",
+          ),
+        );
+      },
+    );
+  }
+
+  Widget wrapperWidget({
+    required int itemCount,
+    required IndexedWidgetBuilder itemBuilder,
+  }) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double width = constraints.maxWidth;
+        final double padding = Dimens.outerPadding;
+        final double spacing = Dimens.outerPadding / 2;
+        final double itemWidth = width - (padding * 2) + spacing;
+        final double fraction = itemWidth / width;
+        final controller = PageController(viewportFraction: fraction);
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: Dimens.innerPadding,
+          children: [
+            AspectRatio(
+              aspectRatio: 2 / 1,
+              child: PageView.builder(
+                controller: controller,
+                itemCount: itemCount,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: spacing / 2),
+                    child: itemBuilder(context, index),
+                  );
+                },
+              ),
+            ),
+
+            // 인디케이터 표시.
+            SmoothPageIndicator(
+              controller: controller,
+              count: itemCount,
+              onDotClicked: (index) {
+                // 특정 인디케이터 클릭 시, 해당 페이지로 이동.
+                controller.animateToPage(
+                  index,
+                  curve: Animes.transition.curve,
+                  duration: Animes.transition.duration,
+                );
+              },
+              effect: ExpandingDotsEffect(
+                dotWidth: 10,
+                dotHeight: 10,
+                dotColor: Scheme.current.rearground,
+                activeDotColor: Scheme.current.primary,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static AppBarBehavior createAppBarBehavior() {
+    return MaterialAppBarBehavior(alignAnimation: false);
+  }
+}
+
+class _SliderItem extends StatefulWidget {
+  const _SliderItem({
+    super.key,
+    required this.url,
+    required this.title,
+  });
+
+  final String url;
+  final String title;
+
+  @override
+  State<_SliderItem> createState() => _SliderItemState();
+}
+
+class _SliderItemState extends State<_SliderItem> {
+  Color? paletteColor;
+
+  void _initPaletteColor() async {
+    // 이미지 처리에 대해서 성능 최적화를 위해 작게.
+    final provider = ResizeImage(
+      NetworkImage(widget.url),
+      width: 200,
+      height: 200,
+    );
+
+    final generator = await PaletteGenerator.fromImageProvider(
+      provider,
+      size: const Size(200, 200),
+      maximumColorCount: 16,
+    );
+
+    // 가장 유사한 이미지 대표색을 정의합니다.
+    setState(() => paletteColor = generator.dominantColor?.color);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initPaletteColor();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        AppImage.network(
+          url: widget.url,
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.cover,
+        ),
+
+        // 이미지 대표색으로 별도의 그림자 렌더링.
+        if (paletteColor != null)
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  paletteColor!,
+                  paletteColor!.withAlpha(50),
+                  Scheme.transparent,
+                ]
+              )
+            ),
+          ),
+
+        Positioned.fill(
+          child: Padding(
+            padding: EdgeInsets.all(Dimens.innerPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              spacing: 10,
+              children: [
+                // 행사 제목 표시.
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    color: Scheme.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  )
+                ),
+
+                // 행사 일정 표시.
+                Wrap(
+                  spacing: Dimens.rowSpacing,
+                  children: [
+                    _DateButton(date: "2025-06-25"),
+                    Text("~", style: TextStyle(color: Scheme.current.foreground3)),
+                    _DateButton(date: "2025-07-01")
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
