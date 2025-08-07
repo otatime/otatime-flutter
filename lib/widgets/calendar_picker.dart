@@ -75,7 +75,7 @@ class _CalendarPickerState extends State<CalendarPicker> {
       ? "시작 날짜를 선택하세요."
       : endDate == null
         ? "종료 날짜를 선택하세요."
-        : "${startDate!.year}-${startDate!.month}-${startDate!.day} 부터 " +
+        : "${startDate!.year}-${startDate!.month}-${startDate!.day} 부터 "
           "${endDate!.year}-${endDate!.month}-${endDate!.day} 까지";
   }
 
@@ -99,15 +99,14 @@ class _CalendarPickerState extends State<CalendarPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(Dimens.outerPadding),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        spacing: Dimens.innerPadding,
-        children: [
-          Row(
-            children: [
-              Column(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      spacing: Dimens.innerPadding,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 spacing: Dimens.columnSpacing,
@@ -122,56 +121,54 @@ class _CalendarPickerState extends State<CalendarPicker> {
                   ),
                 ],
               ),
+            ),
 
-              Expanded(child: SizedBox()),
+            // 현재 표시 날짜를 이전 달로 이동.
+            CircularButton(
+              iconPath: "arrow_left".svg,
+              onTap: () {
+                setState(() => current = DateTime(current.year, current.month - 1));
+              },
+            ),
 
-              // 현재 표시 날짜를 이전 달로 이동.
-              CircularButton(
-                iconPath: "arrow_left".svg,
-                onTap: () {
-                  setState(() => current = DateTime(current.year, current.month - 1));
-                },
+            // 현재 표시 날짜를 다음 달로 이동.
+            CircularButton(
+              iconPath: "arrow_right".svg,
+              onTap: () {
+                setState(() => current = DateTime(current.year, current.month + 1));
+              },
+            ),
+          ],
+        ),
+
+        // 추가적인 여백 추가.
+        SizedBox(),
+
+        // 일요일부터 토요일까지 요일 텍스트를 가로로 표시.
+        Row(
+          children: ["일", "월", "화", "수", "목", "금", "토"].map((weekDay) {
+            return Expanded(
+              child: Text(
+                weekDay,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Scheme.current.foreground2),
               ),
+            );
+          }).toList(),
+        ),
 
-              // 현재 표시 날짜를 다음 달로 이동.
-              CircularButton(
-                iconPath: "arrow_right".svg,
-                onTap: () {
-                  setState(() => current = DateTime(current.year, current.month + 1));
-                },
-              ),
-            ],
-          ),
-
-          // 추가적인 여백 추가.
-          SizedBox(),
-
-          // 일요일부터 토요일까지 요일 텍스트를 가로로 표시.
-          Row(
-            children: ["일", "월", "화", "수", "목", "금", "토"].map((weekDay) {
-              return Expanded(
-                child: Text(
-                  weekDay,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Scheme.current.foreground2),
-                ),
-              );
-            }).toList(),
-          ),
-
-          AnimatedSize(
-            alignment: Alignment.topCenter,
-            duration: Animes.transition.duration,
-            curve: Animes.transition.curve,
-            child: Transition(
-              child: KeyedSubtree(
-                key: ValueKey(current),
-                child: gridWidget(),
-              ),
+        AnimatedSize(
+          alignment: Alignment.topCenter,
+          duration: Animes.transition.duration,
+          curve: Animes.transition.curve,
+          child: Transition(
+            child: KeyedSubtree(
+              key: ValueKey(current),
+              child: gridWidget(),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -242,7 +239,7 @@ class _CalendarPickerState extends State<CalendarPicker> {
                     "${date.day}",
                     style: TextStyle(
                       color: isSelected
-                        ? Scheme.current.foreground
+                        ? Scheme.white
                         : switch (date.weekday) {
                             7 => sundayColor,   // 일요일
                             6 => saturdayColor, // 토요일

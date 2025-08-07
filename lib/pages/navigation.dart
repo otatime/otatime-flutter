@@ -9,7 +9,6 @@ import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/pages/home/home.dart';
-import 'package:otatime_flutter/widgets/calendar_picker.dart';
 
 class NavigationPage extends StatefulWidget {
   const NavigationPage({super.key});
@@ -23,7 +22,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
   late final List<Widget> _pages = [
     const HomePage(),
-    const Center(child: CalendarPicker.range()),
+    const Center(child: Text("달력")),
     const Center(child: Text("사용자")),
   ];
 

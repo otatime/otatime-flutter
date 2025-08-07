@@ -9,10 +9,12 @@ class CircularButton extends StatelessWidget {
     super.key,
     required this.onTap,
     required this.iconPath,
+    this.foregroundColor,
   });
 
   final VoidCallback onTap;
   final String iconPath;
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class CircularButton extends StatelessWidget {
           iconPath,
           width: 18,
           height: 18,
-          color: Scheme.current.foreground,
+          color: foregroundColor ?? Scheme.current.foreground,
         ),
       ),
     );

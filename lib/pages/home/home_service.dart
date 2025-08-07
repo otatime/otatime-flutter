@@ -9,6 +9,8 @@ class HomeService extends GetService<HomeModel, Map<String, dynamic>> {
 
   String? category;
   String? location;
+  DateTime? startDate;
+  DateTime? endDate;
 
   @override
   String get path => "/posts";

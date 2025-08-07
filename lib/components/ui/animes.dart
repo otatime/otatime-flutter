@@ -20,4 +20,7 @@ class Animes {
     duration: Duration(milliseconds: 500),
     curve: Curves.ease
   );
+
+  /// 팝업과 관련된 페이드 전환 애니메이션에 공통적으로 사용됩니다.
+  static final Animes popupTransition = transition;
 }

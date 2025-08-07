@@ -7,6 +7,7 @@ class BottomSheetUX {
   static void initialize() {
     // 포괄적으로 전역적인 바텀 시트에 대한 디자인 설정.
     BottomSheet.config = BottomSheetConfig(
+      barrierColor: Scheme.current.barrier,
       builder: (context, child) {
         return Container(
           clipBehavior: Clip.antiAlias,

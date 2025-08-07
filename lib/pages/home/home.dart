@@ -10,11 +10,14 @@ import 'package:otatime_flutter/components/service/service.dart';
 import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
+import 'package:otatime_flutter/components/ux/modal_popup.dart';
 import 'package:otatime_flutter/components/ux/select_box.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/models/post.dart';
 import 'package:otatime_flutter/pages/home/home_service.dart';
 import 'package:otatime_flutter/widgets/app_image.dart';
+import 'package:otatime_flutter/widgets/button.dart';
+import 'package:otatime_flutter/widgets/calendar_picker.dart';
 import 'package:otatime_flutter/widgets/circular_button.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/scroll_edge_fade.dart';
@@ -138,18 +141,78 @@ class _BottomAppBar extends StatelessWidget {
     "성우 행사",
   ];
 
+  void showCalendarPopup(BuildContext context) {
+    DateTime? startDate = service.startDate;
+    DateTime? endDate = service.endDate;
+
+    Navigator.push(context, ModalPopupRoute(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CalendarPicker.range(
+            initialStartDate: startDate,
+            initialEndDate: endDate,
+            onStartChanged: (newDate) => startDate = newDate,
+            onEndChanged: (newDate) => endDate = newDate,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Button(
+                type: ButtonType.tertiary,
+                label: "취소",
+                onTap: () => Navigator.pop(context),
+              ),
+              Button(
+                type: ButtonType.secondary,
+                label: "완료",
+                onTap: () {
+                  // 변경 사항이 없는 경우.
+                  if (service.startDate != startDate
+                   || service.endDate != endDate) {
+                    service.startDate = startDate ?? endDate;
+                    service.endDate = endDate ?? startDate;
+                    service.refresh();
+                  }
+
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Padding(
+      // 시각적 자연스러움을 위해 별도의 여백 추가.
+      padding: EdgeInsets.only(bottom: Dimens.outerPadding / 2),
+      child: Row(
+        children: [
+          Expanded(child: categoriesWidget()),
+
+          // 날짜 선택에 대한 팝업 열기 버튼.
+          CircularButton(
+            iconPath: "calendar".svg,
+            foregroundColor: Scheme.current.foreground2,
+            onTap: () => showCalendarPopup(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 상위 카테고리 위젯.
+  Widget categoriesWidget() {
     return ScrollEdgeFade.horizontal(
       child: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.only(
-              left: Dimens.outerPadding,
-              right: Dimens.outerPadding,
-              bottom: Dimens.outerPadding,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: Dimens.outerPadding),
             child: ConstrainedBox(
               constraints: constraints.copyWith(
                 minWidth: constraints.maxWidth,
