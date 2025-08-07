@@ -1,7 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
+import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
+import 'package:otatime_flutter/extensions/string.dart';
+import 'package:otatime_flutter/widgets/circular_button.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
 
 enum CalendarPickerType {
@@ -13,18 +16,25 @@ class CalendarPicker extends StatefulWidget {
   const CalendarPicker.single({
     super.key,
     DateTime? initialDate,
+    ValueChanged<DateTime?>? onChanged,
   }) : initialStartDate = initialDate,
        initialEndDate = null,
+       onStartChanged = onChanged,
+       onEndChanged = null,
        type = CalendarPickerType.single;
 
   const CalendarPicker.range({
     super.key,
     this.initialStartDate,
     this.initialEndDate,
+    this.onStartChanged,
+    this.onEndChanged,
   }) : type = CalendarPickerType.range;
 
   final DateTime? initialStartDate;
   final DateTime? initialEndDate;
+  final ValueChanged<DateTime?>? onStartChanged;
+  final ValueChanged<DateTime?>? onEndChanged;
   final CalendarPickerType type;
 
   @override
@@ -32,10 +42,13 @@ class CalendarPicker extends StatefulWidget {
 }
 
 class _CalendarPickerState extends State<CalendarPicker> {
-  late final DateTime current;
+  late DateTime current;
 
   late DateTime? startDate = widget.initialStartDate;
   late DateTime? endDate = widget.initialEndDate;
+
+  static Color saturdayColor = Color.fromRGBO(255, 45, 45, 1);
+  static Color sundayColor = Color.fromRGBO(0, 150, 255, 1);
 
   List<DateTime> getDatesInMonth(int year, int month) {
     final List<DateTime> days = [];
@@ -66,6 +79,18 @@ class _CalendarPickerState extends State<CalendarPicker> {
           "${endDate!.year}-${endDate!.month}-${endDate!.day} 까지";
   }
 
+  /// 시작 날짜를 업데이트합니다.
+  void selectStartDate(DateTime? newDate) {
+    widget.onStartChanged?.call(newDate);
+    setState(() => startDate = newDate);
+  }
+
+  /// 종료 날짜를 업데이트합니다.
+  void selectEndDate(DateTime? newDate) {
+    widget.onEndChanged?.call(newDate);
+    setState(() => endDate = newDate);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -80,20 +105,46 @@ class _CalendarPickerState extends State<CalendarPicker> {
         mainAxisSize: MainAxisSize.min,
         spacing: Dimens.innerPadding,
         children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: Dimens.columnSpacing,
+          Row(
             children: [
-              Text(
-                "${current.year}년 ${current.month}월",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                spacing: Dimens.columnSpacing,
+                children: [
+                  Text(
+                    "${current.year}년 ${current.month}월",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)
+                  ),
+                  Text(
+                    getSubTitle(),
+                    style: TextStyle(color: Scheme.current.foreground3)
+                  ),
+                ],
               ),
-              Text(
-                getSubTitle(),
-                style: TextStyle(color: Scheme.current.foreground3)
+
+              Expanded(child: SizedBox()),
+
+              // 현재 표시 날짜를 이전 달로 이동.
+              CircularButton(
+                iconPath: "arrow_left".svg,
+                onTap: () {
+                  setState(() => current = DateTime(current.year, current.month - 1));
+                },
+              ),
+
+              // 현재 표시 날짜를 다음 달로 이동.
+              CircularButton(
+                iconPath: "arrow_right".svg,
+                onTap: () {
+                  setState(() => current = DateTime(current.year, current.month + 1));
+                },
               ),
             ],
           ),
+
+          // 추가적인 여백 추가.
+          SizedBox(),
 
           // 일요일부터 토요일까지 요일 텍스트를 가로로 표시.
           Row(
@@ -108,14 +159,21 @@ class _CalendarPickerState extends State<CalendarPicker> {
             }).toList(),
           ),
 
-          gridWidget(),
+          AnimatedSize(
+            alignment: Alignment.topCenter,
+            duration: Animes.transition.duration,
+            curve: Animes.transition.curve,
+            child: Transition(
+              child: KeyedSubtree(
+                key: ValueKey(current),
+                child: gridWidget(),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
-
-  static Color saturdayColor = Color.fromRGBO(255, 45, 45, 1);
-  static Color sundayColor = Color.fromRGBO(0, 150, 255, 1);
 
   Widget gridWidget() {
     return LayoutBuilder(
@@ -138,6 +196,8 @@ class _CalendarPickerState extends State<CalendarPicker> {
   // 각 개별 날짜를 렌더링하는 용도입니다.
   List<Widget> buildMonthlyGrid() {
     final days = getDatesInMonth(current.year, current.month);
+    final firstDayOfMonth = days.first; // 해당 달의 첫번째 날짜.
+    final lastDayOfMonth = days.last;   // 해당 달의 마지막 날짜.
     final firstWeekday = days.first.weekday % 7; // 일요일 기준
 
     return [
@@ -156,14 +216,16 @@ class _CalendarPickerState extends State<CalendarPicker> {
               onPress: () {
                 if (isSelected) {
                   startDate == date
-                    ? setState(() => startDate = null)
-                    : setState(() => endDate = null);
+                    ? selectStartDate(null)
+                    : selectEndDate(null);
                 } else {
-                  widget.type == CalendarPickerType.single || startDate == null
-                    ? setState(() => startDate = date)
-                    : setState(() {
-                        if (date.isAfter(startDate!)) endDate = date;
-                      });
+                  if (widget.type == CalendarPickerType.single || startDate == null) {
+                    selectStartDate(date);
+                  } else {
+                    date.isAfter(startDate!)
+                      ? selectEndDate(date)
+                      : selectStartDate(date);
+                  }
                 }
               },
               child: Transition(
@@ -197,8 +259,8 @@ class _CalendarPickerState extends State<CalendarPicker> {
                 builder: (context) {
                   final bool isActive = isSelected || isInRanged;
                   final bool isRange = startDate != null && endDate != null;
-                  final bool isStart = date.weekday == 7 || startDate == date; // 주일을 기준으로
-                  final bool isEnd = date.weekday == 6 || endDate == date; // 주일을 기준으로
+                  final bool isStart = date.weekday == 7 || startDate == date || date == firstDayOfMonth; // 주일을 기준으로
+                  final bool isEnd = date.weekday == 6 || endDate == date || date == lastDayOfMonth; // 주일을 기준으로
 
                   // 빈 영역 형태로 조건부 렌더링.
                   if (!isRange) return SizedBox();
