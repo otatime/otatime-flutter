@@ -647,9 +647,9 @@ class _Slider extends StatelessWidget {
 
   // TODO: 임시 로직.
   static final List<String> _images = [
-    "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_1674f255bd218603dfa13a4583fe6ea1378300b4-3840x2160-ori_s_80_50_ori_q_80.webp",
-    "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_95bf380c6cc91097aa19c88d953d20fd0607331e-3840x2160-ori_s_80_50_ori_q_80.webp",
-    "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_6645ecbc2afe80ede75cc933755f4e3765487489-1920x1080-ori_s_80_50_ori_q_80.webp",
+    "https://cdn1.epicgames.com/spt-assets/dcd83ace86fb4501bde1316ca03e29ad/zenless-zone-zero-1voa4.jpg",
+    "https://i.ytimg.com/vi/H-3wo8q0qAk/maxresdefault.jpg",
+    "https://static.inven.co.kr/column/2024/06/30/news/i1335021753.png",
   ];
 
   @override
@@ -661,7 +661,7 @@ class _Slider extends StatelessWidget {
           borderRadius: BorderRadius.circular(Dimens.borderRadius),
           child: _SliderItem(
             url: _images[index],
-            title: "NIKKE - 2025년 8월 9일부터 개최!",
+            title: "젠레스 존 제로 - 2025년 8월 9일부터 개최!",
           ),
         );
       },
