@@ -44,6 +44,7 @@ class Button extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
+            color: Scheme.white,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
