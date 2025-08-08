@@ -38,7 +38,7 @@ class _HeaderConnectionState extends State<HeaderConnection> {
             // 헤더 타이틀 앱바.
             SizedAppBar.builder(
               minExtent: 0,
-              maxExtent: constraints.maxHeight / 2.5,
+              maxExtent: constraints.maxHeight / 3,
               behavior: MaterialAppBarBehavior(),
               builder: (context, position) {
                 return AppBarFadeEffect.onShrink(
@@ -73,7 +73,7 @@ class _HeaderConnectionState extends State<HeaderConnection> {
                       position: _controller.positionOf(0)!,
                       child: Text(
                         widget.title,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],

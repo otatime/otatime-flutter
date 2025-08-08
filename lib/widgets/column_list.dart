@@ -16,7 +16,7 @@ class ColumnList extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(Dimens.borderRadius),
-        color: Scheme.current.rearground,
+        color: Scheme.current.deepground,
       ),
       child: Column(
         // 각 아이템별 중간마다 별도의 라인 추가.

@@ -18,6 +18,6 @@ abstract class EnumSetting<T extends Enum> extends Setting<T> {
 
   @override
   void setValue(T newValue) async {
-    assert(await SettingsBinding.prefs.setInt(key, newValue.index));
+    await SettingsBinding.prefs.setInt(key, newValue.index);
   }
 }

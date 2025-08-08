@@ -761,6 +761,7 @@ class _SliderItemState extends State<_SliderItem> {
     );
 
     // 가장 유사한 이미지 대표색을 정의합니다.
+    if (!mounted) return;
     setState(() => paletteColor = generator.dominantColor?.color);
   }
 

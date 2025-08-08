@@ -3,7 +3,9 @@ import 'package:flutter_appbar/flutter_appbar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
+import 'package:otatime_flutter/components/ux/app_page_route.dart';
 import 'package:otatime_flutter/extensions/string.dart';
+import 'package:otatime_flutter/pages/settings/settings.dart';
 import 'package:otatime_flutter/widgets/button.dart';
 import 'package:otatime_flutter/widgets/column_item.dart';
 import 'package:otatime_flutter/widgets/column_list.dart';
@@ -35,7 +37,10 @@ class UserPage extends StatelessWidget {
               ColumnItem.push(
                 title: "설정",
                 iconPath: "settings".svg,
-                onTap: () {}
+                onTap: () {
+                  // 설정 페이지로 이동.
+                  Navigator.push(context, AppPageRoute(builder: (_) => SettingsPage()));
+                }
               ),
             ],
           ),

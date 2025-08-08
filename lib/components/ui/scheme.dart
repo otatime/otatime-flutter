@@ -37,6 +37,13 @@ abstract class Scheme {
       Theme.dark => _dark
     };
   }
+
+  static Theme themeOf(Brightness brightness) {
+    return switch (brightness) {
+      Brightness.light => Theme.light,
+      Brightness.dark => Theme.dark,
+    };
+  }
 }
 
 class LightScheme extends Scheme {
