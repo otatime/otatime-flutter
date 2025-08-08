@@ -6,6 +6,7 @@ import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/components/ux/app_page_route.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/pages/settings/settings.dart';
+import 'package:otatime_flutter/pages/sign_in.dart';
 import 'package:otatime_flutter/widgets/button.dart';
 import 'package:otatime_flutter/widgets/column_item.dart';
 import 'package:otatime_flutter/widgets/column_list.dart';
@@ -57,12 +58,12 @@ class _HeaderAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(50),
-      child: signedOutWidget(),
+      child: signedOutWidget(context),
     );
   }
 
   /// 사용자가 로그인되지 있지 않은 상태에서 사용됩니다.
-  Widget signedOutWidget() {
+  Widget signedOutWidget(BuildContext context) {
     return Column(
       spacing: Dimens.innerPadding,
       children: [
@@ -102,7 +103,10 @@ class _HeaderAppBar extends StatelessWidget {
             Button(
               type: ButtonType.primary,
               label: "로그인",
-              onTap: () {},
+              onTap: () {
+                // 로그인 페이지로 이동.
+                Navigator.push(context, AppPageRoute(builder: (_) => SignInPage()));
+              },
             ),
             Button(
               type: ButtonType.secondary,

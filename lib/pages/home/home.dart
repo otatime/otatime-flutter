@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
           child: RefreshIndicator(
             onRefresh: service.refresh,
             child: Disableable(
-              activating: service.status != ServiceStatus.refresh,
+              isEnabled: service.status != ServiceStatus.refresh,
               child: AppBarConnection(
                 appBars: [
                   AppBar.builder(

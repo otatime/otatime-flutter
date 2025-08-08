@@ -6,6 +6,7 @@ enum ButtonType {
   primary,
   secondary,
   tertiary,
+  underLine,
 }
 
 class Button extends StatelessWidget {
@@ -29,6 +30,7 @@ class Button extends StatelessWidget {
       ButtonType.primary => primaryWidget(),
       ButtonType.secondary => secondaryWidget(),
       ButtonType.tertiary => tertiaryWidget(),
+      ButtonType.underLine => underLineWidget(),
     };
   }
 
@@ -84,6 +86,31 @@ class Button extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget underLineWidget() {
+    return TouchScale(
+      onPress: onTap,
+      child: Stack(
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              color: Scheme.current.foreground3,
+            ),
+          ),
+
+          // 글자 밑줄 표시.
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(height: 1, color: Scheme.current.foreground3),
+            )
+          ),
+        ],
+      )
     );
   }
 }
