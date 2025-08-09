@@ -23,16 +23,27 @@ class _SignOutPageState extends State<SignOutPage> {
   String inputEmail = "";
   String inputPassword = "";
 
-  void updateInputName(String newValue) {
+  String? inputNameError;
+  String? inputEmailError;
+  String? inputPasswordError;
+
+  void updateInputName(String newValue) => setState(() {
     inputName = newValue;
-  }
+    inputNameError = null;
+  });
 
-  void updateInputEmail(String newValue) {
+  void updateInputEmail(String newValue) => setState(() {
     inputEmail = newValue;
-  }
+    inputEmailError = null;
+  });
 
-  void updateInputPassword(String newValue) {
+  void updateInputPassword(String newValue) => setState(() {
     inputPassword = newValue;
+    inputPasswordError = null;
+  });
+
+  bool get canNext {
+    return inputName != "" && inputEmail != "" && inputPassword != "";
   }
 
   @override
@@ -47,12 +58,21 @@ class _SignOutPageState extends State<SignOutPage> {
               child: ListView(
                 padding: EdgeInsets.all(Dimens.outerPadding),
                 children: [
-                  InputField(hintText: "이름", onChanged: updateInputName),
+                  InputField(
+                    hintText: "이름",
+                    errorText: inputNameError,
+                    onChanged: updateInputName,
+                  ),
                   SizedBox(height: Dimens.innerPadding),
-                  InputField(hintText: "이메일", onChanged: updateInputEmail),
+                  InputField(
+                    hintText: "이메일",
+                    errorText: inputEmailError,
+                    onChanged: updateInputEmail,
+                  ),
                   SizedBox(height: Dimens.innerPadding),
                   InputField(
                     hintText: "비밀번호",
+                    errorText: inputPasswordError,
                     onChanged: updateInputPassword,
                     obscureText: !isVisiblePassword,
                     action: InputFieldAction(
@@ -74,14 +94,17 @@ class _SignOutPageState extends State<SignOutPage> {
             right: Dimens.outerPadding,
             bottom: Dimens.outerPadding,
           ),
-          child: WideButton(
-            label: "다음",
-            isLoading: isLoading,
-            onTap: () async {
-              setState(() => isLoading = true);
-              await Future.delayed(Duration(seconds: 1));
-              setState(() => isLoading = false);
-            }
+          child: Disableable(
+            isEnabled: canNext,
+            child: WideButton(
+              label: "다음",
+              isLoading: isLoading,
+              onTap: () async {
+                setState(() => isLoading = true);
+                await Future.delayed(Duration(seconds: 1));
+                setState(() => isLoading = false);
+              }
+            ),
           ),
         ),
       ],

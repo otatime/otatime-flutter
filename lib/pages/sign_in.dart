@@ -23,12 +23,21 @@ class _SignInPageState extends State<SignInPage> {
   String inputEmail = "";
   String inputPassword = "";
 
-  void updateInputEmail(String newValue) {
-    inputEmail = newValue;
-  }
+  String? inputEmailError;
+  String? inputPasswordError;
 
-  void updateInputPassword(String newValue) {
+  void updateInputEmail(String newValue) => setState(() {
+    inputEmail = newValue;
+    inputEmailError = null;
+  });
+
+  void updateInputPassword(String newValue) => setState(() {
     inputPassword = newValue;
+    inputPasswordError = null;
+  });
+
+  bool get canNext {
+    return inputEmail != "" && inputPassword != "";
   }
 
   @override
@@ -43,10 +52,15 @@ class _SignInPageState extends State<SignInPage> {
               child: ListView(
                 padding: EdgeInsets.all(Dimens.outerPadding),
                 children: [
-                  InputField(hintText: "이메일", onChanged: updateInputEmail),
+                  InputField(
+                    hintText: "이메일",
+                    errorText: inputEmailError,
+                    onChanged: updateInputEmail,
+                  ),
                   SizedBox(height: Dimens.innerPadding),
                   InputField(
                     hintText: "비밀번호",
+                    errorText: inputPasswordError,
                     onChanged: updateInputPassword,
                     obscureText: !isVisiblePassword,
                     action: InputFieldAction(
@@ -82,14 +96,17 @@ class _SignInPageState extends State<SignInPage> {
             right: Dimens.outerPadding,
             bottom: Dimens.outerPadding,
           ),
-          child: WideButton(
-            label: "로그인",
-            isLoading: isLoading,
-            onTap: () async {
-              setState(() => isLoading = true);
-              await Future.delayed(Duration(seconds: 1));
-              setState(() => isLoading = false);
-            }
+          child: Disableable(
+            isEnabled: canNext,
+            child: WideButton(
+              label: "로그인",
+              isLoading: isLoading,
+              onTap: () async {
+                setState(() => isLoading = true);
+                await Future.delayed(Duration(seconds: 1));
+                setState(() => isLoading = false);
+              }
+            ),
           ),
         ),
       ],
