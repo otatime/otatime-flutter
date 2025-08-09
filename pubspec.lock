@@ -114,10 +114,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_appbar
-      sha256: "9000c31792bc3a9c2bdd24343c733693397d4429f4389615c24615be400d4f42"
+      sha256: b187950e13f462a5d0e713c7f61e8b1600773414593a5434324bb89ee0f0bbc8
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.2"
+    version: "1.6.3"
   flutter_cached_transition:
     dependency: "direct main"
     description:
@@ -154,10 +154,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_scroll_bottom_sheet
-      sha256: b3743e2f26f00d8e164235aeb228b3941827a1c4c1e4db2f404de946b2c2105a
+      sha256: "0e515cef3b87711732dffacd6a629f9fe5f2e80e3425a81967f25690793b7863"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
