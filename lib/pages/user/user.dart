@@ -7,6 +7,7 @@ import 'package:otatime_flutter/components/ux/app_page_route.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/pages/settings/settings.dart';
 import 'package:otatime_flutter/pages/sign_in.dart';
+import 'package:otatime_flutter/pages/sign_out.dart';
 import 'package:otatime_flutter/widgets/button.dart';
 import 'package:otatime_flutter/widgets/column_item.dart';
 import 'package:otatime_flutter/widgets/column_list.dart';
@@ -111,7 +112,10 @@ class _HeaderAppBar extends StatelessWidget {
             Button(
               type: ButtonType.secondary,
               label: "회원가입",
-              onTap: () {},
+              onTap: () {
+                // 회원가입 페이지로 이동.
+                Navigator.push(context, AppPageRoute(builder: (_) => SignOutPage()));
+              },
             ),
           ],
         ),
