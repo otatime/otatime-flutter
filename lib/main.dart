@@ -48,17 +48,6 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       color: Scheme.current.primary,
-      theme: ThemeData(
-        primaryColor: Scheme.current.primary,
-        primaryColorLight: Scheme.current.primary,
-        primaryColorDark: Scheme.current.primary,
-
-        // 'RefreshIndicator'에 대한 테마 설정.
-        progressIndicatorTheme: ProgressIndicatorThemeData(
-          color: Scheme.current.foreground,
-          refreshBackgroundColor: Scheme.current.rearground,
-        ),
-      ),
       home: NavigationPage(),
       builder: defaultBuilder,
     );

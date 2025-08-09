@@ -16,7 +16,26 @@ class Designed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Scheme.current.background,
-      body: DefaultTextStyle(
+      body: themeWidget(child: child),
+    );
+  }
+
+  /// [Scaffold]를 제외한 공통 UI 테마 및 디자인을 정의합니다.
+  /// 페이지 단위가 아닌, 개별 구성 요소를 디자인할 때 사용됩니다.
+  static Widget themeWidget({required Widget child}) {
+    return Theme(
+      data: ThemeData(
+        primaryColor: Scheme.current.primary,
+        primaryColorLight: Scheme.current.primary,
+        primaryColorDark: Scheme.current.primary,
+
+        // 'RefreshIndicator'에 대한 테마 설정.
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: Scheme.current.foreground,
+          refreshBackgroundColor: Scheme.current.rearground,
+        ),
+      ),
+      child: DefaultTextStyle(
         style: TextStyle(
           fontFamily: "Pretendard",
           color: Scheme.current.foreground,
