@@ -1,8 +1,8 @@
 import 'package:otatime_flutter/components/service/get_service.dart';
 import 'package:otatime_flutter/pages/home/home_model.dart';
 
-class HomeService extends GetService<HomeModel, Map<String, dynamic>> {
-  HomeService({
+class PostService extends GetService<PostResultModel, Map<String, dynamic>> {
+  PostService({
     this.category,
     this.location,
   });
@@ -16,7 +16,17 @@ class HomeService extends GetService<HomeModel, Map<String, dynamic>> {
   String get path => "/posts";
 
   @override
-  HomeModel fromJson(Map<String, dynamic> json) {
-    return HomeModel.fromJson(json);
+  PostResultModel fromJson(Map<String, dynamic> json) {
+    return PostResultModel.fromJson(json);
+  }
+}
+
+class PostBannerService extends GetService<PostResultModel, Map<String, dynamic>> {
+  @override
+  String get path => "/posts/banner";
+
+  @override
+  PostResultModel fromJson(Map<String, dynamic> json) {
+    return PostResultModel.fromJson(json);
   }
 }

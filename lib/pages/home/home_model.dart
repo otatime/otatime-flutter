@@ -1,8 +1,8 @@
 import 'package:otatime_flutter/models/post.dart';
 import 'package:otatime_flutter/models/search_meta.dart';
 
-class HomeModel {
-  const HomeModel({
+class PostResultModel {
+  const PostResultModel({
     required this.posts,
     required this.meta,
   });
@@ -10,8 +10,8 @@ class HomeModel {
   final List<PostModel> posts;
   final SearchMetaModel meta;
 
-  factory HomeModel.fromJson(Map<String, dynamic> obj) {
-    return HomeModel(
+  factory PostResultModel.fromJson(Map<String, dynamic> obj) {
+    return PostResultModel(
       posts: PostModel.fromJsonArray(obj["posts"]),
       meta: SearchMetaModel.fromJson(obj["meta"]),
     );

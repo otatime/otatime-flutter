@@ -38,7 +38,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ServiceBuilder(
-      serviceBuilder: (_) => HomeService(),
+      serviceBuilder: (_) => PostService(),
       builder: (context, service) {
         return AppBarConnection(
           appBars: [
@@ -77,7 +77,7 @@ class _TopAppBar extends StatelessWidget {
     required this.service,
   });
 
-  final HomeService service;
+  final PostService service;
 
   static List<String> locations = [
     "서울", "부산"
@@ -134,7 +134,7 @@ class _BottomAppBar extends StatelessWidget {
     required this.service,
   });
 
-  final HomeService service;
+  final PostService service;
 
   static List<String> categorys = [
     "애니메이션",
@@ -278,6 +278,7 @@ class _Category extends StatelessWidget {
     return TouchScale(
       onPress: isSelected ? () {} : onTap,
       child: Transition(
+        // 선택 상태가 변화할 때마다 전환 애니메이션 적용.
         child: Container(
           key: ValueKey(isSelected),
           padding: EdgeInsets.symmetric(
@@ -311,7 +312,7 @@ class _ScrollView extends StatelessWidget {
     required this.service,
   });
 
-  final HomeService service;
+  final PostService service;
 
   @override
   Widget build(BuildContext context) {
@@ -626,30 +627,41 @@ class _LocationSelectBox extends StatelessWidget {
 class _Slider extends StatelessWidget {
   const _Slider({super.key});
 
-  // TODO: 임시 로직.
-  static final List<String> _images = [
-    "https://cdn1.epicgames.com/spt-assets/dcd83ace86fb4501bde1316ca03e29ad/zenless-zone-zero-1voa4.jpg",
-    "https://i.ytimg.com/vi/H-3wo8q0qAk/maxresdefault.jpg",
-    "https://static.inven.co.kr/column/2024/06/30/news/i1335021753.png",
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return wrapperWidget(
-      itemCount: _images.length,
-      itemBuilder: (context, index) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(Dimens.borderRadius),
-          child: _SliderItem(
-            url: _images[index],
-            title: "젠레스 존 제로 - 2025년 8월 9일부터 개최!",
+    return ServiceBuilder(
+      serviceBuilder: (_) => PostBannerService(),
+      builder: (context, service) {
+        return Transition(
+          // 로딩 상태가 변화할 때마다 전환 애니메이션 적용.
+          child: Builder(
+            key: ValueKey(service.isLoading),
+            builder: (context) {
+              if (service.isLoading) {
+                return skeletonWidget();
+              }
+
+              final List<PostModel> models = service.data.posts;
+
+              return wrapperWidget(
+                itemCount: models.length,
+                itemBuilder: (context, index) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(Dimens.borderRadius),
+                    child: _SliderItem(
+                      model: models[index],
+                    ),
+                  );
+                },
+              );
+            },
           ),
         );
-      },
+      }
     );
   }
 
-  Widget wrapperWidget({
+  static Widget wrapperWidget({
     required int itemCount,
     required IndexedWidgetBuilder itemBuilder,
   }) {
@@ -705,6 +717,15 @@ class _Slider extends StatelessWidget {
     );
   }
 
+  static Widget skeletonWidget() {
+    return wrapperWidget(
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        return Skeleton(child: Skeleton.partOf());
+      }
+    );
+  }
+
   static AppBarBehavior createAppBarBehavior() {
     return MaterialAppBarBehavior(alignAnimation: false);
   }
@@ -713,12 +734,10 @@ class _Slider extends StatelessWidget {
 class _SliderItem extends StatefulWidget {
   const _SliderItem({
     super.key,
-    required this.url,
-    required this.title,
+    required this.model,
   });
 
-  final String url;
-  final String title;
+  final PostModel model;
 
   @override
   State<_SliderItem> createState() => _SliderItemState();
@@ -730,7 +749,7 @@ class _SliderItemState extends State<_SliderItem> {
   void _initPaletteColor() async {
     // 이미지 처리에 대해서 성능 최적화를 위해 작게.
     final provider = ResizeImage(
-      NetworkImage(widget.url),
+      NetworkImage(widget.model.imageUrl),
       width: 200,
       height: 200,
     );
@@ -757,7 +776,7 @@ class _SliderItemState extends State<_SliderItem> {
     return Stack(
       children: [
         AppImage.network(
-          url: widget.url,
+          url: widget.model.imageUrl,
           width: double.infinity,
           height: double.infinity,
           fit: BoxFit.cover,
@@ -790,7 +809,7 @@ class _SliderItemState extends State<_SliderItem> {
               children: [
                 // 행사 제목 표시.
                 Text(
-                  widget.title,
+                  widget.model.title,
                   style: TextStyle(
                     color: Scheme.white,
                     fontSize: 16,
