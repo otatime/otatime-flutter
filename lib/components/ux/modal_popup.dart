@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart';
 import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
@@ -57,14 +59,21 @@ class ModalPopupRoute extends PopupRoute {
                 animation: curvedAnimation,
                 child: Container(
                   margin: EdgeInsets.all(Dimens.outerPadding),
-                  padding: EdgeInsets.all(Dimens.outerPadding),
-                  decoration: BoxDecoration(
+                  child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    color: Scheme.current.rearground,
-                  ),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 400),
-                    child: child,
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                      child: Container(
+                        padding: EdgeInsets.all(Dimens.outerPadding),
+                        decoration: BoxDecoration(
+                          color: Scheme.current.backgroundInPopup,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Scheme.current.border),
+                        ),
+                        constraints: BoxConstraints(maxWidth: 400),
+                        child: child,
+                      ),
+                    ),
                   ),
                 ),
               ),

@@ -8,6 +8,7 @@ abstract class Scheme {
   Color get deepPrimary;
   Color get background;
   Color get backgroundInInput;
+  Color get backgroundInPopup;
   Color get deepground;
   Color get rearground;
   Color get foreground;
@@ -52,6 +53,7 @@ class LightScheme extends Scheme {
   @override Color get deepPrimary => primary.withAlpha(30);
   @override Color get background => Color.fromRGBO(255, 255, 255, 1);
   @override Color get backgroundInInput => deepground;
+  @override Color get backgroundInPopup => background.withAlpha(200);
   @override Color get deepground => Color.fromRGBO(245, 245, 245, 1);
   @override Color get rearground => Color.fromRGBO(235, 235, 235, 1);
   @override Color get foreground => Scheme.black;
@@ -68,6 +70,7 @@ class DarkScheme extends Scheme {
   @override Color get deepPrimary => primary.withAlpha(50);
   @override Color get background => Color.fromRGBO(10, 10, 12, 1);
   @override Color get backgroundInInput => Scheme.black;
+  @override Color get backgroundInPopup => rearground.withAlpha(200);
   @override Color get deepground => Color.fromRGBO(30, 30, 32, 1);
   @override Color get rearground => Color.fromRGBO(40, 40, 42, 1);
   @override Color get foreground => Scheme.white;
