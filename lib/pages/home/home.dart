@@ -380,7 +380,6 @@ class _ScrollItem extends StatelessWidget {
     final bool isDDay = model.dDay <= 3;
 
     return OpenContainer(
-      transitionType: ContainerTransitionType.fade,
       openElevation: 0,
       openColor: Scheme.current.background,
       openBuilder: (_, _) {
@@ -646,12 +645,7 @@ class _Slider extends StatelessWidget {
               return wrapperWidget(
                 itemCount: models.length,
                 itemBuilder: (context, index) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(Dimens.borderRadius),
-                    child: _SliderItem(
-                      model: models[index],
-                    ),
-                  );
+                  return _SliderItem(model: models[index]);
                 },
               );
             },
@@ -773,64 +767,88 @@ class _SliderItemState extends State<_SliderItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        AppImage.network(
-          url: widget.model.imageUrl,
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.cover,
-        ),
+    return OpenContainer(
+      openElevation: 0,
+      openColor: Scheme.current.background,
+      openBuilder: (_, _) {
+        return Designed(child: PostDetailsPage(model: widget.model));
+      },
+      // 내부 아이템의 곡선 값을 그대로 유지.
+      closedShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Dimens.borderRadius),
+      ),
+      closedElevation: 0,
+      closedColor: Scheme.current.background,
+      closedBuilder: (context, openContainer) {
+        return Designed.themeWidget(
+          child: TouchScale(
+            scale: 0.95,
+            onPress: openContainer,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(Dimens.borderRadius),
+              child: Stack(
+                children: [
+                  AppImage.network(
+                    url: widget.model.imageUrl,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
 
-        // 이미지 대표색으로 별도의 그림자 렌더링.
-        if (paletteColor != null)
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  paletteColor!,
-                  paletteColor!.withAlpha(50),
-                  Scheme.transparent,
-                ]
-              )
+                  // 이미지 대표색으로 별도의 그림자 렌더링.
+                  if (paletteColor != null)
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            paletteColor!,
+                            paletteColor!.withAlpha(50),
+                            Scheme.transparent,
+                          ]
+                        )
+                      ),
+                    ),
+
+                  Positioned.fill(
+                    child: Padding(
+                      padding: EdgeInsets.all(Dimens.innerPadding),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 10,
+                        children: [
+                          // 행사 제목 표시.
+                          Text(
+                            widget.model.title,
+                            style: TextStyle(
+                              color: Scheme.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            )
+                          ),
+
+                          // 행사 일정 표시.
+                          Wrap(
+                            spacing: Dimens.rowSpacing,
+                            children: [
+                              DateButton(date: "2025-06-25"),
+                              Text("~", style: TextStyle(color: Scheme.current.foreground3)),
+                              DateButton(date: "2025-07-01")
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-
-        Positioned.fill(
-          child: Padding(
-            padding: EdgeInsets.all(Dimens.innerPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              spacing: 10,
-              children: [
-                // 행사 제목 표시.
-                Text(
-                  widget.model.title,
-                  style: TextStyle(
-                    color: Scheme.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  )
-                ),
-
-                // 행사 일정 표시.
-                Wrap(
-                  spacing: Dimens.rowSpacing,
-                  children: [
-                    DateButton(date: "2025-06-25"),
-                    Text("~", style: TextStyle(color: Scheme.current.foreground3)),
-                    DateButton(date: "2025-07-01")
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
