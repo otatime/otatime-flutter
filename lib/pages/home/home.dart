@@ -433,6 +433,7 @@ class _ScrollItem extends StatelessWidget {
                             // 행사 날짜
                             Wrap(
                               crossAxisAlignment: WrapCrossAlignment.center,
+                              runSpacing: Dimens.columnSpacing,
                               spacing: 5,
                               children: [
                                 // D-Day (3일) 임박시 표시.
@@ -521,6 +522,7 @@ class _ScrollItem extends StatelessWidget {
       child: Text(
         "D-DAY",
         style: TextStyle(
+          color: Scheme.white,
           fontSize: 12,
           fontWeight: FontWeight.bold,
         ),

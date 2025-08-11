@@ -17,6 +17,21 @@ class PostDetailsPage extends StatelessWidget {
 
   final PostModel model;
 
+  // TODO: 임시 코드.
+  static const String loremText = """
+안녕하세요, 여러분!
+2025년 8월 9일부터 드디어 기다리던 NIKKE 행사가 시작됩니다.
+이번 행사는 최신 트렌드와 혁신적인 콘텐츠가 가득한 특별한 시간으로, 많은 분들이 기대하고 계실 거예요.
+
+행사 기간 동안 다양한 프로그램과 워크숍, 그리고 흥미진진한 이벤트가 준비되어 있습니다.
+특히 이번에는 참가자분들이 직접 체험할 수 있는 체험 부스도 마련되어 있어 현장감 넘치는 경험을 할 수 있답니다.
+
+여러분 모두 소중한 추억을 만들 수 있는 이번 행사에 꼭 참여해 주세요!
+더 자세한 정보와 일정은 곧 업데이트 예정이니 자주 확인 부탁드립니다.
+
+감사합니다!
+  """;
+
   @override
   Widget build(BuildContext context) {
     final bool isDDay = model.dDay <= 3;
@@ -67,6 +82,7 @@ class PostDetailsPage extends StatelessWidget {
               // 행사 날짜
               Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,
+                runSpacing: Dimens.columnSpacing,
                 spacing: 5,
                 children: [
                   // D-Day (3일) 임박시 표시.
@@ -93,9 +109,20 @@ class PostDetailsPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(Dimens.borderRadius),
                   color: Scheme.current.deepground,
                 ),
-                child: Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                  style: TextStyle(color: Scheme.current.foreground2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: Dimens.columnSpacing,
+                  children: [
+                    Text(
+                      "상세 내용",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      loremText,
+                      style: TextStyle(color: Scheme.current.foreground2),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -133,6 +160,7 @@ class PostDetailsPage extends StatelessWidget {
       child: Text(
         "D-DAY",
         style: TextStyle(
+          color: Scheme.white,
           fontSize: 12,
           fontWeight: FontWeight.bold,
         ),
