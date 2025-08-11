@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:otatime_flutter/components/service/service.dart';
+import 'package:otatime_flutter/components/shared/palette.dart';
 import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
@@ -29,7 +30,6 @@ import 'package:otatime_flutter/widgets/service_builder.dart';
 import 'package:otatime_flutter/widgets/skeleton.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatelessWidget {
@@ -741,18 +741,7 @@ class _SliderItemState extends State<_SliderItem> {
   Color? paletteColor;
 
   void _initPaletteColor() async {
-    // 이미지 처리에 대해서 성능 최적화를 위해 작게.
-    final provider = ResizeImage(
-      NetworkImage(widget.model.imageUrl),
-      width: 200,
-      height: 200,
-    );
-
-    final generator = await PaletteGenerator.fromImageProvider(
-      provider,
-      size: const Size(200, 200),
-      maximumColorCount: 16,
-    );
+    final generator = await Palette.of(widget.model.imageUrl);
 
     // 가장 유사한 이미지 대표색을 정의합니다.
     if (!mounted) return;
