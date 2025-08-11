@@ -375,6 +375,19 @@ class _ScrollItem extends StatelessWidget {
 
   final PostModel model;
 
+  /// D-Day 임박 시 별도로 적용되는 박스 보더입니다.
+  static BoxBorder get dDayBorder => GradientBoxBorder(
+    width: 0.5,
+    gradient: LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        Scheme.transparent,
+        Scheme.negative,
+      ],
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final bool isDDay = model.dDay <= 3;
@@ -490,16 +503,7 @@ class _ScrollItem extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(Dimens.borderRadius),
-                        border: GradientBoxBorder(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Scheme.transparent,
-                              Scheme.negative,
-                            ],
-                          ),
-                        ),
+                        border: dDayBorder,
                       ),
                     ),
                   ),

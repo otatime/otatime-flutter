@@ -16,7 +16,9 @@ class Designed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Scheme.current.background,
-      body: themeWidget(child: child),
+      body: SafeArea(
+        child: themeWidget(child: child),
+      ),
     );
   }
 
@@ -42,7 +44,7 @@ class Designed extends StatelessWidget {
         ),
         child: TouchScaleStyle(
           behavior: AppTouchScaleBehavior(),
-          child: SafeArea(child: child),
+          child: child,
         ),
       ),
     );

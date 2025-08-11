@@ -120,7 +120,7 @@ class PostDetailsPage extends StatelessWidget {
                     ),
                     Text(
                       loremText,
-                      style: TextStyle(color: Scheme.current.foreground2),
+                      style: TextStyle(color: Scheme.current.foreground2, height: 1.5),
                     ),
                   ],
                 ),
@@ -182,7 +182,7 @@ class _HeaderAppBar extends StatelessWidget {
     return Stack(
       children: [
         AspectRatio(
-          aspectRatio: 2 / 1,
+          aspectRatio: 1.75 / 1,
           child: AppImage.network(
             url: model.imageUrl,
             fit: BoxFit.cover,
@@ -242,7 +242,7 @@ class _ActionButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(Dimens.innerPadding),
         decoration: BoxDecoration(
-          color: Scheme.current.deepground,
+          color: Scheme.current.deepground.withAlpha(200),
           border: Border.all(color: Scheme.current.border),
           borderRadius: BorderRadius.circular(Dimens.borderRadius),
         ),

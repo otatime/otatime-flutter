@@ -71,8 +71,8 @@ class DarkScheme extends Scheme {
   @override Color get background => Color.fromRGBO(10, 10, 12, 1);
   @override Color get backgroundInInput => Scheme.black;
   @override Color get backgroundInPopup => rearground.withAlpha(200);
-  @override Color get deepground => Color.fromRGBO(30, 30, 32, 1);
-  @override Color get rearground => Color.fromRGBO(40, 40, 42, 1);
+  @override Color get deepground => Color.fromRGBO(30, 30, 33, 1);
+  @override Color get rearground => Color.fromRGBO(40, 40, 43, 1);
   @override Color get foreground => Scheme.white;
   @override Color get foreground2 => Color.fromRGBO(150, 150, 150, 1);
   @override Color get foreground3 => Color.fromRGBO(100, 100, 100, 1);
