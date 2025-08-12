@@ -24,13 +24,14 @@ class Skeleton extends StatelessWidget {
   /// [Shimmer] 효과를 위한, 스켈레톤 UI의 일부 조각으로서 템플릿 형태로 사용됩니다.
   static Widget partOf({
     double? width,
-    double? height
+    double? height,
+    BorderRadius? borderRadius,
   }) {
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Dimens.borderRadius),
+        borderRadius: borderRadius ?? BorderRadius.circular(Dimens.borderRadius),
         color: Scheme.current.placeholder
       ),
     );

@@ -19,8 +19,8 @@ class PostModel {
   final String title;
   final String summary;
   final String imageUrl;
-  final String startDate;
-  final String endDate;
+  final DateTime startDate;
+  final DateTime endDate;
   final String sector;
   final String type;
   final String region;
@@ -34,8 +34,8 @@ class PostModel {
       title: obj["title"],
       summary: obj["summary"],
       imageUrl: obj["imageUrl"],
-      startDate: obj["startDate"],
-      endDate: obj["endDate"],
+      startDate: DateTime.parse(obj["startDate"]),
+      endDate: DateTime.parse(obj["endDate"]),
       sector: obj["sector"],
       type: obj["type"],
       region: obj["region"],

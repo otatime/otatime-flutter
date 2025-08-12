@@ -377,7 +377,6 @@ class _ScrollItem extends StatelessWidget {
 
   /// D-Day 임박 시 별도로 적용되는 박스 보더입니다.
   static BoxBorder get dDayBorder => GradientBoxBorder(
-    width: 0.5,
     gradient: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
@@ -829,9 +828,9 @@ class _SliderItemState extends State<_SliderItem> {
                           Wrap(
                             spacing: Dimens.rowSpacing,
                             children: [
-                              DateButton(date: "2025-06-25"),
+                              DateButton(date: widget.model.startDate),
                               Text("~", style: TextStyle(color: Scheme.current.foreground3)),
-                              DateButton(date: "2025-07-01")
+                              DateButton(date: widget.model.endDate),
                             ],
                           ),
                         ],

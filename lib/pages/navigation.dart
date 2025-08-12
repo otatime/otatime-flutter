@@ -8,6 +8,7 @@ import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/extensions/string.dart';
+import 'package:otatime_flutter/pages/calendar/calendar.dart';
 import 'package:otatime_flutter/pages/home/home.dart';
 import 'package:otatime_flutter/pages/user/user.dart';
 
@@ -23,7 +24,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
   late final List<Widget> _pages = [
     const HomePage(),
-    const Center(child: Text("달력")),
+    const CalendarPage(),
     const UserPage(),
   ];
 

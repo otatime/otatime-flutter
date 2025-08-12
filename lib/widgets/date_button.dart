@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
@@ -9,7 +10,7 @@ class DateButton extends StatelessWidget {
     required this.date,
   });
 
-  final String date;
+  final DateTime date;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class DateButton extends StatelessWidget {
 
           // 날짜 표시
           Text(
-            date,
+            DateFormat("yyyy-MM-dd").format(date),
             style: TextStyle(
               fontSize: 12,
               color: Scheme.current.foreground2,

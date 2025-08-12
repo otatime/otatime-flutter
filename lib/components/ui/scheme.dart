@@ -23,6 +23,8 @@ abstract class Scheme {
   static final Color white = Color.fromRGBO(255, 255, 255, 1);
   static final Color black = Color.fromRGBO(0, 0, 0, 1);
   static final Color negative = Color(0xFFF03737);
+  static final Color saturday = Color.fromRGBO(255, 45, 45, 1);
+  static final Color sunday = Color.fromRGBO(0, 150, 255, 1);
 
   static final LightScheme _light = LightScheme();
   static final DarkScheme _dark = DarkScheme();

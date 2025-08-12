@@ -47,9 +47,7 @@ class _CalendarPickerState extends State<CalendarPicker> {
   late DateTime? startDate = widget.initialStartDate;
   late DateTime? endDate = widget.initialEndDate;
 
-  static Color saturdayColor = Color.fromRGBO(255, 45, 45, 1);
-  static Color sundayColor = Color.fromRGBO(0, 150, 255, 1);
-
+  /// 주어진 연도 및 달에 해당하는 일자들을 리스트 형태로 반환합니다.
   List<DateTime> getDatesInMonth(int year, int month) {
     final List<DateTime> days = [];
 
@@ -173,20 +171,12 @@ class _CalendarPickerState extends State<CalendarPicker> {
   }
 
   Widget gridWidget() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Stack(
-          children: [
-            GridView.count(
-              crossAxisCount: 7, // 1주
-              mainAxisSpacing: 5,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: buildMonthlyGrid(),
-            ),
-          ],
-        );
-      },
+    return GridView.count(
+      crossAxisCount: 7, // 1주
+      mainAxisSpacing: 5,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      children: buildMonthlyGrid(),
     );
   }
 
@@ -241,8 +231,8 @@ class _CalendarPickerState extends State<CalendarPicker> {
                       color: isSelected
                         ? Scheme.white
                         : switch (date.weekday) {
-                            7 => sundayColor,   // 일요일
-                            6 => saturdayColor, // 토요일
+                            7 => Scheme.sunday,   // 일요일
+                            6 => Scheme.saturday, // 토요일
                             int() => Scheme.current.foreground,
                           }
                     ),
