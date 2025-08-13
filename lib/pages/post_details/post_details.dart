@@ -129,6 +129,29 @@ class PostDetailsPage extends StatelessWidget {
           ),
         ),
 
+        // 시각적 자연스러움을 위한 액션 영역 위치의 그림자 효과.
+        Positioned.fill(
+          child: IgnorePointer(
+            ignoring: true,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 100,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Scheme.current.background.withAlpha(0),
+                      Scheme.current.background,
+                    ]
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
         Positioned(
           left: Dimens.outerPadding,
           bottom: Dimens.outerPadding,
@@ -242,7 +265,7 @@ class _ActionButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(Dimens.innerPadding),
         decoration: BoxDecoration(
-          color: Scheme.current.deepground.withAlpha(200),
+          color: Scheme.current.rearground,
           border: Border.all(color: Scheme.current.border),
           borderRadius: BorderRadius.circular(Dimens.borderRadius),
         ),
