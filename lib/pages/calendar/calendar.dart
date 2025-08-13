@@ -1,10 +1,14 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/extensions/string.dart';
+import 'package:otatime_flutter/models/post.dart';
+import 'package:otatime_flutter/pages/calendar/calendar_result.dart';
 import 'package:otatime_flutter/pages/calendar/calendar_service.dart';
 import 'package:otatime_flutter/widgets/circular_button.dart';
+import 'package:otatime_flutter/widgets/designed.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/service_builder.dart';
 import 'package:otatime_flutter/widgets/skeleton.dart';
@@ -150,10 +154,12 @@ class _CalendarPageState extends State<CalendarPage> {
         const SizedBox(), // 앞에 비어 있는 칸
 
       ...days.map((date) {
-        final int postCount = service.data.posts.where((model) {
+        final List<PostModel> posts = service.data.posts.where((model) {
           return !date.isBefore(model.startDate)  // date >= startDate
               && !date.isAfter(model.endDate);    // date <= endDate
-        }).length;
+        }).toList();
+
+        final int postCount = posts.length;
 
         // 사용자의 현재 일자와 일치하는 일자인지에 대한 여부.
         final bool isCurrent = DateTime.now().year == date.year
@@ -162,43 +168,55 @@ class _CalendarPageState extends State<CalendarPage> {
 
         return Disableable(
           isEnabled: postCount > 0,
-          child: TouchScale(
-            onPress: () {},
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isCurrent
-                  ? Scheme.current.deepPrimary
-                  : Scheme.transparent,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "${date.day}",
-                    style: TextStyle(
-                      color: switch (date.weekday) {
-                        7 => Scheme.sunday,   // 일요일
-                        6 => Scheme.saturday, // 토요일
-                        int() => Scheme.current.foreground,
-                      }
-                    ),
+          child: OpenContainer(
+            openElevation: 0,
+            openColor: Scheme.transparent,
+            openBuilder: (_, _) {
+              return Designed(child: CalendarResultPage(date: date, models: posts));
+            },
+            closedElevation: 0,
+            closedShape: CircleBorder(),
+            closedColor: Scheme.transparent,
+            closedBuilder: (context, openContainer) {
+              return TouchScale(
+                onPress: openContainer,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isCurrent
+                      ? Scheme.current.deepPrimary
+                      : Scheme.transparent,
                   ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "${date.day}",
+                        style: TextStyle(
+                          color: switch (date.weekday) {
+                            7 => Scheme.sunday,   // 일요일
+                            6 => Scheme.saturday, // 토요일
+                            int() => Scheme.current.foreground,
+                          }
+                        ),
+                      ),
 
-                  Container(
-                    width: 5,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: postCount > 0
-                        ? Scheme.current.foreground
-                        : Scheme.transparent,
-                    ),
+                      Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: postCount > 0
+                            ? Scheme.current.foreground
+                            : Scheme.transparent,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         );
       }),

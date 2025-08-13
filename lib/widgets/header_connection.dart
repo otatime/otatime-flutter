@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_appbar/flutter_appbar.dart';
+import 'package:otatime_flutter/components/ui/dimens.dart';
+import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/widgets/circular_button.dart';
 
@@ -7,10 +9,12 @@ class HeaderConnection extends StatefulWidget {
   const HeaderConnection({
     super.key,
     required this.title,
+    this.label,
     required this.child,
   });
 
   final String title;
+  final String? label;
   final Widget child;
 
   @override
@@ -45,12 +49,28 @@ class _HeaderConnectionState extends State<HeaderConnection> {
                   end: 0.5,
                   position: position,
                     child: Center(
-                    child: Text(
-                      widget.title,
-                      style: TextStyle(
-                        fontSize: 32, 
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: Dimens.columnSpacing,
+                      children: [
+                        // 제목 표시.
+                        Text(
+                          widget.title,
+                          style: TextStyle(
+                            fontSize: 32, 
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        if (widget.label != null)
+                          Text(
+                            widget.label!,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Scheme.current.foreground2,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 );
