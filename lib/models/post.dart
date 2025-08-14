@@ -45,7 +45,7 @@ class PostModel {
     );
   }
 
-  static List<PostModel> fromJsonArray(List<Map<String, dynamic>> list) {
+  static List<PostModel> fromJsonArray(List<dynamic> list) {
     return list.map((item) => PostModel.fromJson(item)).toList();
   }
 }

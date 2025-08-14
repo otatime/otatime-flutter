@@ -135,6 +135,43 @@ class TestInterceptor extends Interceptor {
     }
   };
 
+  static Map<String, dynamic> postsSearchData = {
+    "result": {
+      "meta": {
+        "currentPage": 0,
+        "size": 10,
+        "hasNext": true,
+      },
+      "posts": [
+        {
+            "postId": 16,
+            "title": "블루 아카이브 페스티벌 - 2023년 5월 20일",
+            "summary": "7천 명이 빈틈 없이 들어찬 킨텍스... 전시, 상품, 공연까지 '완벽 하모니'",
+            "imageUrl": "https://cdn.gameple.co.kr/news/photo/202305/205842_213810_3453.jpg",
+            "startDate": "2023-05-20",
+            "endDate": "2023-05-21",
+            "sector": "게임",
+            "type": "페스티벌",
+            "region": "서울",
+            "location": "홍대 AK 5층",
+            "isLiked" : false,
+            "D-Day": 31
+        }
+      ],
+    }
+  };
+
+  static Map<String, dynamic> postsEmtpyData = {
+    "result": {
+      "meta": {
+        "currentPage": 0,
+        "size": 10,
+        "hasNext": false,
+      },
+      "posts": [],
+    }
+  };
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     await Future.delayed(const Duration(seconds: 1));
@@ -165,6 +202,27 @@ class TestInterceptor extends Interceptor {
           requestOptions: options,
           statusCode: 200,
           data: postsMonthData,
+        ),
+      );
+    }
+
+    if (options.path.contains("/posts/search")) {
+      if (options.path.contains("블루")
+       || options.path.contains("아카이브")) {
+        return handler.resolve(
+          Response(
+            requestOptions: options,
+            statusCode: 200,
+            data: postsSearchData,
+          ),
+        );
+      }
+
+      return handler.resolve(
+        Response(
+          requestOptions: options,
+          statusCode: 200,
+          data: postsEmtpyData,
         ),
       );
     }

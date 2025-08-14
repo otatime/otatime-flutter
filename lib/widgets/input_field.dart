@@ -28,6 +28,7 @@ class InputField extends StatelessWidget {
     this.onChanged,
     this.onSubmitted,
     this.obscureText = false,
+    this.autofocus = false,
     this.focusNode,
     this.keyboardType,
     this.action,
@@ -38,6 +39,7 @@ class InputField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final bool obscureText;
+  final bool autofocus;
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
   final InputFieldAction? action;
@@ -57,6 +59,7 @@ class InputField extends StatelessWidget {
             onChanged: onChanged,
             onSubmitted: onSubmitted,
             obscureText: obscureText,
+            autofocus: autofocus,
             style: TextStyle(fontSize: 16, color: Scheme.current.foreground),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(

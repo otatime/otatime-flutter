@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:animations/animations.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_appbar/flutter_appbar.dart';
@@ -9,12 +11,15 @@ import 'package:otatime_flutter/components/shared/palette.dart';
 import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
+import 'package:otatime_flutter/components/ux/app_page_route.dart';
+import 'package:otatime_flutter/components/ux/hero_open_container.dart';
 import 'package:otatime_flutter/components/ux/modal_popup.dart';
 import 'package:otatime_flutter/components/ux/select_box.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/models/post.dart';
 import 'package:otatime_flutter/pages/home/home_service.dart';
 import 'package:otatime_flutter/pages/post_details/post_details.dart';
+import 'package:otatime_flutter/pages/search/search.dart';
 import 'package:otatime_flutter/widgets/app_image.dart';
 import 'package:otatime_flutter/widgets/button.dart';
 import 'package:otatime_flutter/widgets/calendar_picker.dart';
@@ -114,7 +119,20 @@ class _TopAppBar extends StatelessWidget {
           ),
 
           // 오른쪽 영역.
-          CircularButton(iconPath: "search".svg, onTap: () {})
+          Hero(
+            tag: "search-bar",
+            flightShuttleBuilder: heroOpenContainerShuttle,
+            child: CircularButton(
+              iconPath: "search".svg,
+              onTap: () {
+                // 검색 페이지로 이동.
+                Navigator.push(
+                  context,
+                  AppPageRoute(builder: (_) => SearchPage(), isFadeEffect: true),
+                );
+              }
+            ),
+          ),
         ],
       ),
     );

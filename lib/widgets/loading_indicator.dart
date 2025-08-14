@@ -5,14 +5,22 @@ class LoadingIndicator extends StatelessWidget {
   const LoadingIndicator({
     super.key,
     this.color,
+    this.size = 30,
   });
 
   final Color? color;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
-    return CircularProgressIndicator(
-      color: color,
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CircularProgressIndicator(
+        color: color,
+        strokeWidth: size * 0.125,
+        strokeCap: StrokeCap.round,
+      ),
     );
   }
 }
