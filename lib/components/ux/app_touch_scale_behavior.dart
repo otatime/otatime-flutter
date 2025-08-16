@@ -7,9 +7,14 @@ class AppTouchScaleBehavior extends TouchScaleBehavior {
 
   @override
   Widget build(BuildContext context, Widget child, TouchScaleController controller) {
-    return Opacity(
-      opacity: 1 - controller.animValue * fraction,
-      child: child,
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        return Opacity(
+          opacity: 1 - controller.animValue * fraction,
+          child: RepaintBoundary(child: child),
+        ); 
+      }
     );
   }
 }

@@ -515,7 +515,6 @@ class _SliderItemState extends State<_SliderItem> {
       closedBuilder: (context, openContainer) {
         return Designed.themeWidget(
           child: TouchScale(
-            scale: 0.95,
             onPress: openContainer,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(Dimens.borderRadius),

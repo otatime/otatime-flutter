@@ -50,7 +50,6 @@ class PostScrollItem extends StatelessWidget {
       closedBuilder: (context, openContainer) {
         return Designed.themeWidget(
           child: TouchScale(
-            scale: 0.95,
             onPress: openContainer,
             child: Stack(
               children: [

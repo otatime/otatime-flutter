@@ -18,7 +18,6 @@ class ColumnItem {
     required VoidCallback onTap,
   }) {
     return TouchScale(
-      scale: touchScale,
       onPress: onTap,
       child: Padding(
         padding: EdgeInsets.all(Dimens.innerPadding),
@@ -53,7 +52,6 @@ class ColumnItem {
     required ValueChanged<bool> onChanged,
   }) {
     return TouchScale(
-      scale: touchScale,
       onPress: () {
         onChanged.call(!isEnabled);
         HapticFeedback.vibrate();
@@ -85,7 +83,6 @@ class ColumnItem {
     required ValueChanged<bool> onChanged,
   }) {
     return TouchScale(
-      scale: touchScale,
       onPress: () {
         onChanged.call(!isEnabled);
         HapticFeedback.vibrate();

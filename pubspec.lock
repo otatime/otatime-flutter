@@ -114,10 +114,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_appbar
-      sha256: b187950e13f462a5d0e713c7f61e8b1600773414593a5434324bb89ee0f0bbc8
+      sha256: e5c63f62cd086fa2ec02fef17877bf1c450df4d10186e98be3cf5317a74046cc
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.3"
+    version: "1.6.5"
   flutter_cached_transition:
     dependency: "direct main"
     description:
@@ -183,10 +183,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_touch_scale
-      sha256: ff933b25746b8f359e0c3982068fbe29dbab927b4c99462648624ebd85d9aec2
+      sha256: "136a7a51e1c2077d95806eee3624f4e86a0b535fea4f69d8bffbf1dbf0f91d68"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1+1"
+    version: "1.2.3"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -481,10 +481,10 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00"
+      sha256: ab2726c1a94d3176a45960b6234466ec367179b87dd74f1611adb1f3b5fb9d55
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.6"
+    version: "0.7.7"
   transparent_image:
     dependency: "direct main"
     description:
