@@ -44,6 +44,7 @@ class Designed extends StatelessWidget {
         ),
         child: TouchScaleStyle(
           behavior: AppTouchScaleBehavior(),
+          resolver: DrivenTouchScaleResolver.stevens(baseIntensity: 0.6),
           child: child,
         ),
       ),

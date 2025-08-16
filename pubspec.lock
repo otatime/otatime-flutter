@@ -183,10 +183,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_touch_scale
-      sha256: "136a7a51e1c2077d95806eee3624f4e86a0b535fea4f69d8bffbf1dbf0f91d68"
+      sha256: "4150172a48916caabf3efee8a2a37c9c72315b94de7b66887eb056b971687d74"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.3"
+    version: "1.3.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
