@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:animations/animations.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_appbar/flutter_appbar.dart';
 import 'package:flutter_refresh_indicator/flutter_refresh_indicator.dart';
@@ -25,8 +22,8 @@ import 'package:otatime_flutter/widgets/button.dart';
 import 'package:otatime_flutter/widgets/calendar_picker.dart';
 import 'package:otatime_flutter/widgets/circular_button.dart';
 import 'package:otatime_flutter/widgets/date_button.dart';
-import 'package:otatime_flutter/widgets/designed.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
+import 'package:otatime_flutter/widgets/openable.dart';
 import 'package:otatime_flutter/widgets/scroll_edge_fade.dart';
 import 'package:otatime_flutter/widgets/service_builder.dart';
 import 'package:otatime_flutter/widgets/shared/post_scroll_view.dart';
@@ -500,83 +497,77 @@ class _SliderItemState extends State<_SliderItem> {
 
   @override
   Widget build(BuildContext context) {
-    return OpenContainer(
-      openElevation: 0,
-      openColor: Scheme.current.background,
-      openBuilder: (_, _) {
-        return Designed(child: PostDetailsPage(model: widget.model));
+    return Openable(
+      openBuilder: (context) {
+        return PostDetailsPage(model: widget.model);
       },
       // 내부 아이템의 곡선 값을 그대로 유지.
       closedShape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Dimens.borderRadius),
       ),
-      closedElevation: 0,
-      closedColor: Scheme.current.background,
       closedBuilder: (context, openContainer) {
-        return Designed.themeWidget(
-          child: TouchScale(
-            onPress: openContainer,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(Dimens.borderRadius),
-              child: Stack(
-                children: [
-                  AppImage.network(
-                    url: widget.model.imageUrl,
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+        return TouchScale(
+          onPress: openContainer,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(Dimens.borderRadius),
+            child: Stack(
+              children: [
+                AppImage.network(
+                  url: widget.model.imageUrl,
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.cover,
+                ),
 
-                  // 이미지 대표색으로 별도의 그림자 렌더링.
-                  if (paletteColor != null)
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [
-                            paletteColor!,
-                            paletteColor!.withAlpha(50),
-                            Scheme.transparent,
-                          ]
-                        )
-                      ),
-                    ),
-
-                  Positioned.fill(
-                    child: Padding(
-                      padding: EdgeInsets.all(Dimens.innerPadding),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 10,
-                        children: [
-                          // 행사 제목 표시.
-                          Text(
-                            widget.model.title,
-                            style: TextStyle(
-                              color: Scheme.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            )
-                          ),
-
-                          // 행사 일정 표시.
-                          Wrap(
-                            spacing: Dimens.rowSpacing,
-                            children: [
-                              DateButton(date: widget.model.startDate),
-                              Text("~", style: TextStyle(color: Scheme.current.foreground3)),
-                              DateButton(date: widget.model.endDate),
-                            ],
-                          ),
-                        ],
-                      ),
+                // 이미지 대표색으로 별도의 그림자 렌더링.
+                if (paletteColor != null)
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          paletteColor!,
+                          paletteColor!.withAlpha(50),
+                          Scheme.transparent,
+                        ]
+                      )
                     ),
                   ),
-                ],
-              ),
+
+                Positioned.fill(
+                  child: Padding(
+                    padding: EdgeInsets.all(Dimens.innerPadding),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 10,
+                      children: [
+                        // 행사 제목 표시.
+                        Text(
+                          widget.model.title,
+                          style: TextStyle(
+                            color: Scheme.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          )
+                        ),
+
+                        // 행사 일정 표시.
+                        Wrap(
+                          spacing: Dimens.rowSpacing,
+                          children: [
+                            DateButton(date: widget.model.startDate),
+                            Text("~", style: TextStyle(color: Scheme.current.foreground3)),
+                            DateButton(date: widget.model.endDate),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );
