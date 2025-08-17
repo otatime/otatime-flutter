@@ -32,6 +32,8 @@ class InputField extends StatelessWidget {
     this.focusNode,
     this.keyboardType,
     this.action,
+    this.minLines,
+    this.maxLines = 1,
   });
 
   final String? hintText;
@@ -43,6 +45,8 @@ class InputField extends StatelessWidget {
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
   final InputFieldAction? action;
+  final int? minLines;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +65,8 @@ class InputField extends StatelessWidget {
             obscureText: obscureText,
             autofocus: autofocus,
             style: TextStyle(fontSize: 16, color: Scheme.current.foreground),
+            minLines: minLines,
+            maxLines: maxLines,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(
                 top: Dimens.innerPadding,

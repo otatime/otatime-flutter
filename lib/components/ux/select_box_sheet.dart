@@ -4,7 +4,7 @@ import 'package:flutter_touch_scale/widgets/touch_scale.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 
-class SelectBox {
+class SelectBoxSheet {
   static void open(BuildContext context, {
     required int index,
     required List<String> items,

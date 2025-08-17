@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>업로드를 하기 위한 과정에서 별도의 사진을 찍기 위해 카메라에 엑세스해야 합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>업로드용으로 이미지를 선택하기 위해 이 라이브러리에 엑세스해야 합니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>업로드용으로 이 라이브러리에 이미지를 저장할 수 있는 엑세스 권한이 필요합니다</string>
 </dict>
 </plist>

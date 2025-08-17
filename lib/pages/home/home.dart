@@ -11,11 +11,12 @@ import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/components/ux/app_page_route.dart';
 import 'package:otatime_flutter/components/ux/hero_open_container.dart';
 import 'package:otatime_flutter/components/ux/modal_popup.dart';
-import 'package:otatime_flutter/components/ux/select_box.dart';
+import 'package:otatime_flutter/components/ux/select_box_sheet.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/models/post.dart';
 import 'package:otatime_flutter/pages/home/home_service.dart';
 import 'package:otatime_flutter/pages/post_details/post_details.dart';
+import 'package:otatime_flutter/pages/report/report.dart';
 import 'package:otatime_flutter/pages/search/search.dart';
 import 'package:otatime_flutter/widgets/app_image.dart';
 import 'package:otatime_flutter/widgets/button.dart';
@@ -116,19 +117,34 @@ class _TopAppBar extends StatelessWidget {
           ),
 
           // 오른쪽 영역.
-          Hero(
-            tag: "search-bar",
-            flightShuttleBuilder: heroOpenContainerShuttle,
-            child: CircularButton(
-              iconPath: "search".svg,
-              onTap: () {
-                // 검색 페이지로 이동.
-                Navigator.push(
-                  context,
-                  AppPageRoute(builder: (_) => SearchPage(), isFadeEffect: true),
-                );
-              }
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularButton(
+                iconPath: "paper_plane".svg,
+                onTap: () {
+                  // 제보 페이지로 이동.
+                  Navigator.push(
+                    context,
+                    AppPageRoute(builder: (_) => ReportPage()),
+                  );
+                }
+              ),
+              Hero(
+                tag: "search-bar",
+                flightShuttleBuilder: heroOpenContainerShuttle,
+                child: CircularButton(
+                  iconPath: "search".svg,
+                  onTap: () {
+                    // 검색 페이지로 이동.
+                    Navigator.push(
+                      context,
+                      AppPageRoute(builder: (_) => SearchPage(), isFadeEffect: true),
+                    );
+                  }
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -332,7 +348,7 @@ class _LocationSelectBox extends StatelessWidget {
 
   /// 선택용 바텀 시트 열기.
   void _openBottomSheet(BuildContext context) {
-    SelectBox.open(context, index: index, items: items, onSelected: onChanged);
+    SelectBoxSheet.open(context, index: index, items: items, onSelected: onChanged);
   }
 
   @override
