@@ -25,7 +25,10 @@ class AppPageRoute extends MaterialPageRoute {
   ) {
     if (isFadeEffect) {
       return FadeTransition(
-        opacity: animation,
+        opacity: CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+        ),
         child: child,
       );
     }
@@ -33,7 +36,7 @@ class AppPageRoute extends MaterialPageRoute {
     // 기존 Material 전환 애니메이션 사용.
     return super.buildTransitions(context, animation, secondaryAnimation, child);
   }
-  
+
   @override
   DelegatedTransitionBuilder? get delegatedTransition {
     // 페이드 효과일 경우, 서브 페이지에 대한 애니메이션은 적용하지 않음.

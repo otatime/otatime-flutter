@@ -2,13 +2,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
+import 'package:otatime_flutter/components/ux/app_page_route.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/models/post.dart';
 import 'package:otatime_flutter/pages/calendar/calendar_result.dart';
 import 'package:otatime_flutter/pages/calendar/calendar_service.dart';
 import 'package:otatime_flutter/widgets/circular_button.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
-import 'package:otatime_flutter/widgets/openable.dart';
 import 'package:otatime_flutter/widgets/service_builder.dart';
 import 'package:otatime_flutter/widgets/skeleton.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
@@ -167,51 +167,49 @@ class _CalendarPageState extends State<CalendarPage> {
 
         return Disableable(
           isEnabled: postCount > 0,
-          child: Openable(
-            openBuilder: (context) {
-              return CalendarResultPage(date: date, models: posts);
-            },
-            closedShape: CircleBorder(),
-            closedBuilder: (context, openContainer) {
-              return TouchScale(
-                onPress: openContainer,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isCurrent
-                      ? Scheme.current.deepPrimary
-                      : Scheme.transparent,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "${date.day}",
-                        style: TextStyle(
-                          color: switch (date.weekday) {
-                            7 => Scheme.sunday,   // 일요일
-                            6 => Scheme.saturday, // 토요일
-                            int() => Scheme.current.foreground,
-                          }
-                        ),
-                      ),
-
-                      Container(
-                        width: 5,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: postCount > 0
-                            ? Scheme.current.foreground
-                            : Scheme.transparent,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+          child: TouchScale(
+            onPress: () {
+              // 달력 검색 결과 페이지로 이동.
+              Navigator.push(
+                context,
+                AppPageRoute(builder: (_) => CalendarResultPage(date: date, models: posts)),
               );
             },
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isCurrent
+                  ? Scheme.current.deepPrimary
+                  : Scheme.transparent,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "${date.day}",
+                    style: TextStyle(
+                      color: switch (date.weekday) {
+                        7 => Scheme.sunday,   // 일요일
+                        6 => Scheme.saturday, // 토요일
+                        int() => Scheme.current.foreground,
+                      }
+                    ),
+                  ),
+
+                  Container(
+                    width: 5,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: postCount > 0
+                        ? Scheme.current.foreground
+                        : Scheme.transparent,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       }),
