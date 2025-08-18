@@ -312,6 +312,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  hero_container:
+    dependency: "direct main"
+    description:
+      name: hero_container
+      sha256: "011a0c027606378407bfe26de0b82e8675b565ad97effd726cc2fcd2727a0222"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   html:
     dependency: transitive
     description:

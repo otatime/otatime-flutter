@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hero_container/flutter_hero_container.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/widgets/designed.dart';
@@ -25,10 +26,10 @@ class Openable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OpenContainer(
-      openElevation: 0,
-      openColor: Scheme.current.background,
-      openBuilder: (_, _) {
+    return HeroContainer(
+      openedElevation: 0,
+      openedColor: Scheme.current.background,
+      openedBuilder: (context) {
         return RepaintBoundary(
           child: Designed(child: openBuilder(context)),
         );
