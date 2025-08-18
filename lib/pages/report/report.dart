@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
+import 'package:otatime_flutter/widgets/address_select_box.dart';
 import 'package:otatime_flutter/widgets/calendar_select_box.dart';
 import 'package:otatime_flutter/widgets/header_connection.dart';
 import 'package:otatime_flutter/widgets/image_select_box.dart';
 import 'package:otatime_flutter/widgets/input_field.dart';
+import 'package:otatime_flutter/widgets/labeled_select_box.dart';
 import 'package:otatime_flutter/widgets/select_box.dart';
 import 'package:otatime_flutter/widgets/wide_button.dart';
 
@@ -35,34 +37,45 @@ class _ReportPageState extends State<ReportPage> {
                   onChanged: (newFile) => {},
                 ),
                 SizedBox(height: Dimens.innerPadding),
-                SelectBox(
+                LabeledSelectBox(
                   label: "상위 분류",
-                  index: sectorIndex,
-                  items: ["선택되지 않음", "애니메이션", "게임", "행사", "공연", "캐릭터", "성우 행사"],
-                  onChanged: (newValue) {
-                    setState(() => sectorIndex = newValue);
-                  },
+                  child: SelectBox(
+                    index: sectorIndex,
+                    items: ["선택되지 않음", "애니메이션", "게임", "행사", "공연", "캐릭터", "성우 행사"],
+                    onChanged: (newValue) {
+                      setState(() => sectorIndex = newValue);
+                    },
+                  ),
                 ),
                 SizedBox(height: Dimens.innerPadding),
-                SelectBox(
+                LabeledSelectBox(
                   label: "하위 분류",
-                  index: typeIndex,
-                  items: ["선택되지 않음", "아이템 1", "아이템 2", "아이템 3"],
-                  onChanged: (newValue) {
-                    setState(() => typeIndex = newValue);
-                  },
+                  child: SelectBox(
+                    index: typeIndex,
+                    items: ["선택되지 않음", "아이템 1", "아이템 2", "아이템 3"],
+                    onChanged: (newValue) {
+                      setState(() => typeIndex = newValue);
+                    },
+                  ),
                 ),
                 SizedBox(height: Dimens.innerPadding),
-                CalendarSelectBox.range(
+                LabeledSelectBox(
                   label: "시작 및 종료 날짜",
-                  startDate: startDate,
-                  endDate: endDate,
-                  onStartChanged: (newValue) {
-                    setState(() => startDate = newValue);
-                  },
-                  onEndChanged: (newValue) {
-                    setState(() => endDate = newValue);
-                  },
+                  child: CalendarSelectBox.range(
+                    startDate: startDate,
+                    endDate: endDate,
+                    onStartChanged: (newValue) {
+                      setState(() => startDate = newValue);
+                    },
+                    onEndChanged: (newValue) {
+                      setState(() => endDate = newValue);
+                    },
+                  ),
+                ),
+                SizedBox(height: Dimens.innerPadding),
+                LabeledSelectBox(
+                  label: "행사 위치",
+                  child: AddressSelectBox()
                 ),
 
                 // 추가 간격 표시.

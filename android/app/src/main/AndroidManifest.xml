@@ -12,6 +12,12 @@
         android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- google_maps_flutter 관련 설정 -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBrmzdwBItkukvA0bGyECpPzXpbL_5K5v4"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

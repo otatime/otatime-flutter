@@ -13,14 +13,12 @@ import 'package:otatime_flutter/widgets/transition.dart';
 class CalendarSelectBox extends StatelessWidget {
   const CalendarSelectBox.range({
     super.key,
-    required this.label,
     this.startDate,
     this.endDate,
     required this.onStartChanged,
     required this.onEndChanged,
   });
 
-  final String label;
   final DateTime? startDate;
   final DateTime? endDate;
   final ValueChanged<DateTime?> onStartChanged;
@@ -68,50 +66,36 @@ class CalendarSelectBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      spacing: Dimens.columnSpacing,
-      children: [
-        // 라벨 표시.
-        Padding(
-          padding: EdgeInsets.only(left: Dimens.innerPadding),
-          child: Text(label, style: TextStyle(color: Scheme.current.foreground3)),
-        ),
-
-        // 선택 박스 표시.
-        TouchScale(
-          onPress: () => _openCalendarPopup(context),
-          child: Transition(
-            child: Container(
-              key: ValueKey("$startDate, $endDate"),
-              padding: EdgeInsets.all(Dimens.innerPadding),
-              decoration: BoxDecoration(
-                color: Scheme.current.deepground,
-                borderRadius: BorderRadius.circular(Dimens.borderRadius),
-                border: Border.all(width: 2, color: Scheme.current.border),
+    return TouchScale(
+      onPress: () => _openCalendarPopup(context),
+      child: Transition(
+        child: Container(
+          key: ValueKey("$startDate, $endDate"),
+          padding: EdgeInsets.all(Dimens.innerPadding),
+          decoration: BoxDecoration(
+            color: Scheme.current.deepground,
+            borderRadius: BorderRadius.circular(Dimens.borderRadius),
+            border: Border.all(width: 2, color: Scheme.current.border),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: Dimens.innerPadding,
+            children: [
+              Expanded(
+                child: Text(
+                  startDate != null ? placeholder : "선택되지 않음",
+                  style: TextStyle(fontSize: 16, color: Scheme.current.foreground2),
+                ),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: Dimens.innerPadding,
-                children: [
-                  Expanded(
-                    child: Text(
-                      startDate != null ? placeholder : "선택되지 않음",
-                      style: TextStyle(fontSize: 16, color: Scheme.current.foreground2),
-                    ),
-                  ),
-                  SvgPicture.asset(
-                    "calendar".svg,
-                    width: 16,
-                    color: Scheme.current.foreground3,
-                  ),
-                ],
+              SvgPicture.asset(
+                "calendar".svg,
+                width: 16,
+                color: Scheme.current.foreground3,
               ),
-            ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 

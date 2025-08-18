@@ -11,13 +11,11 @@ class SelectBox extends StatelessWidget {
   const SelectBox({
     super.key,
     required this.index,
-    required this.label,
     required this.items,
     required this.onChanged,
   });
 
   final int index;
-  final String label;
   final List<String> items;
   final ValueChanged<int> onChanged;
 
@@ -28,50 +26,36 @@ class SelectBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      spacing: Dimens.columnSpacing,
-      children: [
-        // 라벨 표시.
-        Padding(
-          padding: EdgeInsets.only(left: Dimens.innerPadding),
-          child: Text(label, style: TextStyle(color: Scheme.current.foreground3)),
-        ),
-
-        // 선택 박스 표시.
-        TouchScale(
-          onPress: () => _openBottomSheet(context),
-          child: Transition(
-            child: Container(
-              key: ValueKey(index),
-              padding: EdgeInsets.all(Dimens.innerPadding),
-              decoration: BoxDecoration(
-                color: Scheme.current.deepground,
-                borderRadius: BorderRadius.circular(Dimens.borderRadius),
-                border: Border.all(width: 2, color: Scheme.current.border),
+    return TouchScale(
+      onPress: () => _openBottomSheet(context),
+      child: Transition(
+        child: Container(
+          key: ValueKey(index),
+          padding: EdgeInsets.all(Dimens.innerPadding),
+          decoration: BoxDecoration(
+            color: Scheme.current.deepground,
+            borderRadius: BorderRadius.circular(Dimens.borderRadius),
+            border: Border.all(width: 2, color: Scheme.current.border),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: Dimens.innerPadding,
+            children: [
+              Expanded(
+                child: Text(
+                  items[index],
+                  style: TextStyle(fontSize: 16, color: Scheme.current.foreground2),
+                ),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: Dimens.innerPadding,
-                children: [
-                  Expanded(
-                    child: Text(
-                      items[index],
-                      style: TextStyle(fontSize: 16, color: Scheme.current.foreground2),
-                    ),
-                  ),
-                  SvgPicture.asset(
-                    "arrow_bottom".svg,
-                    width: 14,
-                    color: Scheme.current.foreground3,
-                  ),
-                ],
+              SvgPicture.asset(
+                "arrow_bottom".svg,
+                width: 14,
+                color: Scheme.current.foreground3,
               ),
-            ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
