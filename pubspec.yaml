@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
   flutter_appbar: ^1.6.5
   flutter_cached_transition: ^1.0.1+1
+  flutter_dotenv: ^5.2.1
   flutter_rebuildable: ^1.0.2
   flutter_refresh_indicator: ^1.1.1
   flutter_scroll_bottom_sheet: ^1.1.0
@@ -40,6 +41,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - .env
     - assets/
     - assets/svg/
     - assets/json/

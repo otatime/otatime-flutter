@@ -5,7 +5,7 @@ import 'package:otatime_flutter/widgets/calendar_select_box.dart';
 import 'package:otatime_flutter/widgets/header_connection.dart';
 import 'package:otatime_flutter/widgets/image_select_box.dart';
 import 'package:otatime_flutter/widgets/input_field.dart';
-import 'package:otatime_flutter/widgets/labeled_select_box.dart';
+import 'package:otatime_flutter/widgets/labeled_box.dart';
 import 'package:otatime_flutter/widgets/select_box.dart';
 import 'package:otatime_flutter/widgets/wide_button.dart';
 
@@ -37,7 +37,7 @@ class _ReportPageState extends State<ReportPage> {
                   onChanged: (newFile) => {},
                 ),
                 SizedBox(height: Dimens.innerPadding),
-                LabeledSelectBox(
+                LabeledBox(
                   label: "상위 분류",
                   child: SelectBox(
                     index: sectorIndex,
@@ -48,7 +48,7 @@ class _ReportPageState extends State<ReportPage> {
                   ),
                 ),
                 SizedBox(height: Dimens.innerPadding),
-                LabeledSelectBox(
+                LabeledBox(
                   label: "하위 분류",
                   child: SelectBox(
                     index: typeIndex,
@@ -59,7 +59,7 @@ class _ReportPageState extends State<ReportPage> {
                   ),
                 ),
                 SizedBox(height: Dimens.innerPadding),
-                LabeledSelectBox(
+                LabeledBox(
                   label: "시작 및 종료 날짜",
                   child: CalendarSelectBox.range(
                     startDate: startDate,
@@ -73,9 +73,9 @@ class _ReportPageState extends State<ReportPage> {
                   ),
                 ),
                 SizedBox(height: Dimens.innerPadding),
-                LabeledSelectBox(
+                LabeledBox(
                   label: "행사 위치",
-                  child: AddressSelectBox()
+                  child: AddressSelectBox(onChanged: (address) {})
                 ),
 
                 // 추가 간격 표시.

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rebuildable/flutter_rebuildable.dart';
 import 'package:otatime_flutter/components/settings/settings_binding.dart';
+import 'package:otatime_flutter/components/shared/env.dart';
 import 'package:otatime_flutter/components/shared/google_mpas.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/components/ux/bottom_sheet.dart';
@@ -11,6 +12,7 @@ import 'package:otatime_flutter/widgets/designed.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SettingsBinding.initializeAll();
+  await Env.initializeAll();
 
   // 구글 맵의 다크 테마 설정 값을 정의하는 JSON 파일 불러오기.
   kGoogleMapsDarkStyle

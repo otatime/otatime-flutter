@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 
-class LabeledSelectBox extends StatelessWidget {
-  const LabeledSelectBox({
+class LabeledBox extends StatelessWidget {
+  const LabeledBox({
     super.key,
     required this.label,
     required this.child,
