@@ -36,6 +36,14 @@ class Designed extends StatelessWidget {
           color: Scheme.current.foreground,
           refreshBackgroundColor: Scheme.current.rearground,
         ),
+
+        // 포괄적인 페이지 전환 애니메이션에 대한 설정.
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          }
+        ),
       ),
       child: DefaultTextStyle(
         style: TextStyle(
