@@ -25,11 +25,15 @@ class Address {
     required this.zipCode,
     required this.street,
     required this.details,
+    required this.latitude,
+    required this.longitude,
   });
 
-  final String zipCode;
-  final String street;
-  final String details;
+  final String zipCode;   // 우편 주소
+  final String street;    // 도로명 주소
+  final String details;   // 상세 주소
+  final double latitude;  // 위도
+  final double longitude; // 경도
 }
 
 class AddressPage extends StatefulWidget {
@@ -42,16 +46,30 @@ class AddressPage extends StatefulWidget {
 class _AddressPageState extends State<AddressPage> {
   AddressModel? selectedModel;
   String? details;
+  bool isLoading = false;
 
   /// 사용자가 최종적으로 주소 선택을 완료하면 호출됩니다.
-  void done() {
+  void done() async {
+    setState(() => isLoading = true);
+
+    assert(selectedModel != null);
+    final service = LocationService(model: selectedModel!);
+    await service.load();
+
+    // 선택한 주소에 대한 위도 및 경도에 대한 조회 결과.
+    final LocationModel location = service.data.model;
+
     final Address result = Address(
       zipCode: selectedModel!.zipNo,
       details: details ?? "",
       street: selectedModel!.roadAddr,
+      latitude: location.entY,
+      longitude: location.entX,
     );
 
-    Navigator.pop(context, result);
+    if (mounted) {
+      Navigator.pop(context, result);
+    }
   }
 
   void updateDetails(String newValue) => setState(() {
@@ -63,42 +81,45 @@ class _AddressPageState extends State<AddressPage> {
     return Column(
       children: [
         Expanded(
-          child: HeaderConnection(
-            title: "주소 선택",
-            child: ListView(
-              padding: EdgeInsets.all(Dimens.outerPadding),
-              children: [
-                LabeledBox(
-                  label: "도로명 주소",
-                  child: ColumnList(
-                    children: [
-                      ColumnItem.push(
-                        title: selectedModel?.roadAddr ?? "주소 검색하기",
-                        iconPath: "navigation".svg,
-                        onTap: () async {
-                          // 도로명 주소 검색 페이지로 이동.
-                          final result = await Navigator.push(
-                            context,
-                            AppPageRoute(builder: (_) => _AddressSearchPage()),
-                          ) as AddressModel?;
+          child: Disableable(
+            isEnabled: !isLoading,
+            child: HeaderConnection(
+              title: "주소 선택",
+              child: ListView(
+                padding: EdgeInsets.all(Dimens.outerPadding),
+                children: [
+                  LabeledBox(
+                    label: "도로명 주소",
+                    child: ColumnList(
+                      children: [
+                        ColumnItem.push(
+                          title: selectedModel?.roadAddr ?? "주소 검색하기",
+                          iconPath: "navigation".svg,
+                          onTap: () async {
+                            // 도로명 주소 검색 페이지로 이동.
+                            final result = await Navigator.push(
+                              context,
+                              AppPageRoute(builder: (_) => _AddressSearchPage()),
+                            ) as AddressModel?;
 
-                          if (result != null) {
-                            setState(() => selectedModel = result);
+                            if (result != null) {
+                              setState(() => selectedModel = result);
+                            }
                           }
-                        }
-                      ),
-                    ],
-                  )
-                ),
-                SizedBox(height: Dimens.innerPadding * 2),
-                LabeledBox(
-                  label: "상세 또는 기타사항",
-                  child: InputField(
-                    hintText: "예: 코엑스 컨벤션 센터 3층 d홀",
-                    onChanged: updateDetails,
+                        ),
+                      ],
+                    )
                   ),
-                ),
-              ],
+                  SizedBox(height: Dimens.innerPadding * 2),
+                  LabeledBox(
+                    label: "상세 또는 기타사항",
+                    child: InputField(
+                      hintText: "예: 코엑스 컨벤션 센터 3층 d홀",
+                      onChanged: updateDetails,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -110,7 +131,11 @@ class _AddressPageState extends State<AddressPage> {
           ),
           child: Disableable(
             isEnabled: selectedModel != null,
-            child: WideButton(label: "선택하기", onTap: done),
+            child: WideButton(
+              label: "선택하기",
+              onTap: done,
+              isLoading: isLoading,
+            ),
           ),
         ),
       ],

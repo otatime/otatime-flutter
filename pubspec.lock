@@ -316,10 +316,10 @@ packages:
     dependency: "direct main"
     description:
       name: hero_container
-      sha256: "011a0c027606378407bfe26de0b82e8675b565ad97effd726cc2fcd2727a0222"
+      sha256: "441e8ce4d17b220be3b404c994b436aceb5256ea9324057e6ef04a7f1af7ef7b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   html:
     dependency: transitive
     description:
