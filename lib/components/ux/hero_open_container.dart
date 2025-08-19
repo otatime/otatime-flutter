@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:otatime_flutter/components/ui/animes.dart';
 
 /// Hero 이동 중간에 보여질 위젯을 정의하는 함수. (OpenContainer 느낌)
 Widget heroOpenContainerShuttle(
@@ -17,7 +16,7 @@ Widget heroOpenContainerShuttle(
     animation: animation,
     builder: (context, child) {
       final double curvedValue
-          = Animes.transition.curve.transform(animation.value);
+          = Curves.fastOutSlowIn.transform(animation.value);
 
       return Stack(
         children: [

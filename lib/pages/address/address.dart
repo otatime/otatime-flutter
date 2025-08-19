@@ -9,6 +9,7 @@ import 'package:otatime_flutter/components/ux/app_page_route.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/pages/address/address_model.dart';
 import 'package:otatime_flutter/pages/address/address_service.dart';
+import 'package:otatime_flutter/widgets/circular_button.dart';
 import 'package:otatime_flutter/widgets/column_item.dart';
 import 'package:otatime_flutter/widgets/column_list.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
@@ -147,10 +148,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
                   alwaysScrolling: false,
                   floating: true,
                 ),
-                body: Padding(
-                  padding: EdgeInsets.all(Dimens.outerPadding),
-                  child: serachBarWidget(autoFocus: true),
-                ),
+                body: serachBarWidget(autoFocus: true),
               ),
             ],
             child: ListenableBuilder(
@@ -207,21 +205,41 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
   }
 
   Widget serachBarWidget({required bool autoFocus}) {
-    return Hero(
-      tag: "search-bar",
-      child: InputField(
-        hintText: "주소 검색",
-        autofocus: autoFocus,
-        onChanged: (newValue) {
-          setState(() {
-            if (newValue.length <= 2) {
-              return service = null;
-            }
+    return Padding(
+      padding: EdgeInsets.only(
+        top: Dimens.outerPadding,
+        right: Dimens.outerPadding,
+        bottom: Dimens.outerPadding,
+      ),
+      child: Row(
+        children: [
+          // 뒤로가기 버튼.
+          CircularButton(
+            iconPath: "arrow_left".svg,
+            onTap: () => Navigator.pop(context),
+          ),
 
-            service = AddressService(keyword: newValue);
-            service?.load();
-          });
-        },
+          // 검색바 표시.
+          Expanded(
+            child: Hero(
+              tag: "search-bar",
+              child: InputField(
+                hintText: "주소 검색",
+                autofocus: autoFocus,
+                onChanged: (newValue) {
+                  setState(() {
+                    if (newValue.length <= 2) {
+                      return service = null;
+                    }
+
+                    service = AddressService(keyword: newValue);
+                    service?.load();
+                  });
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

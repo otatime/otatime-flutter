@@ -8,6 +8,7 @@ import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/pages/search/search_service.dart';
+import 'package:otatime_flutter/widgets/circular_button.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/info_placeholder.dart';
 import 'package:otatime_flutter/widgets/input_field.dart';
@@ -109,9 +110,19 @@ class _HeaderAppBarState extends State<_HeaderAppBar> {
     bool isSameKeyword = previousKeyword == widget.service.keyword;
 
     return Padding(
-      padding: EdgeInsets.all(Dimens.outerPadding),
+      padding: EdgeInsets.only(
+        top: Dimens.outerPadding,
+        right: Dimens.outerPadding,
+        bottom: Dimens.outerPadding,
+      ),
       child: Row(
         children: [
+          // 뒤로가기 버튼.
+          CircularButton(
+            iconPath: "arrow_left".svg,
+            onTap: () => Navigator.pop(context),
+          ),
+
           Expanded(
             child: Hero(
               tag: "search-bar",
