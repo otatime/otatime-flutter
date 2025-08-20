@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rebuildable/flutter_rebuildable.dart';
 import 'package:otatime_flutter/components/settings/settings_binding.dart';
 import 'package:otatime_flutter/components/shared/env.dart';
-import 'package:otatime_flutter/components/shared/google_mpas.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/components/ux/bottom_sheet.dart';
 import 'package:otatime_flutter/pages/navigation.dart';
@@ -13,10 +12,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SettingsBinding.initializeAll();
   await Env.initializeAll();
-
-  // 구글 맵의 다크 테마 설정 값을 정의하는 JSON 파일 불러오기.
-  kGoogleMapsDarkStyle
-    = await rootBundle.loadString("assets/json/google_mpas_dark.json");
 
   // 사용자가 OS 측의 테마를 변경했을 때 앱 내의 전체 위젯들의 상태를 변경하도록 합니다.
   WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged = () {
