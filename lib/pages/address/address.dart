@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_appbar/flutter_appbar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
+import 'package:otatime_flutter/components/service/service.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/components/ux/app_page_route.dart';
@@ -14,9 +15,11 @@ import 'package:otatime_flutter/widgets/column_item.dart';
 import 'package:otatime_flutter/widgets/column_list.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/header_connection.dart';
+import 'package:otatime_flutter/widgets/info_placeholder.dart';
 import 'package:otatime_flutter/widgets/input_field.dart';
 import 'package:otatime_flutter/widgets/labeled_box.dart';
 import 'package:otatime_flutter/widgets/radio.dart';
+import 'package:otatime_flutter/widgets/skeleton.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
 import 'package:otatime_flutter/widgets/wide_button.dart';
 
@@ -179,32 +182,40 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
             child: ListenableBuilder(
               listenable: service ?? ValueNotifier([]),
               builder: (context, child) {
-
                 // 로딩 상태가 변화할 때마다 전환 애니메이션 적용.
                 return Transition(
                   child: Builder(
-                    key: ValueKey(service?.isLoading),
+                    key: ValueKey(service?.status),
                     builder: (context) {
-                      if (service == null || service!.isLoading) {
-                        return SizedBox();
+                      if (service == null) return SizedBox();
+
+                      // 사용자가 검색어를 너무 짧게 입력한 경우.
+                      if (service!.keyword.length <= 2) {
+                        return InfoPlaceholder(
+                          iconPath: "search".svg,
+                          title: "검색어가 너무 짧아요",
+                          label: "검색어는 최소 2글자 이상 입력해주세요."
+                        );
                       }
 
-                      return ListView.separated(
-                        padding: EdgeInsets.all(Dimens.outerPadding),
-                        separatorBuilder: (context, index) {
-                          return SizedBox(height: Dimens.innerPadding);
-                        },
-                        itemCount: service!.data.length,
-                        itemBuilder: (context, index) {
-                          final AddressModel model = service!.data[index];
+                      if (service!.status == ServiceStatus.loading) {
+                        return _ScrollView.skeletonWidget();
+                      }
 
-                          return _ScrollItem(
-                            isSelected: model == selectedModel,
-                            model: model,
-                            onTap: () {
-                              setState(() => selectedModel = model);
-                            },
-                          );
+                      // 검색 결과가 존재하지 않는 경우.
+                      if (service!.data.isEmpty) {
+                        return InfoPlaceholder(
+                          iconPath: "search".svg,
+                          title: "다시 시도해주세요!",
+                          label: "‘${service!.keyword}’ 검색 결과를 찾을 수 없습니다.",
+                        );
+                      }
+
+                      return _ScrollView(
+                        service: service!,
+                        selectedModel: selectedModel,
+                        onChanged: (newModel) {
+                          setState(() => selectedModel = newModel);
                         },
                       );
                     },
@@ -253,12 +264,17 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
                 autofocus: autoFocus,
                 onChanged: (newValue) {
                   setState(() {
-                    if (newValue.length <= 2) {
+                    if (newValue.isEmpty) {
                       return service = null;
                     }
 
                     service = AddressService(keyword: newValue);
-                    service?.load();
+
+                    // 최소 검색어 길이를 충족한 경우.
+                    if (service!.status == ServiceStatus.none
+                     && service!.keyword.length > 2) {
+                      service?.load();
+                    }
                   });
                 },
               ),
@@ -266,6 +282,58 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ScrollView extends StatelessWidget {
+  const _ScrollView({
+    super.key,
+    required this.service,
+    required this.selectedModel,
+    required this.onChanged,
+  });
+
+  final AddressService service;
+  final AddressModel? selectedModel;
+  final ValueChanged<AddressModel> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return wrapperWidget(
+      itemCount: service.data.length,
+      itemBuilder: (context, index) {
+        final AddressModel model = service.data[index];
+
+        return _ScrollItem(
+          isSelected: model == selectedModel,
+          model: model,
+          onTap: () => onChanged.call(model),
+        );
+      },
+    );
+  }
+
+  static Widget wrapperWidget({
+    required int itemCount,
+    required IndexedWidgetBuilder itemBuilder,
+  }) {
+    return ListView.separated(
+      padding: EdgeInsets.all(Dimens.outerPadding),
+      separatorBuilder: (context, index) {
+        return SizedBox(height: Dimens.innerPadding);
+      },
+      itemCount: itemCount,
+      itemBuilder: itemBuilder,
+    );
+  }
+
+  static Widget skeletonWidget() {
+    return wrapperWidget(
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return _ScrollItem.skeletonWidget();
+      },
     );
   }
 }
@@ -341,6 +409,23 @@ class _ScrollItem extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  static Widget skeletonWidget() {
+    return Skeleton(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        spacing: Dimens.columnSpacing,
+        children: [
+          Skeleton.partOf(height: 60),
+          FractionallySizedBox(
+            widthFactor: 0.5,
+            child: Skeleton.partOf(height: 30),
+          )
+        ],
       ),
     );
   }
