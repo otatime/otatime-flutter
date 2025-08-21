@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:otatime_flutter/components/api/interface/api_error.dart';
 import 'package:otatime_flutter/components/service/service.dart';
 import 'package:otatime_flutter/components/shared/env.dart';
 import 'package:otatime_flutter/components/shared/network.dart';
@@ -22,8 +21,6 @@ abstract class BusinessJusoService<T> extends Service<T> {
         done(fromJson(response.data));
         return;
       }
-
-      throw APIError(type: null, response: response);
     } catch (error) {
       fail();
       rethrow;

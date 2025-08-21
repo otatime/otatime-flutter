@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:otatime_flutter/components/shared/auth_interceptor.dart';
 import 'package:otatime_flutter/components/shared/test_interceptor.dart';
 
 /// API 서버에 대한 도메인 주소가 정의됩니다.
-final String kUrl = "https://www.otatime.com";
+final String kUrl = "http://3.35.92.114:8080";
 
 /// 앱 내에서 전역적으로 사용되는 [Dio] 인스턴스입니다.
 final Dio kDio = Dio(
@@ -15,4 +16,6 @@ final Dio kDio = Dio(
     connectTimeout: const Duration(seconds: 10),
     receiveTimeout: const Duration(seconds: 10),
   )
-)..interceptors.add(TestInterceptor());
+)
+..interceptors.add(AuthInterceptor())
+..interceptors.add(TestInterceptor());

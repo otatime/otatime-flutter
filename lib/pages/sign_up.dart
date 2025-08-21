@@ -6,14 +6,14 @@ import 'package:otatime_flutter/widgets/header_connection.dart';
 import 'package:otatime_flutter/widgets/input_field.dart';
 import 'package:otatime_flutter/widgets/wide_button.dart';
 
-class SignOutPage extends StatefulWidget {
-  const SignOutPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<SignOutPage> createState() => _SignOutPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignOutPageState extends State<SignOutPage> {
+class _SignUpPageState extends State<SignUpPage> {
   bool isLoading = false;
 
   /// 비밀번호 난독화 끄기 여부.

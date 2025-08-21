@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rebuildable/flutter_rebuildable.dart';
+import 'package:otatime_flutter/components/auth/my_user.dart';
+import 'package:otatime_flutter/components/secure/secure_binding.dart';
 import 'package:otatime_flutter/components/settings/settings_binding.dart';
 import 'package:otatime_flutter/components/shared/env.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
@@ -11,6 +13,7 @@ import 'package:otatime_flutter/widgets/designed.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SettingsBinding.initializeAll();
+  await SecureBinding.initializeAll();
   await Env.initializeAll();
 
   // 사용자가 OS 측의 테마를 변경했을 때 앱 내의 전체 위젯들의 상태를 변경하도록 합니다.
@@ -19,6 +22,9 @@ void main() async {
   };
 
   BottomSheetUX.initialize();
+
+  // 초기 앱 실행 시, 사용자 정보 불러오기.
+  MyUser.load();
 
   runApp(RebuildableApp(child: const MainApp()));
 }

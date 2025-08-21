@@ -1,6 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:otatime_flutter/components/api/interface/api_error.dart';
+import 'package:otatime_flutter/components/shared/test.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
+import 'package:otatime_flutter/components/auth/my_user.dart';
 import 'package:otatime_flutter/extensions/string.dart';
+import 'package:otatime_flutter/pages/sign_in/sign_in_service.dart';
 import 'package:otatime_flutter/widgets/button.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/header_connection.dart';
@@ -35,6 +39,42 @@ class _SignInPageState extends State<SignInPage> {
     inputPassword = newValue;
     inputPasswordError = null;
   });
+
+  void done() async {
+    if (!Test.isEmail(inputEmail)) {
+      setState(() => inputEmailError = "유효하지 않은 이메일 형식입니다.");
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      final SignInService signIn = SignInService(
+        email: inputEmail,
+        password: inputPassword,
+      );
+
+      await signIn.load();
+      await MyUser.signIn(
+        accessToken: signIn.data.accessToken,
+        refreshToken: signIn.data.refreshToken,
+      );
+
+      // 해당 사용자 정보 불러오기.
+      MyUser.load();
+
+      // 로그인 성공 시, 페이지 나가기.
+      if (mounted) Navigator.pop(context);
+    } catch (error) {
+
+      // 서버 측 에러 메세지 그대로 표시.
+      if (error is APIError) {
+        setState(() => inputEmailError = error.detail);
+      }
+    }
+
+    setState(() => isLoading = false);
+  }
 
   bool get canNext {
     return inputEmail != "" && inputPassword != "";
@@ -101,11 +141,7 @@ class _SignInPageState extends State<SignInPage> {
             child: WideButton(
               label: "로그인",
               isLoading: isLoading,
-              onTap: () async {
-                setState(() => isLoading = true);
-                await Future.delayed(Duration(seconds: 1));
-                setState(() => isLoading = false);
-              }
+              onTap: done,
             ),
           ),
         ),
