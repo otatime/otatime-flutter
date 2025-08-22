@@ -35,12 +35,13 @@ abstract class RestService<T, K> extends Service<T> {
         return;
       }
     } catch (error) {
+      fail();
+
       if (error is DioException) {
         final APIError dto = APIError.fromJson(error.response!.data["error"]);
         throw dto;
       }
 
-      fail();
       rethrow;
     }
   }

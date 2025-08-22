@@ -21,4 +21,9 @@ class APIError {
       detail: obj["detail"],
     );
   }
+
+  @override
+  String toString() {
+    return "{title: $title, status: $status, detail: $detail}";
+  }
 }
