@@ -8,6 +8,7 @@ import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/models/post.dart';
 import 'package:otatime_flutter/widgets/app_image.dart';
 import 'package:otatime_flutter/widgets/date_button.dart';
+import 'package:otatime_flutter/widgets/wide_button.dart';
 
 class PostDetailsPage extends StatelessWidget {
   const PostDetailsPage({
@@ -36,92 +37,138 @@ class PostDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isDDay = model.dDay <= 3;
 
-    return Stack(
+    return Column(
       children: [
-        AppBarConnection(
-          appBars: [
-            _HeaderAppBar.createAppBar(model: model),
-          ],
-          child: ListView(
-            padding: EdgeInsets.all(Dimens.outerPadding),
+        Expanded(
+          child: Stack(
             children: [
-              Row(
-                spacing: Dimens.rowSpacing,
-                children: [
-                  SvgPicture.asset(
-                    "navigation-filled".svg,
-                    height: 16,
-                    color: Scheme.current.foreground2,
-                  ),
-
-                  // 행사 위치 표시.
-                  Text(
-                    "${model.region} · ${model.location}",
-                    style: TextStyle(color: Scheme.current.foreground2),
-                  ),
+              AppBarConnection(
+                appBars: [
+                  _HeaderAppBar.createAppBar(model: model),
                 ],
-              ),
-
-              SizedBox(height: Dimens.columnSpacing),
-
-              Text(
-                model.title,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-
-              SizedBox(height: Dimens.columnSpacing),
-
-              // 상위 카테고리 및 하위 카테고리 간략히 표시.
-              Text(
-                "${model.sector}, ${model.type}",
-                style: TextStyle(color: Scheme.current.primary),
-              ),
-
-              SizedBox(height: Dimens.innerPadding),
-
-              // 행사 날짜
-              Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                runSpacing: Dimens.columnSpacing,
-                spacing: 5,
-                children: [
-                  // D-Day (3일) 임박시 표시.
-                  if (isDDay) dDayWidget(),
-                  DateButton(date: model.startDate),
-                  Text(
-                    "부터",
-                    style: TextStyle(fontSize: 12, color: Scheme.current.foreground3)
-                  ),
-                  DateButton(date: model.endDate),
-                  Text(
-                    "까지",
-                    style: TextStyle(fontSize: 12, color: Scheme.current.foreground3)
-                  ),
-                ],
-              ),
-
-              SizedBox(height: Dimens.innerPadding),
-
-              // 행사 상세 내용 표시.
-              Container(
-                padding: EdgeInsets.all(Dimens.innerPadding),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimens.borderRadius),
-                  color: Scheme.current.deepground,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: Dimens.columnSpacing,
+                child: ListView(
+                  padding: EdgeInsets.all(Dimens.outerPadding),
                   children: [
-                    Text(
-                      "상세 내용",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    Row(
+                      spacing: Dimens.rowSpacing,
+                      children: [
+                        SvgPicture.asset(
+                          "navigation-filled".svg,
+                          height: 16,
+                          color: Scheme.current.foreground2,
+                        ),
+
+                        // 행사 위치 표시.
+                        Text(
+                          "${model.region} · ${model.location}",
+                          style: TextStyle(color: Scheme.current.foreground2),
+                        ),
+                      ],
                     ),
+
+                    SizedBox(height: Dimens.columnSpacing),
+
                     Text(
-                      loremText,
-                      style: TextStyle(color: Scheme.current.foreground2, height: 1.5),
+                      model.title,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
+
+                    SizedBox(height: Dimens.columnSpacing),
+
+                    // 상위 카테고리 및 하위 카테고리 간략히 표시.
+                    Text(
+                      "${model.sector}, ${model.type}",
+                      style: TextStyle(color: Scheme.current.primary),
+                    ),
+
+                    SizedBox(height: Dimens.innerPadding),
+
+                    // 행사 날짜
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      runSpacing: Dimens.columnSpacing,
+                      spacing: 5,
+                      children: [
+                        // D-Day (3일) 임박시 표시.
+                        if (isDDay) dDayWidget(),
+                        DateButton(date: model.startDate),
+                        Text(
+                          "부터",
+                          style: TextStyle(fontSize: 12, color: Scheme.current.foreground3)
+                        ),
+                        DateButton(date: model.endDate),
+                        Text(
+                          "까지",
+                          style: TextStyle(fontSize: 12, color: Scheme.current.foreground3)
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: Dimens.innerPadding),
+
+                    // 행사 상세 내용 표시.
+                    Container(
+                      padding: EdgeInsets.all(Dimens.innerPadding),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Dimens.borderRadius),
+                        color: Scheme.current.deepground,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: Dimens.columnSpacing,
+                        children: [
+                          Text(
+                            "상세 내용",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            loremText,
+                            style: TextStyle(color: Scheme.current.foreground2, height: 1.5),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // 시각적 자연스러움을 위한 액션 영역 위치의 그림자 효과.
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: true,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Scheme.current.background.withAlpha(0),
+                            Scheme.current.background,
+                          ]
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              Positioned(
+                left: Dimens.outerPadding,
+                bottom: Dimens.outerPadding,
+                child: Row(
+                  spacing: Dimens.innerPadding,
+                  children: [
+                    // 뒤로가기 버튼.
+                    _ActionButton(
+                      iconPath: "arrow_left".svg,
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    _ActionButton(iconPath: "heart".svg, onTap: () {}),
+                    _ActionButton(iconPath: "link".svg, onTap: () {})
                   ],
                 ),
               ),
@@ -129,43 +176,16 @@ class PostDetailsPage extends StatelessWidget {
           ),
         ),
 
-        // 시각적 자연스러움을 위한 액션 영역 위치의 그림자 효과.
-        Positioned.fill(
-          child: IgnorePointer(
-            ignoring: true,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Scheme.current.background.withAlpha(0),
-                      Scheme.current.background,
-                    ]
-                  ),
-                ),
-              ),
-            ),
+        Padding(
+          padding: EdgeInsets.only(
+            left: Dimens.outerPadding,
+            right: Dimens.outerPadding,
+            bottom: Dimens.outerPadding,
           ),
-        ),
-
-        Positioned(
-          left: Dimens.outerPadding,
-          bottom: Dimens.outerPadding,
-          child: Row(
-            spacing: Dimens.innerPadding,
-            children: [
-              // 뒤로가기 버튼.
-              _ActionButton(
-                iconPath: "arrow_left".svg,
-                onTap: () => Navigator.pop(context),
-              ),
-              _ActionButton(iconPath: "heart".svg, onTap: () {}),
-              _ActionButton(iconPath: "link".svg, onTap: () {})
-            ],
+          child: WideButton(
+            iconPath: "navigation-filled".svg,
+            label: "위치 보기",
+            onTap: () {},
           ),
         ),
       ],

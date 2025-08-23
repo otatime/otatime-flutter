@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
@@ -10,11 +11,13 @@ class WideButton extends StatefulWidget {
     super.key,
     required this.label,
     required this.onTap,
+    this.iconPath,
     this.isLoading = false,
   });
 
   final String label;
   final VoidCallback onTap;
+  final String? iconPath;
   final bool isLoading;
 
   @override
@@ -45,17 +48,33 @@ class _WideButtonState extends State<WideButton> {
                 ),
                 child: Opacity(
                   opacity: 1 - animValue,
-                  child: Text(
-                    widget.label,
-                    style: TextStyle(
-                      color: Scheme.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: Dimens.innerPadding,
+                    children: [
+                      // 버튼 아이콘 표시.
+                      if (widget.iconPath != null)
+                        SvgPicture.asset(
+                          widget.iconPath!,
+                          width: 16,
+                          color: Scheme.white,
+                        ),
+
+                      // 버튼 라벨 표시.
+                      Text(
+                        widget.label,
+                        style: TextStyle(
+                          color: Scheme.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
 
+              // 특정 조건에서 로딩 인디케이터 표시.
               if (animValue != 0)
                 Opacity(
                   opacity: animValue,
