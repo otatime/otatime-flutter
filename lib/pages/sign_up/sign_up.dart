@@ -1,7 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_scroll_bottom_sheet/flutter_bottom_sheet.dart';
+import 'package:otatime_flutter/components/api/interface/api_error.dart';
+import 'package:otatime_flutter/components/auth/my_user.dart';
+import 'package:otatime_flutter/components/shared/test.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/extensions/string.dart';
+import 'package:otatime_flutter/pages/sign_in/sign_in_service.dart';
+import 'package:otatime_flutter/pages/sign_up/sign_up_service.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/header_connection.dart';
 import 'package:otatime_flutter/widgets/input_field.dart';
@@ -45,7 +50,48 @@ class _SignUpPageState extends State<SignUpPage> {
   });
 
   void next() async {
-    BottomSheet.open(context, _Terms(onDone: () {}));
+    if (!Test.isEmail(inputEmail)) {
+      setState(() => inputEmailError = "유효하지 않은 이메일 형식입니다.");
+      return;
+    }
+
+    BottomSheet.open(context, _Terms(onDone: () async {
+      Navigator.pop(context);
+
+      setState(() => isLoading = true);
+
+      try {
+        final SignUpService signUp = SignUpService(
+          username: inputName,
+          email: inputEmail,
+          password: inputPassword,
+        )..load();
+
+        await signUp.load();
+
+        final SignInService signIn = SignInService(
+          email: inputEmail,
+          password: inputPassword,
+        );
+
+        await signIn.load();
+        await MyUser.signIn(
+          accessToken: signIn.data.accessToken,
+          refreshToken: signIn.data.refreshToken,
+        );
+
+        MyUser.load();
+
+        // 로그인 완료 시, 페이지 나가기.
+        if (mounted) Navigator.pop(context);
+      } on APIError catch (error) {
+
+        // 서버 측 에러 메세지 그대로 표시.
+        setState(() => inputNameError = error.detail);
+      }
+
+      setState(() => isLoading = false);
+    }));
   }
 
   bool get canNext {

@@ -65,12 +65,10 @@ class _SignInPageState extends State<SignInPage> {
 
       // 로그인 성공 시, 페이지 나가기.
       if (mounted) Navigator.pop(context);
-    } catch (error) {
+    } on APIError catch (error) {
 
       // 서버 측 에러 메세지 그대로 표시.
-      if (error is APIError) {
-        setState(() => inputEmailError = error.detail);
-      }
+      setState(() => inputEmailError = error.detail);
     }
 
     setState(() => isLoading = false);
