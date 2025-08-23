@@ -4,7 +4,6 @@ import 'package:flutter_refresh_indicator/flutter_refresh_indicator.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
 import 'package:otatime_flutter/components/service/service.dart';
-import 'package:otatime_flutter/components/shared/palette.dart';
 import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
@@ -18,18 +17,19 @@ import 'package:otatime_flutter/pages/home/home_service.dart';
 import 'package:otatime_flutter/pages/post_details/post_details.dart';
 import 'package:otatime_flutter/pages/report/report.dart';
 import 'package:otatime_flutter/pages/search/search.dart';
-import 'package:otatime_flutter/widgets/app_image.dart';
 import 'package:otatime_flutter/widgets/button.dart';
 import 'package:otatime_flutter/widgets/calendar_picker.dart';
 import 'package:otatime_flutter/widgets/circular_button.dart';
 import 'package:otatime_flutter/widgets/date_button.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/openable.dart';
+import 'package:otatime_flutter/widgets/palette_image.dart';
 import 'package:otatime_flutter/widgets/scroll_edge_fade.dart';
 import 'package:otatime_flutter/widgets/service_builder.dart';
 import 'package:otatime_flutter/widgets/shared/post_scroll_view.dart';
 import 'package:otatime_flutter/widgets/skeleton.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatelessWidget {
@@ -497,18 +497,10 @@ class _SliderItem extends StatefulWidget {
 class _SliderItemState extends State<_SliderItem> {
   Color? paletteColor;
 
-  void _initPaletteColor() async {
-    final generator = await Palette.of(widget.model.imageUrl);
-
+  void setPaletteColor(PaletteGenerator generator) async {
     // 가장 유사한 이미지 대표색을 정의합니다.
     if (!mounted) return;
     setState(() => paletteColor = generator.dominantColor?.color);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initPaletteColor();
   }
 
   @override
@@ -528,11 +520,12 @@ class _SliderItemState extends State<_SliderItem> {
             borderRadius: BorderRadius.circular(Dimens.borderRadius),
             child: Stack(
               children: [
-                AppImage.network(
+                PaletteImage.network(
                   url: widget.model.imageUrl,
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,
+                  onPalette: setPaletteColor,
                 ),
 
                 // 이미지 대표색으로 별도의 그림자 렌더링.

@@ -4,15 +4,23 @@ import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class AppImage extends StatelessWidget {
-  const AppImage.network({
+  const AppImage({
     super.key,
-    required this.url,
+    required this.provider,
+    this.width,
+    this.height,
+    this.fit,
+  });
+
+  AppImage.network({
+    super.key,
+    required String url,
     this.width,
     this.height,
     this.fit
-  });
+  }) : provider = NetworkImage(url);
 
-  final String url;
+  final ImageProvider provider;
   final double? width;
   final double? height;
   final BoxFit? fit;
@@ -28,7 +36,7 @@ class AppImage extends StatelessWidget {
         fit: fit,
         width: width,
         height: height,
-        image: NetworkImage(url)
+        image: provider,
       ),
     );
   }

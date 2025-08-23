@@ -3,16 +3,16 @@ import 'package:palette_generator/palette_generator.dart';
 
 /// 애플리케이션 내에서 공통적으로 이미지 대표색을 추출하는 데 사용됩니다.
 class Palette {
-  static Future<PaletteGenerator> of(String imageUrl) async {
+  static Future<PaletteGenerator> of(ImageProvider provider) async {
     // 이미지 처리에 대해서 성능 최적화를 위해 작게.
-    final provider = ResizeImage(
-      NetworkImage(imageUrl),
+    final ResizeImage resizedImage = ResizeImage(
+      provider,
       width: 200,
       height: 200,
     );
 
     return await PaletteGenerator.fromImageProvider(
-      provider,
+      resizedImage,
       size: const Size(200, 200),
       maximumColorCount: 16,
     );
