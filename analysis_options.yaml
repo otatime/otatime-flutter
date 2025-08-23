@@ -3,3 +3,4 @@ analyzer:
   errors:
     unused_element_parameter: ignore
     deprecated_member_use: ignore
+    avoid_function_literals_in_foreach_calls: ignore

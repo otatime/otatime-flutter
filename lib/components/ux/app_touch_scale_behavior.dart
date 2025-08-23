@@ -11,7 +11,7 @@ class AppTouchScaleBehavior extends TouchScaleBehavior {
       animation: controller,
       builder: (context, _) {
         return Opacity(
-          opacity: 1 - controller.animValue * fraction,
+          opacity: (1 - controller.animValue * fraction).clamp(0, 1),
           child: RepaintBoundary(child: child),
         ); 
       }

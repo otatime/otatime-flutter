@@ -9,7 +9,7 @@ import 'package:otatime_flutter/components/ux/app_page_route.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/pages/settings/settings.dart';
 import 'package:otatime_flutter/pages/sign_in/sign_in.dart';
-import 'package:otatime_flutter/pages/sign_up.dart';
+import 'package:otatime_flutter/pages/sign_up/sign_up.dart';
 import 'package:otatime_flutter/widgets/button.dart';
 import 'package:otatime_flutter/widgets/column_item.dart';
 import 'package:otatime_flutter/widgets/column_list.dart';

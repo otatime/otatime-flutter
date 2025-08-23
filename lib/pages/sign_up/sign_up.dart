@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_scroll_bottom_sheet/flutter_bottom_sheet.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/header_connection.dart';
 import 'package:otatime_flutter/widgets/input_field.dart';
+import 'package:otatime_flutter/widgets/terms_list.dart';
 import 'package:otatime_flutter/widgets/wide_button.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -41,6 +43,10 @@ class _SignUpPageState extends State<SignUpPage> {
     inputPassword = newValue;
     inputPasswordError = null;
   });
+
+  void next() async {
+    BottomSheet.open(context, _Terms(onDone: () {}));
+  }
 
   bool get canNext {
     return inputName != "" && inputEmail != "" && inputPassword != "";
@@ -99,12 +105,56 @@ class _SignUpPageState extends State<SignUpPage> {
             child: WideButton(
               label: "다음",
               isLoading: isLoading,
-              onTap: () async {
-                setState(() => isLoading = true);
-                await Future.delayed(Duration(seconds: 1));
-                setState(() => isLoading = false);
-              }
+              onTap: next,
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Terms extends StatefulWidget {
+  const _Terms({
+    super.key,
+    required this.onDone,
+  });
+
+  /// 필수 약관을 모두 선택하고 확인 버튼을 눌렀을 때 호출됩니다.
+  final VoidCallback onDone;
+
+  @override
+  State<_Terms> createState() => __TermsState();
+}
+
+class __TermsState extends State<_Terms> {
+  final List<TermsItem> termsItmes = [
+    TermsItem(
+      label: "개인 정보 처리 방침",
+      link: "https://www.notion.so/257f8070678280e8975cd4c18a2f095a",
+      required: true
+    ),
+    TermsItem(
+      label: "서비스 이용 약관",
+      link: "https://www.notion.so/257f8070678280e8975cd4c18a2f095a",
+      required: true
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        TermsList(
+          onChanged: () => setState(() {}),
+          items: termsItmes,
+        ),
+        Padding(
+          padding: EdgeInsets.all(Dimens.outerPadding),
+          child: Disableable(
+            isEnabled: TermsItem.isRequiredItemsChecked(termsItmes),
+            child: WideButton(label: "확인", onTap: widget.onDone),
           ),
         ),
       ],

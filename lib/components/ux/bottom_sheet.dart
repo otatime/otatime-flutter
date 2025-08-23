@@ -9,6 +9,8 @@ class BottomSheetUX {
     BottomSheet.config = BottomSheetConfig(
       barrierColor: Scheme.current.barrier,
       builder: (context, child) {
+        final MediaQueryData data = MediaQuery.of(context);
+
         return Container(
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
@@ -34,7 +36,13 @@ class BottomSheetUX {
                     ),
                   ),
                 ),
-                child,
+                MediaQuery(
+                  data: data.copyWith(
+                    // 수직 스크롤 뷰에 대한 기본 패딩 정의.
+                    padding: data.padding.copyWith(top: Dimens.outerPadding * 2 + 4),
+                  ),
+                  child: child,
+                )
               ],
             ),
           ),
