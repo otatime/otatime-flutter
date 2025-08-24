@@ -1,4 +1,4 @@
-package com.example.otatime_flutter
+package com.devttangkong.otatime_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 

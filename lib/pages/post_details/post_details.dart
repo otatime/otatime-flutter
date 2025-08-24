@@ -1,11 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_appbar/flutter_appbar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_touch_scale/widgets/touch_scale.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
+import 'package:otatime_flutter/components/ux/app_page_route.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/models/post.dart';
+import 'package:otatime_flutter/pages/post_map/post_map.dart';
+import 'package:otatime_flutter/widgets/action_button.dart';
 import 'package:otatime_flutter/widgets/app_image.dart';
 import 'package:otatime_flutter/widgets/date_button.dart';
 import 'package:otatime_flutter/widgets/wide_button.dart';
@@ -163,12 +165,12 @@ class PostDetailsPage extends StatelessWidget {
                   spacing: Dimens.innerPadding,
                   children: [
                     // 뒤로가기 버튼.
-                    _ActionButton(
+                    ActionButton(
                       iconPath: "arrow_left".svg,
                       onTap: () => Navigator.pop(context),
                     ),
-                    _ActionButton(iconPath: "heart".svg, onTap: () {}),
-                    _ActionButton(iconPath: "link".svg, onTap: () {})
+                    ActionButton(iconPath: "heart".svg, onTap: () {}),
+                    ActionButton(iconPath: "link".svg, onTap: () {})
                   ],
                 ),
               ),
@@ -185,7 +187,10 @@ class PostDetailsPage extends StatelessWidget {
           child: WideButton(
             iconPath: "navigation-filled".svg,
             label: "위치 보기",
-            onTap: () {},
+            onTap: () {
+              // 행사 지도 페이지로 이동.
+              Navigator.push(context, AppPageRoute(builder: (_) => PostMapPage()));
+            },
           ),
         ),
       ],
@@ -264,42 +269,6 @@ class _HeaderAppBar extends StatelessWidget {
           child: _HeaderAppBar(model: model),
         );
       },
-    );
-  }
-}
-
-class _ActionButton extends StatelessWidget {
-  const _ActionButton({
-    super.key,
-    required this.iconPath,
-    required this.onTap,
-  });
-
-  final String iconPath;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return TouchScale(
-      onPress: onTap,
-      child: Container(
-        padding: EdgeInsets.all(Dimens.innerPadding),
-        decoration: BoxDecoration(
-          color: Scheme.current.rearground,
-          border: Border.all(color: Scheme.current.border),
-          borderRadius: BorderRadius.circular(Dimens.borderRadius),
-        ),
-        child: SizedBox(
-          width: 18,
-          height: 18,
-          child: SvgPicture.asset(
-            iconPath,
-            color: Scheme.current.foreground2,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-        ),
-      ),
     );
   }
 }

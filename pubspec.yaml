@@ -27,6 +27,7 @@ dependencies:
   image_picker: ^1.2.0
   infinite_pageview: ^0.0.4
   intl: ^0.20.2
+  kakao_map_sdk: ^1.1.4
   palette_generator: ^0.3.3+7
   shared_preferences: ^2.5.3
   shimmer: ^3.0.0
@@ -46,6 +47,7 @@ flutter:
     - .env
     - assets/
     - assets/svg/
+    - assets/image/
     - assets/fonts/
 
   fonts:

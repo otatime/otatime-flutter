@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rebuildable/flutter_rebuildable.dart';
+import 'package:kakao_map_sdk/kakao_map_sdk.dart';
 import 'package:otatime_flutter/components/auth/my_user.dart';
 import 'package:otatime_flutter/components/secure/secure_binding.dart';
 import 'package:otatime_flutter/components/settings/settings_binding.dart';
@@ -15,6 +16,9 @@ void main() async {
   await SettingsBinding.initializeAll();
   await SecureBinding.initializeAll();
   await Env.initializeAll();
+
+  // 카카오 맵 SDK 인스턴스 초기화.
+  await KakaoMapSdk.instance.initialize(Env.get("KAKAO_API_KEY"));
 
   // 사용자가 OS 측의 테마를 변경했을 때 앱 내의 전체 위젯들의 상태를 변경하도록 합니다.
   WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged = () {
