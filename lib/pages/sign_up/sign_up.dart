@@ -100,62 +100,64 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Disableable(
-            isEnabled: !isLoading,
-            child: HeaderConnection(
-              title: "회원가입",
-              child: ListView(
-                padding: EdgeInsets.all(Dimens.outerPadding),
-                children: [
-                  InputField(
-                    hintText: "이름",
-                    errorText: inputNameError,
-                    onChanged: updateInputName,
-                  ),
-                  SizedBox(height: Dimens.innerPadding),
-                  InputField(
-                    hintText: "이메일",
-                    errorText: inputEmailError,
-                    onChanged: updateInputEmail,
-                  ),
-                  SizedBox(height: Dimens.innerPadding),
-                  InputField(
-                    hintText: "비밀번호",
-                    errorText: inputPasswordError,
-                    onChanged: updateInputPassword,
-                    obscureText: !isVisiblePassword,
-                    action: InputFieldAction(
-                      iconPath: isVisiblePassword ? "eye_off".svg : "eye".svg,
-                      onTap: () {
-                        // 비밀번호 보기 여부 토글.
-                        setState(() => isVisiblePassword = !isVisiblePassword);
-                      }
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: Disableable(
+              isEnabled: !isLoading,
+              child: HeaderConnection(
+                title: "회원가입",
+                child: ListView(
+                  padding: EdgeInsets.all(Dimens.outerPadding),
+                  children: [
+                    InputField(
+                      hintText: "이름",
+                      errorText: inputNameError,
+                      onChanged: updateInputName,
                     ),
-                  ),
-                ],
+                    SizedBox(height: Dimens.innerPadding),
+                    InputField(
+                      hintText: "이메일",
+                      errorText: inputEmailError,
+                      onChanged: updateInputEmail,
+                    ),
+                    SizedBox(height: Dimens.innerPadding),
+                    InputField(
+                      hintText: "비밀번호",
+                      errorText: inputPasswordError,
+                      onChanged: updateInputPassword,
+                      obscureText: !isVisiblePassword,
+                      action: InputFieldAction(
+                        iconPath: isVisiblePassword ? "eye_off".svg : "eye".svg,
+                        onTap: () {
+                          // 비밀번호 보기 여부 토글.
+                          setState(() => isVisiblePassword = !isVisiblePassword);
+                        }
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            left: Dimens.outerPadding,
-            right: Dimens.outerPadding,
-            bottom: Dimens.outerPadding,
-          ),
-          child: Disableable(
-            isEnabled: canNext,
-            child: WideButton(
-              label: "다음",
-              isLoading: isLoading,
-              onTap: next,
+          Padding(
+            padding: EdgeInsets.only(
+              left: Dimens.outerPadding,
+              right: Dimens.outerPadding,
+              bottom: Dimens.outerPadding,
+            ),
+            child: Disableable(
+              isEnabled: canNext,
+              child: WideButton(
+                label: "다음",
+                isLoading: isLoading,
+                onTap: next,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_appbar/flutter_appbar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,6 +6,7 @@ import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/components/ux/app_page_route.dart';
 import 'package:otatime_flutter/extensions/string.dart';
+import 'package:otatime_flutter/main.dart';
 import 'package:otatime_flutter/models/post.dart';
 import 'package:otatime_flutter/pages/post_map/post_map.dart';
 import 'package:otatime_flutter/widgets/action_button.dart';
@@ -12,13 +14,20 @@ import 'package:otatime_flutter/widgets/app_image.dart';
 import 'package:otatime_flutter/widgets/date_button.dart';
 import 'package:otatime_flutter/widgets/wide_button.dart';
 
-class PostDetailsPage extends StatelessWidget {
+class PostDetailsPage extends StatefulWidget {
   const PostDetailsPage({
     super.key,
     required this.model,
   });
 
   final PostModel model;
+
+  @override
+  State<PostDetailsPage> createState() => _PostDetailsPageState();
+}
+
+class _PostDetailsPageState extends State<PostDetailsPage> {
+  final AppBarController _appBarController = AppBarController();
 
   // TODO: 임시 코드.
   static const String loremText = """
@@ -34,9 +43,45 @@ class PostDetailsPage extends StatelessWidget {
 
 감사합니다!
   """;
+  
+  @override
+  void initState() {
+    super.initState();
+
+    // 상태 표시줄 아이콘 스타일을 라이트 위주로 변경.
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Scheme.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final AppBarPosition position = _appBarController.positionOf(0)!;
+
+      position.addListener(() {
+        if (position.shrinkedPercent > 0.5) {
+          MainApp.initSystemUIOverlayStyle();
+        } else {
+          // 헤더가 펼쳐진 상태에서는 스타일을 라이트 위주로 변경.
+          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: Scheme.transparent,
+            statusBarIconBrightness: Brightness.light,
+          ));
+        }
+      });
+    });
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+
+    // 기존 상태 표시줄 스타일로 복원.
+    MainApp.initSystemUIOverlayStyle();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final PostModel model = widget.model;
     final bool isDDay = model.dDay <= 3;
 
     return Column(
@@ -45,8 +90,9 @@ class PostDetailsPage extends StatelessWidget {
           child: Stack(
             children: [
               AppBarConnection(
+                controller: _appBarController,
                 appBars: [
-                  _HeaderAppBar.createAppBar(model: model),
+                  _HeaderAppBar.createAppBar(context, model: model),
                 ],
                 child: ListView(
                   padding: EdgeInsets.all(Dimens.outerPadding),
@@ -229,14 +275,11 @@ class _HeaderAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        AspectRatio(
-          aspectRatio: 1.75 / 1,
-          child: AppImage.network(
-            url: model.imageUrl,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
+        AppImage.network(
+          url: model.imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
         ),
         Positioned.fill(
           child: Container(
@@ -245,6 +288,8 @@ class _HeaderAppBar extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
+                  Scheme.black.withAlpha(150),
+                  Scheme.transparent,
                   Scheme.transparent,
                   Scheme.transparent,
                   Scheme.current.background.withAlpha(150),
@@ -258,8 +303,14 @@ class _HeaderAppBar extends StatelessWidget {
     );
   }
 
-  static AppBar createAppBar({required PostModel model}) {
-    return AppBar.builder(
+  static AppBar createAppBar(BuildContext context, {required PostModel model}) {
+    final MediaQueryData mediaData = MediaQuery.of(context);
+    final double statusBarHeight = mediaData.padding.top;
+    final double viewHeight = mediaData.size.height;
+
+    return SizedAppBar.builder(
+      minExtent: statusBarHeight,
+      maxExtent: viewHeight / 3.5,
       behavior: MaterialAppBarBehavior(),
       builder: (context, position) {
 

@@ -28,44 +28,46 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: service,
-      builder: (context, _) {
-        return AppBarConnection(
-          appBars: [
-            AppBar(
-              behavior: AbsoluteAppBarBehavior(),
-              body: _HeaderAppBar(service: service),
-            ),
-          ],
-          // 초기 로딩 상태가 변화할 때마다 전환 애니메이션 적용.
-          child: Transition(
-            child: Builder(
-              key: ValueKey(service.status),
-              builder: (context) {
-                if (service.status == ServiceStatus.none) {
-                  return SizedBox();
-                }
+    return SafeArea(
+      child: ListenableBuilder(
+        listenable: service,
+        builder: (context, _) {
+          return AppBarConnection(
+            appBars: [
+              AppBar(
+                behavior: AbsoluteAppBarBehavior(),
+                body: _HeaderAppBar(service: service),
+              ),
+            ],
+            // 초기 로딩 상태가 변화할 때마다 전환 애니메이션 적용.
+            child: Transition(
+              child: Builder(
+                key: ValueKey(service.status),
+                builder: (context) {
+                  if (service.status == ServiceStatus.none) {
+                    return SizedBox();
+                  }
 
-                // 검색 결과가 존재하지 않는 경우.
-                if (service.status != ServiceStatus.loading
-                 && service.data.posts.isEmpty) {
-                  return InfoPlaceholder(
-                    iconPath: "search".svg,
-                    title: "다시 시도해주세요!",
-                    label: "‘${service.keyword}’ 검색 결과를 찾을 수 없습니다.",
+                  // 검색 결과가 존재하지 않는 경우.
+                  if (service.status != ServiceStatus.loading
+                  && service.data.posts.isEmpty) {
+                    return InfoPlaceholder(
+                      iconPath: "search".svg,
+                      title: "다시 시도해주세요!",
+                      label: "‘${service.keyword}’ 검색 결과를 찾을 수 없습니다.",
+                    );
+                  }
+
+                  return Disableable(
+                    isEnabled: service.status != ServiceStatus.refresh,
+                    child: PostScrollView(service: service),
                   );
-                }
-
-                return Disableable(
-                  isEnabled: service.status != ServiceStatus.refresh,
-                  child: PostScrollView(service: service),
-                );
-              },
+                },
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

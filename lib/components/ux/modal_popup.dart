@@ -54,24 +54,26 @@ class ModalPopupRoute extends PopupRoute {
             ),
 
             // 모달 팝업 위젯.
-            Center(
-              child: _FadeTransition(
-                animation: curvedAnimation,
-                child: Container(
-                  margin: EdgeInsets.all(Dimens.outerPadding),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                      child: Container(
-                        padding: EdgeInsets.all(Dimens.outerPadding),
-                        decoration: BoxDecoration(
-                          color: Scheme.current.backgroundInPopup,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Scheme.current.border),
+            SafeArea(
+              child: Center(
+                child: _FadeTransition(
+                  animation: curvedAnimation,
+                  child: Container(
+                    margin: EdgeInsets.all(Dimens.outerPadding),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                        child: Container(
+                          padding: EdgeInsets.all(Dimens.outerPadding),
+                          decoration: BoxDecoration(
+                            color: Scheme.current.backgroundInPopup,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: Scheme.current.border),
+                          ),
+                          constraints: BoxConstraints(maxWidth: 400),
+                          child: child,
                         ),
-                        constraints: BoxConstraints(maxWidth: 400),
-                        child: child,
                       ),
                     ),
                   ),

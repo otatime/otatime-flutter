@@ -34,32 +34,34 @@ class _NavigationPageState extends State<NavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: CachedTransition(
-            duration: Animes.pageTransition.duration,
-            curve: Animes.pageTransition.curve,
-            transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
-              return SharedAxisTransition(
-                animation: primaryAnimation,
-                secondaryAnimation: secondaryAnimation,
-                transitionType: SharedAxisTransitionType.vertical,
-                fillColor: Scheme.transparent,
-                child: child,
-              );
-            },
-            child: KeyedSubtree(
-              key: ValueKey(_index),
-              child: _pages[_index],
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: CachedTransition(
+              duration: Animes.pageTransition.duration,
+              curve: Animes.pageTransition.curve,
+              transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+                return SharedAxisTransition(
+                  animation: primaryAnimation,
+                  secondaryAnimation: secondaryAnimation,
+                  transitionType: SharedAxisTransitionType.vertical,
+                  fillColor: Scheme.transparent,
+                  child: child,
+                );
+              },
+              child: KeyedSubtree(
+                key: ValueKey(_index),
+                child: _pages[_index],
+              ),
             ),
           ),
-        ),
-        _BottomNavigation(
-          index: _index,
-          onChanged: moveTo,
-        ),
-      ],
+          _BottomNavigation(
+            index: _index,
+            onChanged: moveTo,
+          ),
+        ],
+      ),
     );
   }
 }

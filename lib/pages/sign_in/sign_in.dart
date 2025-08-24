@@ -80,70 +80,72 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Disableable(
-            isEnabled: !isLoading,
-            child: HeaderConnection(
-              title: "로그인",
-              child: ListView(
-                padding: EdgeInsets.all(Dimens.outerPadding),
-                children: [
-                  InputField(
-                    hintText: "이메일",
-                    errorText: inputEmailError,
-                    onChanged: updateInputEmail,
-                  ),
-                  SizedBox(height: Dimens.innerPadding),
-                  InputField(
-                    hintText: "비밀번호",
-                    errorText: inputPasswordError,
-                    onChanged: updateInputPassword,
-                    obscureText: !isVisiblePassword,
-                    action: InputFieldAction(
-                      iconPath: isVisiblePassword ? "eye_off".svg : "eye".svg,
-                      onTap: () {
-                        // 비밀번호 보기 여부 토글.
-                        setState(() => isVisiblePassword = !isVisiblePassword);
-                      }
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: Disableable(
+              isEnabled: !isLoading,
+              child: HeaderConnection(
+                title: "로그인",
+                child: ListView(
+                  padding: EdgeInsets.all(Dimens.outerPadding),
+                  children: [
+                    InputField(
+                      hintText: "이메일",
+                      errorText: inputEmailError,
+                      onChanged: updateInputEmail,
                     ),
-                  ),
-                  SizedBox(height: Dimens.innerPadding),
-
-                  // 왼쪽으로 정렬 및 자연스러움을 위한 안쪽 여백 추가.
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: Dimens.innerPadding),
-                      child: Button(
-                        type: ButtonType.underLine,
-                        label: "비밀번호를 잊으셨나요?",
-                        onTap: () {},
+                    SizedBox(height: Dimens.innerPadding),
+                    InputField(
+                      hintText: "비밀번호",
+                      errorText: inputPasswordError,
+                      onChanged: updateInputPassword,
+                      obscureText: !isVisiblePassword,
+                      action: InputFieldAction(
+                        iconPath: isVisiblePassword ? "eye_off".svg : "eye".svg,
+                        onTap: () {
+                          // 비밀번호 보기 여부 토글.
+                          setState(() => isVisiblePassword = !isVisiblePassword);
+                        }
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: Dimens.innerPadding),
+
+                    // 왼쪽으로 정렬 및 자연스러움을 위한 안쪽 여백 추가.
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: Dimens.innerPadding),
+                        child: Button(
+                          type: ButtonType.underLine,
+                          label: "비밀번호를 잊으셨나요?",
+                          onTap: () {},
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            left: Dimens.outerPadding,
-            right: Dimens.outerPadding,
-            bottom: Dimens.outerPadding,
-          ),
-          child: Disableable(
-            isEnabled: canNext,
-            child: WideButton(
-              label: "로그인",
-              isLoading: isLoading,
-              onTap: done,
+          Padding(
+            padding: EdgeInsets.only(
+              left: Dimens.outerPadding,
+              right: Dimens.outerPadding,
+              bottom: Dimens.outerPadding,
+            ),
+            child: Disableable(
+              isEnabled: canNext,
+              child: WideButton(
+                label: "로그인",
+                isLoading: isLoading,
+                onTap: done,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

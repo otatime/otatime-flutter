@@ -43,18 +43,21 @@ class MainApp extends StatelessWidget {
     );
   };
 
+  static void initSystemUIOverlayStyle() {
+    // 상태 표시줄 스타일은 테마나 사용자 설정에 따라 유동적으로 변경될 수 있으므로,
+    // 이를 적절히 반영하기 위해 루트 위젯이 빌드되면 다음 프레임에서 이를 설정합니다.
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Scheme.transparent,
+      statusBarIconBrightness: Scheme.current is DarkScheme
+        ? Brightness.light
+        : Brightness.dark
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
-      // 상태 표시줄 스타일은 테마나 사용자 설정에 따라 유동적으로 변경될 수 있으므로,
-      // 이를 적절히 반영하기 위해 루트 위젯이 빌드되면 다음 프레임에서 이를 설정합니다.
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Scheme.transparent,
-        statusBarIconBrightness: Scheme.current is DarkScheme
-          ? Brightness.light
-          : Brightness.dark
-      ));
+      initSystemUIOverlayStyle();
     });
 
     return MaterialApp(

@@ -81,67 +81,69 @@ class _AddressPageState extends State<AddressPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Disableable(
-            isEnabled: !isLoading,
-            child: HeaderConnection(
-              title: "주소 선택",
-              child: ListView(
-                padding: EdgeInsets.all(Dimens.outerPadding),
-                children: [
-                  LabeledBox(
-                    label: "도로명 주소",
-                    child: ColumnList(
-                      children: [
-                        ColumnItem.push(
-                          title: selectedModel?.roadAddr ?? "주소 검색하기",
-                          iconPath: "navigation".svg,
-                          onTap: () async {
-                            // 도로명 주소 검색 페이지로 이동.
-                            final result = await Navigator.push(
-                              context,
-                              AppPageRoute(builder: (_) => _AddressSearchPage()),
-                            ) as AddressModel?;
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: Disableable(
+              isEnabled: !isLoading,
+              child: HeaderConnection(
+                title: "주소 선택",
+                child: ListView(
+                  padding: EdgeInsets.all(Dimens.outerPadding),
+                  children: [
+                    LabeledBox(
+                      label: "도로명 주소",
+                      child: ColumnList(
+                        children: [
+                          ColumnItem.push(
+                            title: selectedModel?.roadAddr ?? "주소 검색하기",
+                            iconPath: "navigation".svg,
+                            onTap: () async {
+                              // 도로명 주소 검색 페이지로 이동.
+                              final result = await Navigator.push(
+                                context,
+                                AppPageRoute(builder: (_) => _AddressSearchPage()),
+                              ) as AddressModel?;
 
-                            if (result != null) {
-                              setState(() => selectedModel = result);
+                              if (result != null) {
+                                setState(() => selectedModel = result);
+                              }
                             }
-                          }
-                        ),
-                      ],
-                    )
-                  ),
-                  SizedBox(height: Dimens.innerPadding * 2),
-                  LabeledBox(
-                    label: "상세 또는 기타사항",
-                    child: InputField(
-                      hintText: "예: 코엑스 컨벤션 센터 3층 d홀",
-                      onChanged: updateDetails,
+                          ),
+                        ],
+                      )
                     ),
-                  ),
-                ],
+                    SizedBox(height: Dimens.innerPadding * 2),
+                    LabeledBox(
+                      label: "상세 또는 기타사항",
+                      child: InputField(
+                        hintText: "예: 코엑스 컨벤션 센터 3층 d홀",
+                        onChanged: updateDetails,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsetsGeometry.only(
-            left: Dimens.outerPadding,
-            right: Dimens.outerPadding,
-            bottom: Dimens.outerPadding,
-          ),
-          child: Disableable(
-            isEnabled: selectedModel != null,
-            child: WideButton(
-              label: "선택하기",
-              onTap: done,
-              isLoading: isLoading,
+          Padding(
+            padding: EdgeInsetsGeometry.only(
+              left: Dimens.outerPadding,
+              right: Dimens.outerPadding,
+              bottom: Dimens.outerPadding,
+            ),
+            child: Disableable(
+              isEnabled: selectedModel != null,
+              child: WideButton(
+                label: "선택하기",
+                onTap: done,
+                isLoading: isLoading,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -166,77 +168,79 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: AppBarConnection(
-            appBars: [
-              AppBar(
-                behavior: MaterialAppBarBehavior(
-                  alwaysScrolling: false,
-                  floating: true,
-                ),
-                body: serachBarWidget(autoFocus: true),
-              ),
-            ],
-            child: ListenableBuilder(
-              listenable: service ?? ValueNotifier([]),
-              builder: (context, child) {
-                // 로딩 상태가 변화할 때마다 전환 애니메이션 적용.
-                return Transition(
-                  child: Builder(
-                    key: ValueKey(service?.status),
-                    builder: (context) {
-                      if (service == null) return SizedBox();
-
-                      // 사용자가 검색어를 너무 짧게 입력한 경우.
-                      if (service!.keyword.length <= 2) {
-                        return InfoPlaceholder(
-                          iconPath: "search".svg,
-                          title: "검색어가 너무 짧아요",
-                          label: "검색어는 최소 2글자 이상 입력해주세요."
-                        );
-                      }
-
-                      if (service!.status == ServiceStatus.loading) {
-                        return _ScrollView.skeletonWidget();
-                      }
-
-                      // 검색 결과가 존재하지 않는 경우.
-                      if (service!.data.isEmpty) {
-                        return InfoPlaceholder(
-                          iconPath: "search".svg,
-                          title: "다시 시도해주세요!",
-                          label: "‘${service!.keyword}’ 검색 결과를 찾을 수 없습니다.",
-                        );
-                      }
-
-                      return _ScrollView(
-                        service: service!,
-                        selectedModel: selectedModel,
-                        onChanged: (newModel) {
-                          setState(() => selectedModel = newModel);
-                        },
-                      );
-                    },
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: AppBarConnection(
+              appBars: [
+                AppBar(
+                  behavior: MaterialAppBarBehavior(
+                    alwaysScrolling: false,
+                    floating: true,
                   ),
-                );
-              }
+                  body: serachBarWidget(autoFocus: true),
+                ),
+              ],
+              child: ListenableBuilder(
+                listenable: service ?? ValueNotifier([]),
+                builder: (context, child) {
+                  // 로딩 상태가 변화할 때마다 전환 애니메이션 적용.
+                  return Transition(
+                    child: Builder(
+                      key: ValueKey(service?.status),
+                      builder: (context) {
+                        if (service == null) return SizedBox();
+
+                        // 사용자가 검색어를 너무 짧게 입력한 경우.
+                        if (service!.keyword.length <= 2) {
+                          return InfoPlaceholder(
+                            iconPath: "search".svg,
+                            title: "검색어가 너무 짧아요",
+                            label: "검색어는 최소 2글자 이상 입력해주세요."
+                          );
+                        }
+
+                        if (service!.status == ServiceStatus.loading) {
+                          return _ScrollView.skeletonWidget();
+                        }
+
+                        // 검색 결과가 존재하지 않는 경우.
+                        if (service!.data.isEmpty) {
+                          return InfoPlaceholder(
+                            iconPath: "search".svg,
+                            title: "다시 시도해주세요!",
+                            label: "‘${service!.keyword}’ 검색 결과를 찾을 수 없습니다.",
+                          );
+                        }
+
+                        return _ScrollView(
+                          service: service!,
+                          selectedModel: selectedModel,
+                          onChanged: (newModel) {
+                            setState(() => selectedModel = newModel);
+                          },
+                        );
+                      },
+                    ),
+                  );
+                }
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsetsGeometry.only(
-            left: Dimens.outerPadding,
-            right: Dimens.outerPadding,
-            bottom: Dimens.outerPadding,
+          Padding(
+            padding: EdgeInsetsGeometry.only(
+              left: Dimens.outerPadding,
+              right: Dimens.outerPadding,
+              bottom: Dimens.outerPadding,
+            ),
+            child: Disableable(
+              isEnabled: selectedModel != null,
+              child: WideButton(label: "선택하기", onTap: done)
+            ),
           ),
-          child: Disableable(
-            isEnabled: selectedModel != null,
-            child: WideButton(label: "선택하기", onTap: done)
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

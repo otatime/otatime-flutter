@@ -17,15 +17,17 @@ class CalendarResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HeaderConnection(
-      title: DateFormat("yyyy년 MM월 dd일").format(date),
-      label: "결과 ${models.length}개",
-      child: ListView.builder(
-        padding: EdgeInsets.all(Dimens.outerPadding),
-        itemCount: models.length,
-        itemBuilder: (context, index) {
-          return PostScrollItem(model: models[index]);
-        }
+    return SafeArea(
+      child: HeaderConnection(
+        title: DateFormat("yyyy년 MM월 dd일").format(date),
+        label: "결과 ${models.length}개",
+        child: ListView.builder(
+          padding: EdgeInsets.all(Dimens.outerPadding),
+          itemCount: models.length,
+          itemBuilder: (context, index) {
+            return PostScrollItem(model: models[index]);
+          }
+        ),
       ),
     );
   }

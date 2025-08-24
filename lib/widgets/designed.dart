@@ -16,9 +16,7 @@ class Designed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Scheme.current.background,
-      body: SafeArea(
-        child: themeWidget(child: child),
-      ),
+      body: themeWidget(child: child),
     );
   }
 
