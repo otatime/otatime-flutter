@@ -1,8 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
+import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/models/post.dart';
 import 'package:otatime_flutter/pages/post_details/post_details.dart';
 import 'package:otatime_flutter/widgets/app_image.dart';
@@ -57,14 +61,45 @@ class PostScrollItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    AspectRatio(
-                      aspectRatio: 3 / 1,
-                      child: AppImage.network(
-                        url: model.imageUrl,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
+                    Stack(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 3 / 1,
+                          child: AppImage.network(
+                            url: model.imageUrl,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        ),
+
+                        // 부드러운 그림자 효과.
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              height: Dimens.innerPadding,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Scheme.current.deepground.withAlpha(0),
+                                    Scheme.current.deepground,
+                                  ]
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // 찜 액션 버튼 표시.
+                        Positioned(
+                          right: Dimens.innerPadding,
+                          bottom: Dimens.innerPadding,
+                          child: likeActionButtonWidget(),
+                        ),
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.all(Dimens.innerPadding),
@@ -136,10 +171,12 @@ class PostScrollItem extends StatelessWidget {
               // D-Day 임박 시, 별도의 안쪽 여백을 차지하지 않은 형태로 그래디언트 보더 표시.
               if (isDDay)
                 Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(Dimens.borderRadius),
-                      border: dDayBorder,
+                  child: IgnorePointer(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Dimens.borderRadius),
+                        border: dDayBorder,
+                      ),
                     ),
                   ),
                 ),
@@ -147,6 +184,38 @@ class PostScrollItem extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  /// 행사 이미지에 대한 찜 액션 버튼 위젯입니다.
+  Widget likeActionButtonWidget() {
+    return TouchScale(
+      onPress: () {
+        // TODO: 행사 액션 버튼 구현.
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(1e10),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: Container(
+            padding: EdgeInsets.all(Dimens.innerPadding),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: model.isLiked
+                ? Scheme.negative.withAlpha(25)
+                : Scheme.current.rearground.withAlpha(100),
+              shape: BoxShape.circle,
+            ),
+            child: SvgPicture.asset(
+              model.isLiked ? "heart-filled".svg : "heart".svg,
+              width: 18,
+              color: model.isLiked
+                ? Scheme.negative
+                : Scheme.current.foreground.withAlpha(150),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
