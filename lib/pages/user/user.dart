@@ -122,6 +122,23 @@ class _HeaderAppBar extends StatelessWidget {
               MyUser.data.userName,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
             ),
+
+            // 프로필 이메일 표시.
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: Dimens.rowSpacing,
+              children: [
+                SvgPicture.asset(
+                  "mail-filled".svg,
+                  width: 14,
+                  color: Scheme.current.foreground2,
+                ),
+                Text(
+                  MyUser.data.email,
+                  style: TextStyle(color: Scheme.current.foreground2)
+                ),
+              ],
+            ),
           ],
         ),
         Wrap(

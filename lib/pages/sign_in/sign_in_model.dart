@@ -10,7 +10,7 @@ class SignInModel {
   final String accessToken;
   final String refreshToken;
   final String userName;
-  final String profileImageUrl;
+  final String? profileImageUrl;
 
   factory SignInModel.fromJson(Map<String, dynamic> obj) {
     return SignInModel(
