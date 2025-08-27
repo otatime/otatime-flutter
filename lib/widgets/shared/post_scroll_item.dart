@@ -189,6 +189,10 @@ class PostScrollItem extends StatelessWidget {
 
   /// 행사 이미지에 대한 찜 액션 버튼 위젯입니다.
   Widget likeActionButtonWidget() {
+    final Color backgroundColor = model.isLiked
+        ? Scheme.negative.withAlpha(30)
+        : Scheme.current.rearground.withAlpha(100);
+
     return TouchScale(
       onPress: () {
         // TODO: 행사 액션 버튼 구현.
@@ -201,9 +205,7 @@ class PostScrollItem extends StatelessWidget {
             padding: EdgeInsets.all(Dimens.innerPadding),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: model.isLiked
-                ? Scheme.negative.withAlpha(25)
-                : Scheme.current.rearground.withAlpha(100),
+              color: backgroundColor,
               shape: BoxShape.circle,
             ),
             child: SvgPicture.asset(
