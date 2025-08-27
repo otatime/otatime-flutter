@@ -13,6 +13,7 @@ import 'package:otatime_flutter/pages/sign_up/sign_up.dart';
 import 'package:otatime_flutter/widgets/button.dart';
 import 'package:otatime_flutter/widgets/column_item.dart';
 import 'package:otatime_flutter/widgets/column_list.dart';
+import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/loading_indicator.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
 
@@ -21,37 +22,46 @@ class UserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBarConnection(
-      appBars: [
-        _HeaderAppBar.createAppBar(),
-      ],
-      child: ListView(
-        padding: EdgeInsets.all(Dimens.outerPadding),
-        children: [
-          ColumnList(
+    return ListenableBuilder(
+      listenable: MyUser.statusNotifier,
+      builder: (context, _) {
+        return AppBarConnection(
+          appBars: [
+            // 사용자 정보에 대한 헤더.
+            _HeaderAppBar.createAppBar(),
+          ],
+          child: ListView(
+            padding: EdgeInsets.all(Dimens.outerPadding),
             children: [
-              ColumnItem.push(
-                title: "찜 목록",
-                iconPath: "heart".svg,
-                onTap: () {}
+              ColumnList(
+                children: [
+                  Disableable(
+                    isEnabled: MyUser.status == MyUserStatus.loaded,
+                    child: ColumnItem.push(
+                      title: "찜 목록",
+                      iconPath: "heart".svg,
+                      onTap: () {}
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: Dimens.innerPadding),
+              ColumnList(
+                children: [
+                  ColumnItem.push(
+                    title: "설정",
+                    iconPath: "settings".svg,
+                    onTap: () {
+                      // 설정 페이지로 이동.
+                      Navigator.push(context, AppPageRoute(builder: (_) => SettingsPage()));
+                    }
+                  ),
+                ],
               ),
             ],
           ),
-          SizedBox(height: Dimens.innerPadding),
-          ColumnList(
-            children: [
-              ColumnItem.push(
-                title: "설정",
-                iconPath: "settings".svg,
-                onTap: () {
-                  // 설정 페이지로 이동.
-                  Navigator.push(context, AppPageRoute(builder: (_) => SettingsPage()));
-                }
-              ),
-            ],
-          ),
-        ],
-      ),
+        );
+      }
     );
   }
 }
