@@ -3,6 +3,7 @@ import 'package:flutter_appbar/flutter_appbar.dart';
 import 'package:flutter_refresh_indicator/flutter_refresh_indicator.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
+import 'package:otatime_flutter/components/auth/my_user.dart';
 import 'package:otatime_flutter/components/service/service.dart';
 import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
@@ -116,35 +117,44 @@ class _TopAppBar extends StatelessWidget {
             ],
           ),
 
-          // 오른쪽 영역.
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularButton(
-                iconPath: "paper_plane".svg,
-                onTap: () {
-                  // 제보 페이지로 이동.
-                  Navigator.push(
-                    context,
-                    AppPageRoute(builder: (_) => ReportPage()),
-                  );
-                }
-              ),
-              Hero(
-                tag: "search-bar",
-                flightShuttleBuilder: heroOpenContainerShuttle,
-                child: CircularButton(
-                  iconPath: "search".svg,
-                  onTap: () {
-                    // 검색 페이지로 이동.
-                    Navigator.push(
-                      context,
-                      AppPageRoute(builder: (_) => SearchPage(), isFadeEffect: true),
-                    );
-                  }
-                ),
-              ),
-            ],
+          // 오른쪽 영역, 사용자 상태가 변경될 때마다 업데이트.
+          ListenableBuilder(
+            listenable: MyUser.statusNotifier,
+            builder: (context, child) {
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Disableable(
+                    isEnabled: MyUser.status == MyUserStatus.loaded,
+                    child: CircularButton(
+                      iconPath: "paper_plane".svg,
+                      onTap: () {
+                        // 제보 페이지로 이동.
+                        Navigator.push(
+                          context,
+                          AppPageRoute(builder: (_) => ReportPage()),
+                        );
+                      }
+                    ),
+                  ),
+
+                  Hero(
+                    tag: "search-bar",
+                    flightShuttleBuilder: heroOpenContainerShuttle,
+                    child: CircularButton(
+                      iconPath: "search".svg,
+                      onTap: () {
+                        // 검색 페이지로 이동.
+                        Navigator.push(
+                          context,
+                          AppPageRoute(builder: (_) => SearchPage(), isFadeEffect: true),
+                        );
+                      }
+                    ),
+                  ),
+                ],
+              );
+            }
           ),
         ],
       ),
