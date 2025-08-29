@@ -26,7 +26,6 @@ class LocationResultModel {
   final LocationModel model;
 
   factory LocationResultModel.fromJson(Map<String, dynamic> obj) {
-    print(obj);
     return LocationResultModel(
       common: AddressCommonModel.fromJson(obj["results"]["common"]),
       model: LocationModel.fromJson(obj["results"]["juso"][0]),
