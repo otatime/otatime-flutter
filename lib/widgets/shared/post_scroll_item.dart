@@ -23,13 +23,13 @@ class PostScrollItem extends StatelessWidget {
   final PostModel model;
 
   /// D-Day 임박 시 별도로 적용되는 박스 보더입니다.
-  static BoxBorder get dDayBorder => GradientBoxBorder(
+  static BoxBorder get cardBorder => GradientBoxBorder(
     gradient: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
         Scheme.transparent,
-        Scheme.negative,
+        Scheme.current.border,
       ],
     ),
   );
@@ -95,10 +95,18 @@ class PostScrollItem extends StatelessWidget {
 
                         // 찜 액션 버튼 표시.
                         Positioned(
+                          top: Dimens.innerPadding,
                           right: Dimens.innerPadding,
-                          bottom: Dimens.innerPadding,
                           child: likeActionButtonWidget(),
                         ),
+
+                        // D-Day (3일) 임박시 표시.
+                        if (isDDay)
+                          Positioned(
+                            top: Dimens.innerPadding,
+                            left: Dimens.innerPadding,
+                            child: dDayWidget(),
+                          ),
                       ],
                     ),
                     Padding(
@@ -120,8 +128,6 @@ class PostScrollItem extends StatelessWidget {
                             runSpacing: Dimens.columnSpacing,
                             spacing: 5,
                             children: [
-                              // D-Day (3일) 임박시 표시.
-                              if (isDDay) dDayWidget(),
                               DateButton(date: model.startDate),
 
                               // D-Day 표시 없을때만.
@@ -169,17 +175,16 @@ class PostScrollItem extends StatelessWidget {
               ),
 
               // D-Day 임박 시, 별도의 안쪽 여백을 차지하지 않은 형태로 그래디언트 보더 표시.
-              if (isDDay)
-                Positioned.fill(
-                  child: IgnorePointer(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(Dimens.borderRadius),
-                        border: dDayBorder,
-                      ),
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(Dimens.borderRadius),
+                      border: cardBorder,
                     ),
                   ),
                 ),
+              ),
             ],
           ),
         );
@@ -244,14 +249,15 @@ class PostScrollItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       decoration: BoxDecoration(
-        color: Scheme.current.rearground,
+        color: Scheme.current.tagBackground,
         borderRadius: BorderRadius.circular(1e10),
+        border: Border.all(color: Scheme.current.border),
       ),
       child: Text(
         "#$tag",
         style: TextStyle(
           fontSize: 12,
-          color: Scheme.current.foreground2,
+          color: Scheme.current.tagForeground,
         ),
       ),
     );
