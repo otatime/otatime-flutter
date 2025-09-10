@@ -466,8 +466,8 @@ class _Slider extends StatelessWidget {
                 );
               },
               effect: ExpandingDotsEffect(
-                dotWidth: 10,
-                dotHeight: 10,
+                dotWidth: 8,
+                dotHeight: 8,
                 dotColor: Scheme.current.rearground,
                 activeDotColor: Scheme.current.primary,
               ),
@@ -568,7 +568,7 @@ class _SliderItemState extends State<_SliderItem> {
                           widget.model.title,
                           style: TextStyle(
                             color: Scheme.white,
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           )
                         ),
@@ -578,7 +578,6 @@ class _SliderItemState extends State<_SliderItem> {
                           spacing: Dimens.rowSpacing,
                           children: [
                             DateButton(date: widget.model.startDate),
-                            Text("~", style: TextStyle(color: Scheme.current.foreground3)),
                             DateButton(date: widget.model.endDate),
                           ],
                         ),
