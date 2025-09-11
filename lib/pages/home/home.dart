@@ -3,6 +3,7 @@ import 'package:flutter_appbar/flutter_appbar.dart';
 import 'package:flutter_refresh_indicator/flutter_refresh_indicator.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
+import 'package:intl/intl.dart';
 import 'package:otatime_flutter/components/auth/my_user.dart';
 import 'package:otatime_flutter/components/service/service.dart';
 import 'package:otatime_flutter/components/ui/animes.dart';
@@ -21,7 +22,6 @@ import 'package:otatime_flutter/pages/search/search.dart';
 import 'package:otatime_flutter/widgets/button.dart';
 import 'package:otatime_flutter/widgets/calendar_picker.dart';
 import 'package:otatime_flutter/widgets/circular_button.dart';
-import 'package:otatime_flutter/widgets/date_button.dart';
 import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/openable.dart';
 import 'package:otatime_flutter/widgets/palette_image.dart';
@@ -315,8 +315,9 @@ class _Category extends StatelessWidget {
   Widget build(BuildContext context) {
     return TouchScale(
       onPress: isSelected ? () {} : onTap,
+
+      // 선택 상태가 변화할 때마다 전환 애니메이션 적용.
       child: Transition(
-        // 선택 상태가 변화할 때마다 전환 애니메이션 적용.
         child: Container(
           key: ValueKey(isSelected),
           padding: EdgeInsets.symmetric(
@@ -326,7 +327,7 @@ class _Category extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected
               ? Scheme.current.foreground
-              : Scheme.current.rearground,
+              : Scheme.current.reargroundInBackground,
             borderRadius: BorderRadius.circular(1e10)
           ),
           child: Text(
@@ -440,7 +441,7 @@ class _Slider extends StatelessWidget {
           spacing: Dimens.innerPadding,
           children: [
             AspectRatio(
-              aspectRatio: 2 / 1,
+              aspectRatio: 1.5 / 1,
               child: PageView.builder(
                 controller: controller,
                 itemCount: itemCount,
@@ -468,8 +469,8 @@ class _Slider extends StatelessWidget {
               effect: ExpandingDotsEffect(
                 dotWidth: 8,
                 dotHeight: 8,
-                dotColor: Scheme.current.rearground,
-                activeDotColor: Scheme.current.primary,
+                dotColor: Scheme.current.foreground.withAlpha(25),
+                activeDotColor: Scheme.current.foreground,
               ),
             ),
           ],
@@ -507,6 +508,26 @@ class _SliderItem extends StatefulWidget {
 class _SliderItemState extends State<_SliderItem> {
   Color? paletteColor;
 
+  /// 팔레트 색상이 어두운지에 대한 여부를 반환합니다.
+  bool get isPaletteDark {
+    assert(paletteColor != null);
+    return paletteColor!.computeLuminance() < 0.5;
+  }
+
+  /// 팔레트 색상에 자연스러운 배경 색상을 반환합니다.
+  Color get backgroundColor {
+    return paletteColor == null
+      ? Scheme.current.rearground
+      : (isPaletteDark ? Scheme.white.withAlpha(50) : Scheme.black.withAlpha(100));
+  }
+
+  /// 팔레트 색상에 자연스러운 글자 색상을 반환합니다.
+  Color get foregroundColor {
+    return paletteColor == null
+      ? Scheme.current.foreground
+      : (isPaletteDark ? Scheme.white : Scheme.black);
+  }
+
   void setPaletteColor(PaletteGenerator generator) async {
     // 가장 유사한 이미지 대표색을 정의합니다.
     if (!mounted) return;
@@ -539,20 +560,26 @@ class _SliderItemState extends State<_SliderItem> {
                 ),
 
                 // 이미지 대표색으로 별도의 그림자 렌더링.
-                if (paletteColor != null)
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          paletteColor!,
-                          paletteColor!.withAlpha(50),
-                          Scheme.transparent,
-                        ]
-                      )
-                    ),
-                  ),
+                Builder(
+                  builder: (context) {
+                    final Color shadowColor = paletteColor ?? Scheme.current.background;
+
+                    return Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            shadowColor,
+                            shadowColor,
+                            shadowColor.withAlpha(50),
+                            Scheme.transparent,
+                          ]
+                        )
+                      ),
+                    );
+                  },
+                ),
 
                 Positioned.fill(
                   child: Padding(
@@ -568,20 +595,32 @@ class _SliderItemState extends State<_SliderItem> {
                           widget.model.title,
                           style: TextStyle(
                             color: Scheme.white,
-                            fontSize: 18,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
-                          )
+                          ),
                         ),
 
                         // 행사 일정 표시.
                         Wrap(
                           spacing: Dimens.rowSpacing,
                           children: [
-                            DateButton(date: widget.model.startDate),
-                            DateButton(date: widget.model.endDate),
+                            dateButtonWidget(widget.model.startDate),
+                            dateButtonWidget(widget.model.endDate),
                           ],
                         ),
                       ],
+                    ),
+                  ),
+                ),
+
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 3,
+                        color: paletteColor ?? Scheme.transparent,
+                      ),
+                      borderRadius: BorderRadius.circular(Dimens.borderRadius),
                     ),
                   ),
                 ),
@@ -590,6 +629,37 @@ class _SliderItemState extends State<_SliderItem> {
           ),
         );
       },
+    );
+  }
+
+  Widget dateButtonWidget(DateTime date) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(1e10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 5,
+        children: [
+          // 달력 아이콘
+          SvgPicture.asset(
+            "calendar".svg,
+            width: 12,
+            color: foregroundColor,
+          ),
+
+          // 날짜 표시
+          Text(
+            DateFormat("yyyy-MM-dd").format(date),
+            style: TextStyle(
+              fontSize: 12,
+              color: foregroundColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

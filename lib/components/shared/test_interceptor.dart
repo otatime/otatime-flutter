@@ -11,9 +11,8 @@ class TestInterceptor extends Interceptor {
       "posts": [
         {
             "postId": 16,
-            "title": "NIKKE - 2025년 8월 9일부터 개최!",
-            "summary": "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
-            "imageUrl": "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_5bf8138c70b052df43c4ab7c39cc8992a2422834-3840x2160-ori_s_80_50_ori_q_80.webp",
+            "title": "젠레스 존 제로 - 2025년 8월 1일 개최!",
+            "imageUrl": "https://fastcdn.hoyoverse.com/content-v2/nap/122921/2a96623f81d3acbdfdd3d152dd362411_6370061938803802843.png",
             "startDate": "2024-12-07",
             "endDate": "2024-12-09",
             "sector": "애니메이션",
@@ -25,9 +24,8 @@ class TestInterceptor extends Interceptor {
         },
         {
             "postId": 17,
-            "title": "NIKKE - 2025년 8월 9일부터 개최!",
-            "summary": "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
-            "imageUrl": "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_18c203ef6354e344cee4db14427fe22b556d025f-3840x2160-ori_s_80_50_ori_q_80.webp",
+            "title": "블루아카이브 - 2025년 8월 1일 개최!",
+            "imageUrl": "https://cdn.ipnn.co.kr/news/photo/202210/405624_49081_032.jpg",
             "startDate": "2024-12-07",
             "endDate": "2024-12-09",
             "sector": "애니메이션",
@@ -39,9 +37,8 @@ class TestInterceptor extends Interceptor {
         },
         {
             "postId": 18,
-            "title": "NIKKE - 2025년 8월 9일부터 개최!",
-            "summary": "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
-            "imageUrl": "https://na-nikke-aws.playerinfinite.com/cms/nrft/feeds/pic/_26527c23c46bce436b83f65f8e9f3c6da3521017-3840x2160-ori_s_80_50_ori_q_80.webp",
+            "title": "승리의 여신 니케 - 2025년 8월 1일 개최!",
+            "imageUrl": "https://i3.ruliweb.com/img/23/12/03/18c2de6163f566c33.jpg",
             "startDate": "2024-12-07",
             "endDate": "2024-12-09",
             "sector": "애니메이션",
@@ -50,7 +47,33 @@ class TestInterceptor extends Interceptor {
             "location": "홍대 AK 5층",
             "isLiked" : false,
             "D-Day": 6
-        }
+        },
+        {
+            "postId": 18,
+            "title": "스파이 패밀리 - 2025년 8월 1일 개최!",
+            "imageUrl": "https://mblogthumb-phinf.pstatic.net/MjAyMjA1MDdfMTM2/MDAxNjUxOTMwODQ3Njc3.rz2eEvPW6zBVhXgWM67df4EJw515qK7B-N_N8p6ueTgg.paAt3V8gYPKuH9sHpY0EM8k9KcED_hRgdaFibo1n-Gsg.JPEG.jgwkrrk/SPFB-gallery11.jpg?type=w800",
+            "startDate": "2024-12-07",
+            "endDate": "2024-12-09",
+            "sector": "애니메이션",
+            "type": "콜라보카페",
+            "region": "서울",
+            "location": "홍대 AK 5층",
+            "isLiked" : false,
+            "D-Day": 6
+        },
+        {
+            "postId": 18,
+            "title": "붕괴 스타레일 - 2025년 8월 1일 개최!",
+            "imageUrl": "https://pbs.twimg.com/media/GJlUbxUbkAA2ae3.jpg",
+            "startDate": "2024-12-07",
+            "endDate": "2024-12-09",
+            "sector": "애니메이션",
+            "type": "콜라보카페",
+            "region": "서울",
+            "location": "홍대 AK 5층",
+            "isLiked" : false,
+            "D-Day": 6
+        },
       ],
     }
   };
@@ -66,8 +89,7 @@ class TestInterceptor extends Interceptor {
         {
             "postId": 16,
             "title": "젠레스 존 제로 - 2025년 8월 9일부터 개최!",
-            "summary": "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
-            "imageUrl": "https://cdn1.epicgames.com/spt-assets/dcd83ace86fb4501bde1316ca03e29ad/zenless-zone-zero-1voa4.jpg",
+            "imageUrl": "https://pbs.twimg.com/media/GRK6HmbaUAAE48u.jpg",
             "startDate": "2025-06-25",
             "endDate": "2025-07-01",
             "sector": "애니메이션",
@@ -80,7 +102,6 @@ class TestInterceptor extends Interceptor {
         {
             "postId": 17,
             "title": "젠레스 존 제로 - 2025년 8월 9일부터 개최!",
-            "summary": "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
             "imageUrl": "https://i.ytimg.com/vi/H-3wo8q0qAk/maxresdefault.jpg",
             "startDate": "2025-06-25",
             "endDate": "2025-07-01",
@@ -94,7 +115,6 @@ class TestInterceptor extends Interceptor {
         {
             "postId": 18,
             "title": "젠레스 존 제로 - 2025년 8월 9일부터 개최!",
-            "summary": "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
             "imageUrl": "https://static.inven.co.kr/column/2024/06/30/news/i1335021753.png",
             "startDate": "2025-06-25",
             "endDate": "2025-07-01",
@@ -120,7 +140,6 @@ class TestInterceptor extends Interceptor {
         {
             "postId": 16,
             "title": "젠레스 존 제로 - 2025년 8월 9일부터 개최!",
-            "summary": "니케. 지상을 빼앗긴 인류에게 승리를 가져다 줄 마지막 희망. 그 절박한 염원이 담긴 이름과 함께 소녀들은 지상으로 향한다.",
             "imageUrl": "https://i.ytimg.com/vi/DhJrP1aNTgY/hq720.jpg",
             "startDate": "2025-08-11",
             "endDate": "2025-08-13",
@@ -146,7 +165,6 @@ class TestInterceptor extends Interceptor {
         {
             "postId": 16,
             "title": "블루 아카이브 페스티벌 - 2023년 5월 20일",
-            "summary": "7천 명이 빈틈 없이 들어찬 킨텍스... 전시, 상품, 공연까지 '완벽 하모니'",
             "imageUrl": "https://cdn.gameple.co.kr/news/photo/202305/205842_213810_3453.jpg",
             "startDate": "2023-05-20",
             "endDate": "2023-05-21",

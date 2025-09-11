@@ -11,6 +11,7 @@ abstract class Scheme {
   Color get backgroundInPopup;
   Color get deepground;
   Color get rearground;
+  Color get reargroundInBackground;
   Color get foreground;
   Color get foreground2;
   Color get foreground3;
@@ -18,8 +19,7 @@ abstract class Scheme {
   Color get placeholder;
   Color get highlight;
   Color get barrier;
-  Color get tagBackground;
-  Color get tagForeground;
+  Color get imageBackdrop;
 
   static final Color transparent = Color.fromRGBO(0, 0, 0, 0);
   static final Color white = Color.fromRGBO(255, 255, 255, 1);
@@ -55,30 +55,31 @@ abstract class Scheme {
 class LightScheme extends Scheme {
   @override Color get primary => Color(0xFF0077FF);
   @override Color get deepPrimary => primary.withAlpha(30);
-  @override Color get background => Color(0xFFF3F5FD);
+  @override Color get background => Color.fromRGBO(245, 247, 250, 1);
   @override Color get backgroundInInput => deepground;
   @override Color get backgroundInPopup => background.withAlpha(200);
   @override Color get deepground => Scheme.white;
-  @override Color get rearground => Color.fromRGBO(235, 235, 235, 1);
+  @override Color get rearground => Color.fromRGBO(245, 245, 245, 1);
+  @override Color get reargroundInBackground => Color.fromRGBO(235, 235, 235, 1);
   @override Color get foreground => Scheme.black;
-  @override Color get foreground2 => Color.fromRGBO(100, 100, 100, 1);
-  @override Color get foreground3 => Color.fromRGBO(150, 150, 150, 1);
+  @override Color get foreground2 => Color.fromRGBO(120, 120, 120, 1);
+  @override Color get foreground3 => Color.fromRGBO(180, 180, 180, 1);
   @override Color get border => Color.fromRGBO(0, 0, 0, 0.1);
   @override Color get placeholder => rearground;
   @override Color get highlight => Color.fromRGBO(100, 100, 100, 0.1);
   @override Color get barrier => Scheme.black.withAlpha(150);
-  @override Color get tagBackground => Color.fromRGBO(59, 130, 246, 0.1);
-  @override Color get tagForeground => Color.fromRGBO(59, 130, 246, 1);
+  @override Color get imageBackdrop => Scheme.black.withAlpha(100);
 }
 
 class DarkScheme extends Scheme {
   @override Color get primary => Color(0xFF0077FF);
   @override Color get deepPrimary => primary.withAlpha(50);
-  @override Color get background => Color.fromRGBO(10, 10, 13, 1);
+  @override Color get background => Color.fromRGBO(12, 12, 14, 1);
   @override Color get backgroundInInput => Scheme.black;
   @override Color get backgroundInPopup => rearground.withAlpha(200);
   @override Color get deepground => Color.fromRGBO(30, 30, 33, 1);
   @override Color get rearground => Color.fromRGBO(40, 40, 43, 1);
+  @override Color get reargroundInBackground => rearground;
   @override Color get foreground => Scheme.white;
   @override Color get foreground2 => Color.fromRGBO(150, 150, 150, 1);
   @override Color get foreground3 => Color.fromRGBO(100, 100, 100, 1);
@@ -86,6 +87,5 @@ class DarkScheme extends Scheme {
   @override Color get placeholder => rearground;
   @override Color get highlight => Color.fromRGBO(255, 255, 255, 0.1);
   @override Color get barrier => Scheme.black.withAlpha(150);
-  @override Color get tagBackground => Color.fromRGBO(102, 126, 234, 0.2);
-  @override Color get tagForeground => Color.fromRGBO(102, 126, 234, 1);
+  @override Color get imageBackdrop => Scheme.black.withAlpha(100);
 }

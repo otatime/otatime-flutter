@@ -3,7 +3,6 @@ class PostModel {
   const PostModel({
     required this.postId,
     required this.title,
-    required this.summary,
     required this.imageUrl,
     required this.startDate,
     required this.endDate,
@@ -17,7 +16,6 @@ class PostModel {
 
   final int postId;
   final String title;
-  final String summary;
   final String imageUrl;
   final DateTime startDate;
   final DateTime endDate;
@@ -32,7 +30,6 @@ class PostModel {
     return PostModel(
       postId: obj["postId"],
       title: obj["title"],
-      summary: obj["summary"],
       imageUrl: obj["imageUrl"],
       startDate: DateTime.parse(obj["startDate"]),
       endDate: DateTime.parse(obj["endDate"]),

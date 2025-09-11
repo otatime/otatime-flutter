@@ -1,19 +1,15 @@
-import 'dart:ui';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_touch_scale/widgets/touch_scale.dart';
-import 'package:intl/intl.dart';
-import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/models/post.dart';
 import 'package:otatime_flutter/pages/post_details/post_details.dart';
+import 'package:otatime_flutter/widgets/app_image.dart';
+import 'package:otatime_flutter/widgets/date_button.dart';
 import 'package:otatime_flutter/widgets/openable.dart';
-import 'package:otatime_flutter/widgets/palette_image.dart';
 import 'package:otatime_flutter/widgets/skeleton.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 class PostScrollItem extends StatefulWidget {
   const PostScrollItem({
@@ -57,34 +53,10 @@ class PostScrollItem extends StatefulWidget {
 }
 
 class _PostScrollItemState extends State<PostScrollItem> {
-  Color? paletteColor;
-
-  /// 팔레트 색상이 어두운지에 대한 여부를 반환합니다.
-  bool? get isPaletteDark {
-    if (paletteColor == null) return null;
-    return paletteColor!.computeLuminance() < 0.5;
-  }
-
-  Color get backdropColor {
-    return isPaletteDark == null
-      ? Scheme.current.foreground
-      : isPaletteDark! ? Scheme.white : Scheme.black;
-  }
-
-  void setPaletteColor(PaletteGenerator generator) async {
-    // 가장 유사한 이미지 대표색을 정의합니다.
-    if (!mounted) return;
-    setState(() => paletteColor = generator.dominantColor?.color);
-  }
-
   @override
   Widget build(BuildContext context) {
     final PostModel model = widget.model;
     final bool isDDay = model.dDay <= 3;
-    final Color backgroundColor = paletteColor ?? Scheme.current.deepground;
-    final Color foregorundColor = isPaletteDark == null
-      ? Scheme.current.foreground
-      : isPaletteDark! ? Scheme.white : Scheme.black;
 
     return Openable(
       openBuilder: (context) {
@@ -97,13 +69,11 @@ class _PostScrollItemState extends State<PostScrollItem> {
       closedBuilder: (context, openContainer) {
         return TouchScale(
           onPress: openContainer,
-          child: AnimatedContainer(
-            duration: Animes.transition.duration,
-            curve: Animes.transition.curve,
+          child: Container(
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Dimens.borderRadius),
-              color: backgroundColor,
+              color: Scheme.current.deepground,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,34 +83,11 @@ class _PostScrollItemState extends State<PostScrollItem> {
                   children: [
                     AspectRatio(
                       aspectRatio: 3 / 1,
-                      child: PaletteImage.network(
+                      child: AppImage.network(
                         url: model.imageUrl,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
-                        onPalette:setPaletteColor,
-                      ),
-                    ),
-
-                    // 부드러운 그림자 효과.
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: AnimatedContainer(
-                          duration: Animes.transition.duration,
-                          curve: Animes.transition.curve,
-                          height: Dimens.innerPadding * 2,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                backgroundColor.withAlpha(0),
-                                backgroundColor,
-                              ]
-                            ),
-                          ),
-                        ),
                       ),
                     ),
 
@@ -161,47 +108,83 @@ class _PostScrollItemState extends State<PostScrollItem> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                    left: Dimens.innerPadding,
-                    right: Dimens.innerPadding,
-                    bottom: Dimens.innerPadding,
-                  ),
-                  child: Column(
+                  padding: EdgeInsets.all(Dimens.innerPadding),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: Dimens.columnSpacing,
+                    spacing: Dimens.innerPadding,
                     children: [
-                      // 행사 제목
-                      Text(
-                        model.title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: foregorundColor,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(Dimens.borderRadius2),
+                        child: AppImage.network(
+                          url: "https://i.namu.wiki/i/qBo0jMNP1u8Xhnbz4iQCb-fSkOj1TTjeIQpGxNaHYOKjX299jKOdhjfId8-amIPM37h0Y_iYP6MIh5tqPZ2vEg.webp",
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
                         ),
                       ),
+                      // 오른족 영역, 행사 정보 표시.
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: Dimens.columnSpacing,
+                          children: [
+                            // 행사 제목
+                            Text(
+                              model.title,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
 
-                      // 행사 태그
-                      Wrap(
-                        spacing: 5,
-                        runSpacing: 5,
-                        children: [
-                          tagWidget(model.sector),
-                          tagWidget(model.type),
-                        ],
-                      ),
+                            // 행사 태그
+                            Wrap(
+                              spacing: 5,
+                              runSpacing: 5,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  spacing: Dimens.rowSpacing,
+                                  children: [
+                                    SvgPicture.asset(
+                                      "navigation-filled".svg,
+                                      height: 14,
+                                      color: Scheme.current.foreground2,
+                                    ),
+                                    Text(
+                                      model.location,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Scheme.current.foreground2
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  "·",
+                                  style: TextStyle(color: Scheme.current.foreground3),
+                                ),
+                                tagWidget(model.sector),
+                                tagWidget(model.type),
+                              ],
+                            ),
 
-                      SizedBox(),
+                            // 간격 추가
+                            SizedBox(),
 
-                      // 행사 날짜
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        runSpacing: Dimens.columnSpacing,
-                        spacing: 5,
-                        children: [
-                          dateButtonWidget(model.startDate),
-                          dateButtonWidget(model.endDate),
-                        ],
+                            // 행사 날짜
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              runSpacing: Dimens.columnSpacing,
+                              spacing: 5,
+                              children: [
+                                DateButton(date: model.startDate),
+                                DateButton(date: model.endDate),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -216,32 +199,26 @@ class _PostScrollItemState extends State<PostScrollItem> {
 
   /// 행사 이미지에 대한 찜 액션 버튼 위젯입니다.
   Widget likeActionButtonWidget() {
-    final Color backgroundColor = widget.model.isLiked
-        ? Scheme.negative.withAlpha(30)
-        : Scheme.current.rearground.withAlpha(100);
-
     return TouchScale(
       onPress: () {
         // TODO: 행사 액션 버튼 구현.
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(1e10),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: Container(
-            padding: EdgeInsets.all(Dimens.innerPadding),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              shape: BoxShape.circle,
-            ),
-            child: SvgPicture.asset(
-              widget.model.isLiked ? "heart-filled".svg : "heart".svg,
-              width: 18,
-              color: widget.model.isLiked
-                ? Scheme.negative
-                : Scheme.current.foreground.withAlpha(150),
-            ),
+        child: Container(
+          width: 40,
+          height: 40,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Scheme.current.imageBackdrop,
+            shape: BoxShape.circle,
+          ),
+          child: SvgPicture.asset(
+            widget.model.isLiked ? "heart-filled".svg : "heart".svg,
+            width: 16,
+            color: widget.model.isLiked
+              ? Scheme.negative
+              : Scheme.current.foreground2,
           ),
         ),
       ),
@@ -267,46 +244,12 @@ class _PostScrollItemState extends State<PostScrollItem> {
     );
   }
 
-  Widget dateButtonWidget(DateTime date) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      decoration: BoxDecoration(
-        color: backdropColor.withAlpha(50),
-        borderRadius: BorderRadius.circular(1e10),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        spacing: 5,
-        children: [
-          // 달력 아이콘
-          SvgPicture.asset(
-            "calendar".svg,
-            width: 12,
-            color: Scheme.white,
-          ),
-
-          // 날짜 표시
-          Text(
-            DateFormat("yyyy-MM-dd").format(date),
-            style: TextStyle(
-              fontSize: 12,
-              color: Scheme.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget tagWidget(String tag) {
-    return Opacity(
-      opacity: 0.5,
-      child: Text(
-        "#$tag",
-        style: TextStyle(
-          color: backdropColor,
-          fontWeight: FontWeight.bold,
-        ),
+    return Text(
+      "#$tag",
+      style: TextStyle(
+        fontSize: 13,
+        color: Scheme.current.foreground2,
       ),
     );
   }
