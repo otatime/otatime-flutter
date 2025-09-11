@@ -30,17 +30,18 @@ class PostScrollItem extends StatefulWidget {
             aspectRatio: 3 / 1,
             child: Skeleton.partOf(),
           ),
-          Skeleton.partOf(height: 25),
+          Skeleton.partOf(height: 28),
           FractionallySizedBox(
             widthFactor: 0.7,
-            child: Skeleton.partOf(height: 25),
+            child: Skeleton.partOf(height: 28),
           ),
+          SizedBox(),
           Wrap(
             spacing: 5,
             runSpacing: 5,
             children: [
-              Skeleton.partOf(width: 70, height: 25),
-              Skeleton.partOf(width: 70, height: 25),
+              Skeleton.partOf(width: 70, height: 28),
+              Skeleton.partOf(width: 70, height: 28),
             ],
           ),
         ],
@@ -116,7 +117,7 @@ class _PostScrollItemState extends State<PostScrollItem> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(Dimens.borderRadius2),
                         child: AppImage.network(
-                          url: "https://i.namu.wiki/i/qBo0jMNP1u8Xhnbz4iQCb-fSkOj1TTjeIQpGxNaHYOKjX299jKOdhjfId8-amIPM37h0Y_iYP6MIh5tqPZ2vEg.webp",
+                          url: model.writer.profileImageUrl,
                           width: 40,
                           height: 40,
                           fit: BoxFit.cover,
@@ -138,7 +139,7 @@ class _PostScrollItemState extends State<PostScrollItem> {
                               ),
                             ),
 
-                            // 행사 태그
+                            // 행사 위치 및 태그 표시
                             Wrap(
                               spacing: 5,
                               runSpacing: 5,
@@ -149,7 +150,7 @@ class _PostScrollItemState extends State<PostScrollItem> {
                                   children: [
                                     SvgPicture.asset(
                                       "navigation-filled".svg,
-                                      height: 14,
+                                      height: 13,
                                       color: Scheme.current.foreground2,
                                     ),
                                     Text(

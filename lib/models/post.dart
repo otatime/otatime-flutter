@@ -1,4 +1,6 @@
 
+import 'package:otatime_flutter/models/profile.dart';
+
 class PostModel {
   const PostModel({
     required this.postId,
@@ -12,6 +14,7 @@ class PostModel {
     required this.location,
     required this.isLiked,
     required this.dDay,
+    required this.writer,
   });
 
   final int postId;
@@ -25,6 +28,7 @@ class PostModel {
   final String location;
   final bool isLiked;
   final int dDay;
+  final ProfileModel writer;
 
   factory PostModel.fromJson(Map<String, dynamic> obj) {
     return PostModel(
@@ -39,6 +43,7 @@ class PostModel {
       location: obj["location"],
       isLiked: obj["isLiked"],
       dDay: obj["D-Day"],
+      writer: ProfileModel.fromJson(obj["writer"]),
     );
   }
 
