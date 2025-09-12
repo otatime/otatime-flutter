@@ -594,7 +594,7 @@ class _SliderItemState extends State<_SliderItem> {
                         Text(
                           widget.model.title,
                           style: TextStyle(
-                            color: Scheme.white,
+                            color: foregroundColor,
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),

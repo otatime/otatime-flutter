@@ -73,8 +73,12 @@ class _PostScrollItemState extends State<PostScrollItem> {
           child: Container(
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Dimens.borderRadius),
               color: Scheme.current.deepground,
+              borderRadius: BorderRadius.circular(Dimens.borderRadius),
+              border: Border.all(
+                width: Dimens.cardLineWidth,
+                color: Scheme.current.border,
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,13 +86,19 @@ class _PostScrollItemState extends State<PostScrollItem> {
               children: [
                 Stack(
                   children: [
-                    AspectRatio(
-                      aspectRatio: 3 / 1,
-                      child: AppImage.network(
-                        url: model.imageUrl,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(Dimens.borderRadius),
+                        topRight: Radius.circular(Dimens.borderRadius),
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 3 / 1,
+                        child: AppImage.network(
+                          url: model.imageUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
                       ),
                     ),
 
@@ -123,6 +133,7 @@ class _PostScrollItemState extends State<PostScrollItem> {
                           fit: BoxFit.cover,
                         ),
                       ),
+
                       // 오른족 영역, 행사 정보 표시.
                       Expanded(
                         child: Column(
@@ -144,27 +155,13 @@ class _PostScrollItemState extends State<PostScrollItem> {
                               spacing: 5,
                               runSpacing: 5,
                               children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  spacing: Dimens.rowSpacing,
-                                  children: [
-                                    SvgPicture.asset(
-                                      "navigation-filled".svg,
-                                      height: 13,
-                                      color: Scheme.current.foreground2,
-                                    ),
-                                    Text(
-                                      model.location,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: Scheme.current.foreground2
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                locationWidget(),
                                 Text(
                                   "·",
-                                  style: TextStyle(color: Scheme.current.foreground3),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Scheme.current.foreground3,
+                                  ),
                                 ),
                                 tagWidget(model.sector),
                                 tagWidget(model.type),
@@ -211,7 +208,7 @@ class _PostScrollItemState extends State<PostScrollItem> {
           height: 40,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Scheme.current.imageBackdrop,
+            color: Scheme.current.imageOverlayBackground,
             shape: BoxShape.circle,
           ),
           child: SvgPicture.asset(
@@ -219,7 +216,7 @@ class _PostScrollItemState extends State<PostScrollItem> {
             width: 16,
             color: widget.model.isLiked
               ? Scheme.negative
-              : Scheme.current.foreground2,
+              : Scheme.current.imageOverlayForeground,
           ),
         ),
       ),
@@ -245,11 +242,32 @@ class _PostScrollItemState extends State<PostScrollItem> {
     );
   }
 
+  Widget locationWidget() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: Dimens.rowSpacing,
+      children: [
+        SvgPicture.asset(
+          "navigation-filled".svg,
+          height: 12,
+          color: Scheme.current.foreground2,
+        ),
+        Text(
+          widget.model.location,
+          style: TextStyle(
+            fontSize: 12,
+            color: Scheme.current.foreground2
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget tagWidget(String tag) {
     return Text(
       "#$tag",
       style: TextStyle(
-        fontSize: 13,
+        fontSize: 12,
         color: Scheme.current.foreground2,
       ),
     );

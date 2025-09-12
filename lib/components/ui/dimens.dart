@@ -6,4 +6,5 @@ class Dimens {
   static const double borderRadius2 = 10;
   static const double rowSpacing = innerPadding / 2;
   static const double columnSpacing = rowSpacing;
+  static const double cardLineWidth = 0.5;
 }
