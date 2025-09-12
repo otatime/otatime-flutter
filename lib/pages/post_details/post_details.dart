@@ -12,6 +12,7 @@ import 'package:otatime_flutter/pages/post_map/post_map.dart';
 import 'package:otatime_flutter/widgets/action_button.dart';
 import 'package:otatime_flutter/widgets/app_image.dart';
 import 'package:otatime_flutter/widgets/date_button.dart';
+import 'package:otatime_flutter/widgets/separated_line.dart';
 import 'package:otatime_flutter/widgets/wide_button.dart';
 
 class PostDetailsPage extends StatefulWidget {
@@ -98,83 +99,92 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                   padding: EdgeInsets.all(Dimens.outerPadding),
                   children: [
                     Row(
-                      spacing: Dimens.rowSpacing,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: Dimens.innerPadding,
                       children: [
-                        SvgPicture.asset(
-                          "navigation-filled".svg,
-                          height: 16,
-                          color: Scheme.current.foreground2,
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(Dimens.borderRadius2),
+                          child: AppImage.network(
+                            url: model.writer.profileImageUrl,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
                         ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                spacing: Dimens.rowSpacing,
+                                children: [
+                                  SvgPicture.asset(
+                                    "navigation-filled".svg,
+                                    height: 16,
+                                    color: Scheme.current.foreground2,
+                                  ),
 
-                        // 행사 위치 표시.
-                        Text(
-                          "${model.region} · ${model.location}",
-                          style: TextStyle(color: Scheme.current.foreground2),
+                                  // 행사 위치 표시.
+                                  Text(
+                                    "${model.region} · ${model.location}",
+                                    style: TextStyle(color: Scheme.current.foreground2),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: Dimens.columnSpacing),
+
+                              Text(
+                                model.title,
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                              ),
+
+                              SizedBox(height: Dimens.columnSpacing),
+
+                              // 상위 카테고리 및 하위 카테고리 간략히 표시.
+                              Text(
+                                "#${model.sector} #${model.type}",
+                                style: TextStyle(color: Scheme.current.foreground2),
+                              ),
+
+                              SizedBox(height: Dimens.innerPadding),
+
+                              // 행사 날짜
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                runSpacing: Dimens.columnSpacing,
+                                spacing: 5,
+                                children: [
+                                  // D-Day (3일) 임박시 표시.
+                                  if (isDDay) dDayWidget(),
+                                  DateButton(date: model.startDate),
+                                  DateButton(date: model.endDate),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-
-                    SizedBox(height: Dimens.columnSpacing),
-
-                    Text(
-                      model.title,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-
-                    SizedBox(height: Dimens.columnSpacing),
-
-                    // 상위 카테고리 및 하위 카테고리 간략히 표시.
-                    Text(
-                      "${model.sector}, ${model.type}",
-                      style: TextStyle(color: Scheme.current.primary),
                     ),
 
                     SizedBox(height: Dimens.innerPadding),
-
-                    // 행사 날짜
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      runSpacing: Dimens.columnSpacing,
-                      spacing: 5,
-                      children: [
-                        // D-Day (3일) 임박시 표시.
-                        if (isDDay) dDayWidget(),
-                        DateButton(date: model.startDate),
-                        Text(
-                          "부터",
-                          style: TextStyle(fontSize: 12, color: Scheme.current.foreground3)
-                        ),
-                        DateButton(date: model.endDate),
-                        Text(
-                          "까지",
-                          style: TextStyle(fontSize: 12, color: Scheme.current.foreground3)
-                        ),
-                      ],
-                    ),
-
+                    SeparatedLine.horizontal(),
                     SizedBox(height: Dimens.innerPadding),
 
                     // 행사 상세 내용 표시.
-                    Container(
-                      padding: EdgeInsets.all(Dimens.innerPadding),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(Dimens.borderRadius),
-                        color: Scheme.current.deepground,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: Dimens.columnSpacing,
-                        children: [
-                          Text(
-                            "상세 내용",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            loremText,
-                            style: TextStyle(color: Scheme.current.foreground2, height: 1.5),
-                          ),
-                        ],
+                    labeledBy(
+                      label: "상세 내용",
+                      child: Container(
+                        padding: EdgeInsets.all(Dimens.innerPadding),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(Dimens.borderRadius),
+                          color: Scheme.current.deepground,
+                        ),
+                        child: Text(
+                          loremText,
+                          style: TextStyle(color: Scheme.current.foreground2, height: 1.6),
+                        ),
                       ),
                     ),
                   ],
@@ -243,6 +253,27 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
     );
   }
 
+  Widget labeledBy({
+    required String label,
+    required Widget child,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      spacing: Dimens.innerPadding,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        child,
+      ],
+    );
+  }
+
   /// D-Day를 나타내는 버튼 형태의 위젯입니다.
   Widget dDayWidget() {
     return Container(
@@ -273,6 +304,9 @@ class _HeaderAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 자연스러운 색 보간을 위해 배경색을 기반으로 하는 투명색을 사용함.
+    final Color transparent = Scheme.current.background.withAlpha(0);
+
     return Stack(
       children: [
         AppImage.network(
@@ -289,10 +323,14 @@ class _HeaderAppBar extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Scheme.black.withAlpha(150),
-                  Scheme.transparent,
-                  Scheme.transparent,
-                  Scheme.transparent,
-                  Scheme.current.background.withAlpha(150),
+                  Scheme.black.withAlpha(75),
+                  transparent,
+                  transparent,
+                  transparent,
+                  transparent,
+                  transparent,
+                  Scheme.current.background.withAlpha(100),
+                  Scheme.current.background.withAlpha(200),
                   Scheme.current.background,
                 ],
               ),

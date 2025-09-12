@@ -21,6 +21,7 @@ abstract class Scheme {
   Color get barrier;
   Color get imageOverlayBackground;
   Color get imageOverlayForeground;
+  Color get separatedLine;
 
   static final Color transparent = Color.fromRGBO(0, 0, 0, 0);
   static final Color white = Color.fromRGBO(255, 255, 255, 1);
@@ -71,6 +72,7 @@ class LightScheme extends Scheme {
   @override Color get barrier => Scheme.black.withAlpha(150);
   @override Color get imageOverlayBackground => Scheme.black.withAlpha(100);
   @override Color get imageOverlayForeground => Scheme.white.withAlpha(150);
+  @override Color get separatedLine => Color.fromRGBO(235, 237, 240, 1);
 }
 
 class DarkScheme extends Scheme {
@@ -91,4 +93,5 @@ class DarkScheme extends Scheme {
   @override Color get barrier => Scheme.black.withAlpha(150);
   @override Color get imageOverlayBackground => Scheme.black.withAlpha(100);
   @override Color get imageOverlayForeground => Scheme.white.withAlpha(150);
+  @override Color get separatedLine => Scheme.black;
 }
