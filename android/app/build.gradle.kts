@@ -1,8 +1,20 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+val keystoreProps = Properties().apply {
+    val keystorePropsFile = rootProject.file("key.properties")
+    if (keystorePropsFile.exists()) {
+        load(FileInputStream(keystorePropsFile))
+    } else {
+        throw Exception("/android 폴더에 'key.properties'와 'keystore.jks' 파일을 추가하세요.")
+    }
 }
 
 android {
@@ -30,15 +42,28 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProps.getProperty("keyAlias")
+            keyPassword = keystoreProps.getProperty("keyPassword")
+            storeFile = file("../keystore.jks")
+            storePassword = keystoreProps.getProperty("storePassword")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(file("proguard-rules.pro"))
 
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // `flutter run --release`으로 빌드 할 때는 릴리스 키로 서명됩니다.
+            signingConfig = signingConfigs.getByName("release")
+        }
+
+        debug {
+            // `flutter run --debug`으로 빌드 할 때는 릴리스 키로 서명됩니다.
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }

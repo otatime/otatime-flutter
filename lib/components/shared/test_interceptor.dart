@@ -96,7 +96,7 @@ class TestInterceptor extends Interceptor {
           "writer": {
             "userId": 1,
             "username": "붕괴 스타레일",
-            "profileImageUrl": "https://i.namu.wiki/i/cMMf1XKU24vhkhh81x-bsQwz1709u-EIS3wXO2N1rmoCp0_l2BlPWPinvyCkL5n05CWcubomZ0tRtsDZc3XIbKrS9Kzdvt4iqXWMGiQmWo-cPIei51OgV6ME4b7vrvWBYF7De2bfz2iRQF8Np6yegQ.webp",
+            "profileImageUrl": "https://i.namu.wiki/i/TvflmW8hr6yULWMiO47CJdYvwQb9CvSZvFZPmJ7nyntSMkqmjiP2-PsXvNH0ZEhd2ze3_pQru2_HyvzRyKigYg.webp",
           }
         },
       ],
