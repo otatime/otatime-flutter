@@ -1,4 +1,5 @@
 
+/// 주소 검색 결과를 정의하는 모델입니다. (공통 정보 + 주소 목록)
 class AddressResultModel {
   const AddressResultModel({
     required this.common,
@@ -16,6 +17,7 @@ class AddressResultModel {
   }
 }
 
+/// 좌표 검색 결과를 정의하는 모델입니다.
 class LocationResultModel {
   const LocationResultModel({
     required this.common,
@@ -78,6 +80,7 @@ class AddressCommonAsPageModel extends AddressCommonModel {
   }
 }
 
+/// 주소 데이터(도로명, 지번, 건물명 등)를 정의하는 모델입니다.
 class AddressModel {
   const AddressModel({
     required this.detBdNmList,
@@ -171,6 +174,7 @@ class AddressModel {
   }
 }
 
+/// 좌표 기반 위치 데이터(건물번호, 좌표 등)를 정의하는 모델입니다.
 class LocationModel {
   const LocationModel({
     required this.admCd,
