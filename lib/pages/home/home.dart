@@ -528,8 +528,8 @@ class _SliderItemState extends State<_SliderItem> {
       : (isPaletteDark ? Scheme.white : Scheme.black);
   }
 
+  /// 가장 유사한 이미지 대표색을 정의합니다.
   void setPaletteColor(PaletteGenerator generator) async {
-    // 가장 유사한 이미지 대표색을 정의합니다.
     if (!mounted) return;
     setState(() => paletteColor = generator.dominantColor?.color);
   }
@@ -614,14 +614,57 @@ class _SliderItemState extends State<_SliderItem> {
                 ),
 
                 Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 3,
-                        color: paletteColor ?? Scheme.transparent,
-                      ),
-                      borderRadius: BorderRadius.circular(Dimens.borderRadius),
-                    ),
+                  child: Builder(
+                    builder: (context) {
+                      final Color backgroundColor = paletteColor ?? Scheme.current.background;
+                      final DateTime now = DateTime.now();
+                      final int dDay = widget.model.dDay;
+
+                      // 오늘을 기준으로 현재 행사가 진행 중인지에 대한 여부.
+                      final bool isProgressing = widget.model.startDate.isBefore(now)
+                                              && widget.model.endDate.isAfter(now);
+
+                      /// 행사의 진행 현황을 문자열 표현하여 이를 반환합니다.
+                      String getEventStatus() {
+                        if (isProgressing) return "현재 진행 중";
+                        if (dDay == 1) return "내일 진행";
+                        if (dDay == 0) return "오늘 진행";
+                        if (dDay > 1) return "$dDay일 후 진행";
+                        return "$dDay일 전";
+                      }
+
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(Dimens.borderRadius),
+                          border: Border.all(
+                            width: 3,
+                            color: backgroundColor,
+                          ),
+                        ),
+                        child: Stack(
+                          children: [
+                            // 행사 진행 현황 표시.
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: backgroundColor,
+                                  borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(Dimens.borderRadius),
+                                  ),
+                                ),
+                                child: Text(
+                                  getEventStatus(),
+                                  style: TextStyle(color: foregroundColor),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
