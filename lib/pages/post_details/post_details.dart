@@ -44,7 +44,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
 감사합니다!
   """;
-  
+
   @override
   void initState() {
     super.initState();
@@ -137,7 +137,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
                               Text(
                                 model.title,
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                               ),
 
                               SizedBox(height: Dimens.columnSpacing),
@@ -244,6 +244,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             iconPath: "navigation-filled".svg,
             label: "위치 보기",
             onTap: () {
+
               // 행사 지도 페이지로 이동.
               Navigator.push(context, AppPageRoute(builder: (_) => PostMapPage()));
             },
@@ -264,10 +265,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         child,
       ],
