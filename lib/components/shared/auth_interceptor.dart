@@ -5,9 +5,14 @@ import 'package:otatime_flutter/components/secure/secure_token.dart';
 import 'package:otatime_flutter/components/shared/network.dart';
 import 'package:otatime_flutter/pages/sign_in/sign_in_model.dart';
 
+/// API 요청에 대한 인증 처리를 자동화하는 Dio 인터셉터입니다.
+///
+/// 요청 시 액세스 토큰을 헤더에 추가하고, 401 Unauthorized 에러 발생 시
+/// 리프레시 토큰을 사용하여 토큰을 갱신하고 원래 요청을 재시도합니다.
 class AuthInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    // 기존 인증 헤더를 제거하여 중복 및 예기치 않은 오류를 방지합니다.
     options.headers.remove("authorization");
 
     // API 요청 시, 인증을 위해 정의된 액세스 토큰을 헤더에 삽입합니다.
@@ -21,8 +26,7 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-
-    // 사용자 인증 실패 시.
+    // 액세스 토큰 만료 등 사용자 인증에 실패(401)했을 경우, 토큰 갱신을 시도합니다.
     if (err.response?.statusCode == 401) {
       return await _handleUnauthorized(err, handler);
     }
@@ -40,12 +44,12 @@ class AuthInterceptor extends Interceptor {
       try {
         await _refreshAccessToken(refreshToken);
       } catch (_) {
-
-        // 리프레시 토큰으로도 엑세스 토큰 발급을 실패 했을 떄 사용자를 로그아웃 처리하도록 보장.
+        // 리프레시 토큰으로도 엑세스 토큰 발급을 실패 했을 떄 사용자를 로그아웃 처리하도록 보장합니다.
         MyUser.ensureSignOut();
         return handler.reject(error);
       }
 
+      // 토큰 갱신 후 원래의 요청을 재시도합니다.
       final Response retryed = await kDio.fetch(error.requestOptions);
       return handler.resolve(retryed);
     }
@@ -62,6 +66,7 @@ class AuthInterceptor extends Interceptor {
     final Response response = await kDio.post("/re-issue", options: options);
     final APIResult<SignInModel> dto = APIResult.fromJson(response.data);
 
+    // 새로 발급받은 토큰으로 교체합니다.
     await MyUser.signIn(
       accessToken: dto.result.accessToken,
       refreshToken: dto.result.refreshToken,

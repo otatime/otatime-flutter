@@ -5,9 +5,13 @@ import 'package:otatime_flutter/components/ui/animes.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 
+/// 앱 전반에서 사용되는 모달 팝업 라우트입니다.
+///
+/// 배경을 흐리게 처리하고 중앙에 컨텐츠를 표시하는 일반적인 모달 UI를 구현합니다.
 class ModalPopupRoute extends PopupRoute {
   ModalPopupRoute({required this.child});
 
+  /// 팝업 내부에 표시될 위젯.
   final Widget child;
 
   @override
@@ -87,6 +91,7 @@ class ModalPopupRoute extends PopupRoute {
   }
 }
 
+/// 모달 팝업에 사용되는 페이드 및 스케일 전환 효과를 구현하는 위젯입니다.
 class _FadeTransition extends StatelessWidget {
   const _FadeTransition({
     super.key,
@@ -94,7 +99,9 @@ class _FadeTransition extends StatelessWidget {
     required this.child
   });
 
+  /// 전환 효과를 제어하는 애니메이션.
   final Animation<double> animation;
+  /// 애니메이션 효과가 적용될 자식 위젯.
   final Widget child;
 
   /// 스케일 효과에 대한 승수.
@@ -102,9 +109,12 @@ class _FadeTransition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 등장 애니메이션 값 계산.
     final double fadeInValue = animation.isForwardOrCompleted ? animation.value : 1;
+    // 퇴장 애니메이션 값 계산.
     final double fadeOutValue = animation.status == AnimationStatus.reverse ? 1 - animation.value : 0;
 
+    // 등장 및 퇴장 시 스케일이 약간 변화하는 효과를 적용하여 동적인 느낌을 줍니다.
     return Opacity(
       opacity: animation.value,
       child: Transform.scale(

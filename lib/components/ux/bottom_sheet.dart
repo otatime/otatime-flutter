@@ -3,7 +3,10 @@ import 'package:flutter_scroll_bottom_sheet/flutter_bottom_sheet.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 
+/// 앱 전반에서 사용되는 바텀 시트의 공통적인 UI/UX를 정의합니다.
 class BottomSheetUX {
+  /// 앱이 시작될 때 호출되어 모든 바텀 시트에 대한 전역적인 스타일과 레이아웃을 설정합니다.
+  /// 이를 통해 앱 전체에서 일관된 바텀 시트 경험을 제공합니다.
   static void initialize() {
     // 포괄적으로 전역적인 바텀 시트에 대한 디자인 설정.
     BottomSheet.config = BottomSheetConfig(
@@ -24,7 +27,7 @@ class BottomSheetUX {
             child: Stack(
               alignment: Alignment.topCenter,
               children: [
-                // 인디케이터.
+                // 상단 드래그 핸들(인디케이터).
                 Padding(
                   padding: EdgeInsets.all(Dimens.innerPadding),
                   child: Container(
@@ -38,7 +41,7 @@ class BottomSheetUX {
                 ),
                 MediaQuery(
                   data: data.copyWith(
-                    // 수직 스크롤 뷰에 대한 기본 패딩 정의.
+                    // 핸들과 겹치지 않도록 콘텐츠 영역에 대한 상단 여백 추가.
                     padding: data.padding.copyWith(top: Dimens.outerPadding * 2 + 4),
                   ),
                   child: child,

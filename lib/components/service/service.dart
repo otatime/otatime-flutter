@@ -21,6 +21,7 @@ enum ServiceStatus {
 /// MVVM 아키텍처 패턴에서 ViewModel 역할에 해당하는 추상 클래스입니다.
 /// 주로 데이터 로딩 및 상태 관리를 담당합니다.
 abstract class Service<T> extends ChangeNotifier {
+  /// [Service] 인스턴스를 생성하고, 초기 상태를 설정합니다.
   Service({
     ServiceStatus initialStatus = ServiceStatus.none
   }) {
@@ -46,6 +47,7 @@ abstract class Service<T> extends ChangeNotifier {
   bool get isLoading => status == ServiceStatus.none
                      || status == ServiceStatus.loading;
 
+  /// 로드되어 역직렬화된 데이터.
   T? _data;
 
   /// 현재 역직렬화되어 로드된 데이터를 반환합니다.

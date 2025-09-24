@@ -21,6 +21,10 @@ abstract class RestService<T, K> extends Service<T> {
   /// HTTP 요청을 수행한 후, 서버로부터 받은 응답을 반환합니다.
   Future<Response> request();
 
+  /// 서버로부터 데이터를 로드하는 공통 로직을 구현합니다.
+  ///
+  /// [request]를 호출하여 API 요청을 수행하고, 성공 시 응답 데이터를 파싱하여 [done]을 호출합니다.
+  /// 요청 중 오류가 발생하면 [fail]을 호출하고, 서버 응답 오류는 표준 [APIError]로 변환하여 throw합니다.
   @override
   Future<void> load({bool isRefresh = false}) async {
     super.load(isRefresh: isRefresh);

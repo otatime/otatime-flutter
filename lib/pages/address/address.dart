@@ -23,6 +23,7 @@ import 'package:otatime_flutter/widgets/skeleton.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
 import 'package:otatime_flutter/widgets/wide_button.dart';
 
+/// 최종적으로 선택된 주소 정보를 나타내는 클래스.
 class Address {
   const Address({
     required this.zipCode,
@@ -32,13 +33,19 @@ class Address {
     required this.longitude,
   });
 
-  final String zipCode;   // 우편 주소
-  final String street;    // 도로명 주소
-  final String details;   // 상세 주소
-  final double latitude;  // 위도
-  final double longitude; // 경도
+  /// 우편번호.
+  final String zipCode;
+  /// 도로명 주소.
+  final String street;
+  /// 상세 주소.
+  final String details;
+  /// 위도.
+  final double latitude;
+  /// 경도.
+  final double longitude;
 }
 
+/// 주소를 검색하고 선택하는 페이지 위젯.
 class AddressPage extends StatefulWidget {
   const AddressPage({super.key});
 
@@ -47,8 +54,11 @@ class AddressPage extends StatefulWidget {
 }
 
 class _AddressPageState extends State<AddressPage> {
+  /// 사용자가 검색을 통해 선택한 주소 모델.
   AddressModel? selectedModel;
+  /// 사용자가 입력한 상세 주소.
   String? details;
+  /// 위치 정보(위도, 경도)를 가져오는 중인지 여부.
   bool isLoading = false;
 
   /// 사용자가 최종적으로 주소 선택을 완료하면 호출됩니다.
@@ -75,6 +85,7 @@ class _AddressPageState extends State<AddressPage> {
     }
   }
 
+  /// 사용자가 입력한 상세 주소를 상태에 반영합니다.
   void updateDetails(String newValue) => setState(() {
     details = newValue;
   });
@@ -127,6 +138,7 @@ class _AddressPageState extends State<AddressPage> {
               ),
             ),
           ),
+          // 하단 선택하기 버튼 영역.
           Padding(
             padding: EdgeInsetsGeometry.only(
               left: Dimens.outerPadding,
@@ -148,6 +160,7 @@ class _AddressPageState extends State<AddressPage> {
   }
 }
 
+/// 도로명 주소를 검색하는 페이지 위젯.
 class _AddressSearchPage extends StatefulWidget {
   const _AddressSearchPage({super.key});
 
@@ -156,6 +169,7 @@ class _AddressSearchPage extends StatefulWidget {
 }
 
 class _AddressSearchPageState extends State<_AddressSearchPage> {
+  /// 주소 검색 API 서비스를 관리하는 인스턴스.
   AddressService? service;
 
   /// 현재 선택된 주소 정보를 정의합니다.
@@ -201,6 +215,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
                           );
                         }
 
+                        // 로딩 중일 경우 스켈레톤 UI를 표시.
                         if (service!.status == ServiceStatus.loading) {
                           return _ScrollView.skeletonWidget();
                         }
@@ -214,6 +229,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
                           );
                         }
 
+                        // 검색 결과를 리스트로 표시.
                         return _ScrollView(
                           service: service!,
                           selectedModel: selectedModel,
@@ -228,6 +244,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
               ),
             ),
           ),
+          // 하단 선택하기 버튼 영역.
           Padding(
             padding: EdgeInsetsGeometry.only(
               left: Dimens.outerPadding,
@@ -244,6 +261,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
     );
   }
 
+  /// 상단의 검색창 UI를 구성하는 위젯.
   Widget serachBarWidget({required bool autoFocus}) {
     return Padding(
       padding: EdgeInsets.only(
@@ -274,7 +292,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
 
                     service = AddressService(keyword: newValue);
 
-                    // 최소 검색어 길이를 충족한 경우.
+                    // 최소 검색어 길이를 충족한 경우 API 요청.
                     if (service!.status == ServiceStatus.none
                      && service!.keyword.length > 2) {
                       service?.load();
@@ -290,6 +308,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
   }
 }
 
+/// 주소 검색 결과를 스크롤 가능한 리스트로 표시하는 위젯.
 class _ScrollView extends StatelessWidget {
   const _ScrollView({
     super.key,
@@ -298,8 +317,11 @@ class _ScrollView extends StatelessWidget {
     required this.onChanged,
   });
 
+  /// 주소 검색 서비스 인스턴스.
   final AddressService service;
+  /// 현재 선택된 주소 모델.
   final AddressModel? selectedModel;
+  /// 주소 선택 시 호출될 콜백.
   final ValueChanged<AddressModel> onChanged;
 
   @override
@@ -318,6 +340,7 @@ class _ScrollView extends StatelessWidget {
     );
   }
 
+  /// 주소 목록을 감싸는 `ListView` 위젯을 생성합니다.
   static Widget wrapperWidget({
     required int itemCount,
     required IndexedWidgetBuilder itemBuilder,
@@ -332,6 +355,7 @@ class _ScrollView extends StatelessWidget {
     );
   }
 
+  /// 로딩 상태일 때 표시될 스켈레톤 UI 위젯을 생성합니다.
   static Widget skeletonWidget() {
     return wrapperWidget(
       itemCount: 5,
@@ -342,6 +366,7 @@ class _ScrollView extends StatelessWidget {
   }
 }
 
+/// 주소 검색 결과 목록의 개별 항목을 나타내는 위젯.
 class _ScrollItem extends StatelessWidget {
   const _ScrollItem({
     super.key,
@@ -350,8 +375,11 @@ class _ScrollItem extends StatelessWidget {
     required this.onTap,
   });
 
+  /// 현재 항목이 선택되었는지 여부.
   final bool isSelected;
+  /// 이 항목이 표시할 주소 데이터 모델.
   final AddressModel model;
+  /// 항목을 탭했을 때 호출될 콜백.
   final VoidCallback onTap;
 
   @override
@@ -372,6 +400,7 @@ class _ScrollItem extends StatelessWidget {
         child: Row(
           spacing: Dimens.innerPadding,
           children: [
+            // 선택 상태를 나타내는 라디오 버튼.
             Radio(
               isEnabled: isSelected,
               onChanged: (newValue) {},
@@ -404,7 +433,7 @@ class _ScrollItem extends StatelessWidget {
                         color: Scheme.current.foreground2,
                       ),
 
-                      // 우편 변호 표시.
+                      // 우편 번호 표시.
                       Text(model.zipNo, style: TextStyle(color: Scheme.current.foreground2))
                     ],
                   ),
@@ -417,6 +446,7 @@ class _ScrollItem extends StatelessWidget {
     );
   }
 
+  /// 로딩 상태일 때 표시될 개별 항목의 스켈레톤 UI 위젯을 생성합니다.
   static Widget skeletonWidget() {
     return Skeleton(
       child: Column(

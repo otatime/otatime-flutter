@@ -17,5 +17,7 @@ final Dio kDio = Dio(
     receiveTimeout: const Duration(seconds: 10),
   )
 )
+// 요청 시 인증 토큰을 처리하는 인터셉터를 추가합니다.
 ..interceptors.add(AuthInterceptor())
+// 테스트용 응답을 가로채는 인터셉터를 추가합니다.
 ..interceptors.add(TestInterceptor());

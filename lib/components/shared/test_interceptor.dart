@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 
+/// 개발 및 테스트 단계에서 실제 서버 API를 호출하는 대신,
+/// 미리 정의된 목(Mock) 데이터를 반환하여 UI 개발을 용이하게 하는 테스트용 인터셉터입니다.
 class TestInterceptor extends Interceptor {
+  /// 일반 게시물 목록에 대한 목 데이터.
   static Map<String, dynamic> postsData = {
     "result": {
       "meta": {
@@ -103,6 +106,7 @@ class TestInterceptor extends Interceptor {
     }
   };
 
+  /// 배너 게시물 목록에 대한 목 데이터.
   static Map<String, dynamic> postsBannerData = {
     "result": {
       "meta": {
@@ -169,6 +173,7 @@ class TestInterceptor extends Interceptor {
     }
   };
 
+  /// 월별 게시물 목록에 대한 목 데이터. (달력 기능용)
   static Map<String, dynamic> postsMonthData = {
     "result": {
       "meta": {
@@ -199,6 +204,7 @@ class TestInterceptor extends Interceptor {
     }
   };
 
+  /// 검색 결과에 대한 목 데이터.
   static Map<String, dynamic> postsSearchData = {
     "result": {
       "meta": {
@@ -229,6 +235,7 @@ class TestInterceptor extends Interceptor {
     }
   };
 
+  /// 검색 결과가 없을 때 사용되는 빈 목 데이터.
   static Map<String, dynamic> postsEmtpyData = {
     "result": {
       "meta": {
@@ -242,8 +249,10 @@ class TestInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    // 실제 네트워크 지연을 시뮬레이션하기 위해 1초 대기합니다.
     await Future.delayed(const Duration(seconds: 1));
     
+    // 요청 경로에 따라 적절한 목 데이터를 반환합니다.
     if (options.path == "/posts") {
       return handler.resolve(
         Response(
@@ -295,6 +304,7 @@ class TestInterceptor extends Interceptor {
       );
     }
 
+    // 일치하는 경로가 없으면 요청을 계속 진행합니다.
     super.onRequest(options, handler);
   }
 }
