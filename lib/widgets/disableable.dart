@@ -9,16 +9,22 @@ class Disableable extends StatelessWidget {
   const Disableable({
     super.key,
     required this.isEnabled,
-    required this.child
+    required this.child,
   });
 
+  /// 위젯의 활성화 여부.
   final bool isEnabled;
+
+  /// 활성화/비활성화 상태가 제어될 자식 위젯.
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    // isEnabled가 false일 경우, 자식 위젯에 대한 포인터 이벤트를 무시.
     return IgnorePointer(
       ignoring: !isEnabled,
+
+      // isEnabled 값에 따라 투명도를 조절하여 시각적으로 활성화/비활성화 상태를 표현.
       child: AnimatedOpacity(
         opacity: isEnabled ? 1 : 0.5,
         duration: Animes.transition.duration,

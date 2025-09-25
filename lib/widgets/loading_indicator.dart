@@ -8,7 +8,10 @@ class LoadingIndicator extends StatelessWidget {
     this.size = 30,
   });
 
+  /// 로딩 인디케이터의 색상.
   final Color? color;
+
+  /// 로딩 인디케이터의 크기 (너비와 높이).
   final double size;
 
   @override
@@ -18,7 +21,11 @@ class LoadingIndicator extends StatelessWidget {
       height: size,
       child: CircularProgressIndicator(
         color: color,
+
+        // 인디케이터의 두께를 전체 크기에 비례하여 설정.
         strokeWidth: size * 0.125,
+
+        // 인디케이터의 끝 부분을 둥글게 처리하여 부드러운 느낌을 줌.
         strokeCap: StrokeCap.round,
       ),
     );

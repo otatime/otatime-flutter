@@ -67,6 +67,7 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                 ],
+
                 // 게시글 목록 스크롤 뷰.
                 child: PostScrollView(service: service),
               ),
@@ -417,6 +418,7 @@ class _LocationSelectBox extends StatelessWidget {
                 width: 12,
                 color: Scheme.current.foreground2,
               ),
+
               // 선택된 지역 이름.
               Text(items[index], style: TextStyle(color: Scheme.current.foreground2)),
             ],
@@ -441,6 +443,7 @@ class _Slider extends StatelessWidget {
           child: Builder(
             key: ValueKey(service.isLoading),
             builder: (context) {
+
               // 로딩 중일 경우 스켈레톤 UI를 표시.
               if (service.isLoading) {
                 return skeletonWidget();
@@ -474,6 +477,7 @@ class _Slider extends StatelessWidget {
         final double spacing = Dimens.outerPadding / 2;
         final double itemWidth = width - (padding * 2) + spacing;
         final double fraction = itemWidth / width;
+
         // 뷰포트 일부를 보여주기 위한 페이지 컨트롤러 설정.
         final controller = PageController(viewportFraction: fraction);
 
@@ -587,10 +591,12 @@ class _SliderItemState extends State<_SliderItem> {
         // 탭하면 게시물 상세 페이지로 이동.
         return PostDetailsPage(model: widget.model);
       },
+
       // 상세 페이지로 전환 시 컨테이너의 곡선 형태를 유지.
       closedShape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Dimens.borderRadius),
       ),
+
       closedBuilder: (context, openContainer) {
         return TouchScale(
           onPress: openContainer,

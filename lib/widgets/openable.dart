@@ -15,8 +15,13 @@ class Openable extends StatelessWidget {
     this.closedShape,
   });
 
+  /// 열린 상태에서 표시될 위젯을 빌드하는 빌더.
   final WidgetBuilder openBuilder;
+
+  /// 닫힌 상태에서 표시될 위젯을 빌드하는 빌더.
   final CloseContainerBuilder closedBuilder;
+
+  /// 닫힌 상태의 컨테이너 모양.
   final ShapeBorder? closedShape;
 
   /// 닫힌 상태에 대한 기본적인 [ShapeBorder]를 정의합니다.
@@ -29,15 +34,24 @@ class Openable extends StatelessWidget {
     return HeroContainer(
       openedElevation: 0,
       openedColor: Scheme.current.background,
+
+      // 열린 상태의 위젯.
       openedBuilder: (context) {
+        // 불필요한 리빌드를 방지하기 위해 RepaintBoundary로 감싸고,
+        // 앱의 디자인 시스템을 적용하여 위젯을 렌더링합니다.
         return RepaintBoundary(
           child: Designed(child: openBuilder(context)),
         );
       },
+
       closedShape: closedShape ?? defaultClosedShape,
       closedElevation: 0,
       closedColor: Scheme.current.background,
+
+      // 닫힌 상태의 위젯.
       closedBuilder: (context, openContainer) {
+        // 불필요한 리빌드를 방지하기 위해 RepaintBoundary로 감싸고,
+        // 앱의 디자인 시스템을 적용하여 위젯을 렌더링합니다.
         return RepaintBoundary(
           child: Designed.themeWidget(
             child: closedBuilder(context, openContainer),

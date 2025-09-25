@@ -11,6 +11,7 @@ import 'package:otatime_flutter/widgets/date_button.dart';
 import 'package:otatime_flutter/widgets/openable.dart';
 import 'package:otatime_flutter/widgets/skeleton.dart';
 
+/// 해당 위젯은 게시물 목록에 표시되는 단일 아이템입니다.
 class PostScrollItem extends StatefulWidget {
   const PostScrollItem({
     super.key,
@@ -19,6 +20,7 @@ class PostScrollItem extends StatefulWidget {
 
   final PostModel model;
 
+  /// 해당 위젯이 로딩 중일 때 표시될 스켈레톤 UI입니다.
   static Widget skeletonWidget() {
     return Skeleton(
       child: Column(
@@ -57,12 +59,16 @@ class _PostScrollItemState extends State<PostScrollItem> {
   @override
   Widget build(BuildContext context) {
     final PostModel model = widget.model;
+
+    // D-Day가 3일 이하로 남았는지 여부.
     final bool isDDay = model.dDay <= 3;
 
+    // 탭하면 게시물 상세 페이지로 전환되는 애니메이션 효과.
     return Openable(
       openBuilder: (context) {
         return PostDetailsPage(model: model);
       },
+
       // 내부 아이템의 곡선 값을 그대로 유지.
       closedShape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Dimens.borderRadius),
@@ -134,14 +140,14 @@ class _PostScrollItemState extends State<PostScrollItem> {
                         ),
                       ),
 
-                      // 오른족 영역, 행사 정보 표시.
+                      // 프로필 이미지 우측의 행사 정보 영역.
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           spacing: Dimens.columnSpacing,
                           children: [
-                            // 행사 제목
+                            // 행사 제목.
                             Text(
                               model.title,
                               style: TextStyle(
@@ -150,7 +156,7 @@ class _PostScrollItemState extends State<PostScrollItem> {
                               ),
                             ),
 
-                            // 행사 위치 및 태그 표시
+                            // 행사 위치 및 태그 표시.
                             Wrap(
                               spacing: 5,
                               runSpacing: 5,
@@ -168,10 +174,10 @@ class _PostScrollItemState extends State<PostScrollItem> {
                               ],
                             ),
 
-                            // 간격 추가
+                            // 간격 추가.
                             SizedBox(),
 
-                            // 행사 날짜
+                            // 행사 날짜.
                             Wrap(
                               crossAxisAlignment: WrapCrossAlignment.center,
                               runSpacing: Dimens.columnSpacing,
@@ -242,6 +248,7 @@ class _PostScrollItemState extends State<PostScrollItem> {
     );
   }
 
+  /// 행사 위치를 아이콘과 함께 표시하는 위젯입니다.
   Widget locationWidget() {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -256,13 +263,14 @@ class _PostScrollItemState extends State<PostScrollItem> {
           widget.model.location,
           style: TextStyle(
             fontSize: 12,
-            color: Scheme.current.foreground2
+            color: Scheme.current.foreground2,
           ),
         ),
       ],
     );
   }
 
+  /// '#태그' 형식으로 태그를 표시하는 위젯입니다.
   Widget tagWidget(String tag) {
     return Text(
       "#$tag",

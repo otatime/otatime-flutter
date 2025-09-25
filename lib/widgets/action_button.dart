@@ -4,6 +4,7 @@ import 'package:flutter_touch_scale/flutter_touch_scale.dart';
 import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 
+/// 해당 위젯은 터치 시 스케일 효과가 적용되는 간단한 아이콘 버튼입니다.
 class ActionButton extends StatelessWidget {
   const ActionButton({
     super.key,
@@ -11,7 +12,10 @@ class ActionButton extends StatelessWidget {
     required this.onTap,
   });
 
+  /// 버튼에 표시될 SVG 아이콘의 애셋 경로.
   final String iconPath;
+
+  /// 버튼을 탭했을 때 실행될 콜백.
   final VoidCallback onTap;
 
   @override

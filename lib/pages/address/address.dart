@@ -156,6 +156,7 @@ class _AddressPageState extends State<AddressPage> {
               bottom: Dimens.outerPadding,
             ),
             child: Disableable(
+
               // 도로명 주소가 선택되었을 때만 버튼을 활성화.
               isEnabled: selectedModel != null,
               child: WideButton(
@@ -210,6 +211,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
               child: ListenableBuilder(
                 listenable: service ?? ValueNotifier([]),
                 builder: (context, child) {
+
                   // 서비스의 상태가 변경될 때마다 애니메이션과 함께 UI를 갱신.
                   return Transition(
                     child: Builder(
@@ -265,6 +267,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
               bottom: Dimens.outerPadding,
             ),
             child: Disableable(
+
               // 검색 결과에서 주소를 선택해야 버튼이 활성화.
               isEnabled: selectedModel != null,
               child: WideButton(label: "선택하기", onTap: done),

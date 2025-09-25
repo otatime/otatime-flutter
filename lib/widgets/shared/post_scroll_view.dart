@@ -9,12 +9,14 @@ import 'package:otatime_flutter/pages/home/home_model.dart';
 import 'package:otatime_flutter/widgets/shared/post_scroll_item.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
 
+/// 해당 위젯은 RESTful API 서비스로부터 게시물 데이터를 받아와 스크롤 가능한 그리드 형태로 표시합니다.
 class PostScrollView extends StatelessWidget {
   const PostScrollView({
     super.key,
     required this.service,
   });
 
+  /// 게시물 데이터를 제공하는 RESTful API 서비스.
   final RestService<PostResultModel, dynamic> service;
 
   @override
@@ -39,6 +41,7 @@ class PostScrollView extends StatelessWidget {
     );
   }
 
+  /// 게시물 목록을 표시하는 그리드 뷰 위젯을 생성합니다.
   Widget wrapperWidget({
     required int itemCount,
     required IndexedWidgetBuilder itemBuilder,
@@ -60,6 +63,7 @@ class PostScrollView extends StatelessWidget {
     );
   }
 
+  /// 데이터 로딩 중에 표시될 스켈레톤 UI 위젯을 생성합니다.
   Widget skeletonWidget() {
     return wrapperWidget(
       itemCount: 5,

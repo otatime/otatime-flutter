@@ -25,7 +25,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  /// 검색 관련 상태 및 비즈니스 로직을 관리하는 서비스.
   final SearchService service = SearchService();
 
   @override
@@ -48,6 +47,7 @@ class _SearchPageState extends State<SearchPage> {
               child: Builder(
                 key: ValueKey(service.status),
                 builder: (context) {
+
                   // 초기 상태에서는 아무것도 표시하지 않습니다.
                   if (service.status == ServiceStatus.none) {
                     return SizedBox();
@@ -166,6 +166,7 @@ class _HeaderAppBarState extends State<_HeaderAppBar> {
   Widget submitButtonWidget() {
     // 검색어를 제출할 수 있는지 여부 (검색어가 비어있지 않음).
     final bool canSubmit = widget.service.keyword != "";
+
     // 현재 데이터를 로딩하거나 새로고침 중인지 여부.
     final bool isLoading = widget.service.status == ServiceStatus.loading ||
         widget.service.status == ServiceStatus.refresh;
@@ -174,6 +175,7 @@ class _HeaderAppBarState extends State<_HeaderAppBar> {
       alignment: Alignment.centerRight,
       duration: Animes.transition.duration,
       curve: Animes.transition.curve,
+
       // 검색어 입력 여부에 따라 버튼의 크기를 애니메이션으로 조절합니다.
       child: Align(
         alignment: Alignment.centerRight,
@@ -191,6 +193,7 @@ class _HeaderAppBarState extends State<_HeaderAppBar> {
                 color: Scheme.current.primary,
                 borderRadius: BorderRadius.circular(Dimens.borderRadius),
               ),
+
               // 로딩 상태에 따라 버튼 내부의 아이콘을 로딩 인디케이터로 전환합니다.
               child: Transition(
                 child: Builder(

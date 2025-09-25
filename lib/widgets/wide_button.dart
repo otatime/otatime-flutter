@@ -6,6 +6,8 @@ import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:otatime_flutter/widgets/loading_indicator.dart';
 import 'package:otatime_flutter/widgets/transition_animator.dart';
 
+/// 해당 위젯은 앱 전반에서 사용되는 넓은 형태의 버튼입니다.
+/// 아이콘, 라벨, 로딩 상태를 표시할 수 있습니다.
 class WideButton extends StatefulWidget {
   const WideButton({
     super.key,
@@ -17,7 +19,11 @@ class WideButton extends StatefulWidget {
 
   final String label;
   final VoidCallback onTap;
+
+  /// 버튼 라벨 왼쪽에 표시될 아이콘의 SVG 에셋 경로.
   final String? iconPath;
+
+  /// 로딩 상태 여부. true일 경우 로딩 인디케이터가 표시되며, 버튼은 비활성화됩니다.
   final bool isLoading;
 
   @override
@@ -29,24 +35,28 @@ class _WideButtonState extends State<WideButton> {
   Widget build(BuildContext context) {
     return TouchScale(
       onPress: () {
+        // 로딩 중에는 버튼 탭 이벤트를 무시.
         if (widget.isLoading) return;
         widget.onTap.call();
       },
       child: TransitionAnimator(
+        // 로딩 상태에 따라 컨텐츠와 로딩 인디케이터 간의 전환을 제어.
         value: widget.isLoading ? 1 : 0,
         builder: (context, animValue, _) {
           return Stack(
             alignment: Alignment.center,
             children: [
+              // 버튼의 기본 배경 및 컨텐츠 영역.
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Dimens.borderRadius),
                   color: Scheme.current.primary,
                 ),
                 child: Opacity(
+                  // 로딩 상태에 따라 컨텐츠(아이콘, 라벨)를 서서히 사라지게 함.
                   opacity: 1 - animValue,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -74,9 +84,10 @@ class _WideButtonState extends State<WideButton> {
                 ),
               ),
 
-              // 특정 조건에서 로딩 인디케이터 표시.
+              // 로딩 중일 때 로딩 인디케이터를 표시.
               if (animValue != 0)
                 Opacity(
+                  // 로딩 인디케이터를 서서히 나타나게 함.
                   opacity: animValue,
                   child: LoadingIndicator(color: Scheme.white),
                 ),

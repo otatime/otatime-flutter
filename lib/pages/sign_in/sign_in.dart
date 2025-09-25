@@ -70,6 +70,7 @@ class _SignInPageState extends State<SignInPage> {
       );
 
       await signIn.load();
+
       // API 호출 성공 시, 받은 토큰으로 사용자 로그인 처리.
       await MyUser.signIn(
         accessToken: signIn.data.accessToken,
@@ -129,7 +130,6 @@ class _SignInPageState extends State<SignInPage> {
                       action: InputFieldAction(
                         iconPath: isVisiblePassword ? "eye_off".svg : "eye".svg,
                         onTap: () {
-                          // 비밀번호 보기 여부 토글.
                           setState(() => isVisiblePassword = !isVisiblePassword);
                         },
                       ),

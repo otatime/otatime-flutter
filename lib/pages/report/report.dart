@@ -37,36 +37,40 @@ class _ReportPageState extends State<ReportPage> {
         children: [
           Expanded(
             child: HeaderConnection(
-              // 페이지 상단에 '제보' 제목을 표시하는 헤더.
               title: "제보",
               child: ListView(
                 padding: EdgeInsets.all(Dimens.outerPadding),
-                // 제보 폼의 주요 내용을 스크롤 가능하게 표시.
                 children: [
                   // 제보할 내용과 관련된 이미지를 선택하는 영역.
                   ImageSelectBox(
                     onChanged: (newFile) => {},
                   ),
+
                   SizedBox(height: Dimens.innerPadding),
+
                   // 제보 항목의 상위 분류를 선택하는 영역.
                   LabeledBox(
                     label: "상위 분류",
                     child: SelectBox(
                       index: sectorIndex,
                       items: ["선택되지 않음", "애니메이션", "게임", "행사", "공연", "캐릭터", "성우 행사"],
+
                       // 새로운 상위 분류가 선택되면 상태를 업데이트.
                       onChanged: (newValue) {
                         setState(() => sectorIndex = newValue);
                       },
                     ),
                   ),
+
                   SizedBox(height: Dimens.innerPadding),
+
                   // 제보 항목의 하위 분류를 선택하는 영역.
                   LabeledBox(
                     label: "하위 분류",
                     child: SelectBox(
                       index: typeIndex,
                       items: ["선택되지 않음", "아이템 1", "아이템 2", "아이템 3"],
+
                       // 새로운 하위 분류가 선택되면 상태를 업데이트.
                       onChanged: (newValue) {
                         setState(() => typeIndex = newValue);
@@ -80,17 +84,21 @@ class _ReportPageState extends State<ReportPage> {
                     child: CalendarSelectBox.range(
                       startDate: startDate,
                       endDate: endDate,
+
                       // 새로운 시작 날짜가 선택되면 상태를 업데이트.
                       onStartChanged: (newValue) {
                         setState(() => startDate = newValue);
                       },
+
                       // 새로운 종료 날짜가 선택되면 상태를 업데이트.
                       onEndChanged: (newValue) {
                         setState(() => endDate = newValue);
                       },
                     ),
                   ),
+
                   SizedBox(height: Dimens.innerPadding),
+
                   // 행사가 열리는 위치를 선택하는 영역.
                   LabeledBox(
                     label: "행사 위치",
@@ -109,12 +117,15 @@ class _ReportPageState extends State<ReportPage> {
                     ),
                   ),
                   SizedBox(height: Dimens.innerPadding),
+
                   // 제보 내용의 제목을 입력하는 필드.
                   InputField(hintText: "제목"),
                   SizedBox(height: Dimens.innerPadding),
+
                   // 제보 내용에 대한 간략한 소개를 입력하는 필드.
                   InputField(hintText: "간략한 소개", maxLines: null),
                   SizedBox(height: Dimens.innerPadding),
+
                   // 제보 내용에 대한 상세 정보를 입력하는 필드.
                   InputField(hintText: "자세한 정보", minLines: 10, maxLines: null),
                 ],
@@ -128,6 +139,7 @@ class _ReportPageState extends State<ReportPage> {
               right: Dimens.outerPadding,
               bottom: Dimens.outerPadding,
             ),
+
             // 입력된 정보를 제출하는 '제보하기' 버튼.
             child: WideButton(label: "제보하기", onTap: () {}),
           ),

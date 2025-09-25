@@ -14,14 +14,20 @@ class Switch extends StatelessWidget {
   final bool isEnabled;
   final ValueChanged<bool> onChanged;
 
+  /// 스위치의 최대 너비.
   static const double maxWidth = 45;
+
+  /// 스위치의 최대 높이.
   static const double maxHeight = 25;
+
+  /// 스위치 핸들(원)의 크기.
   static const double circleSize = maxHeight;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        // 스위치 배경. 활성화 상태에 따라 색상이 변경됩니다.
         TransitionAnimator(
           value: isEnabled ? 1 : 0,
           builder: (context, animValue, _) {
@@ -40,12 +46,14 @@ class Switch extends StatelessWidget {
             );
           },
         ),
+
+        // 스위치 핸들(원). 활성화 상태에 따라 위치가 좌우로 이동합니다.
         AnimatedPositioned(
           duration: Animes.transition.duration,
           curve: Animes.transition.curve,
-          left: isEnabled ? maxWidth - circleSize: 0,
+          left: isEnabled ? maxWidth - circleSize : 0,
           child: Container(
-            padding: EdgeInsets.all(3),
+            padding: const EdgeInsets.all(3),
             width: circleSize,
             height: circleSize,
             child: Container(

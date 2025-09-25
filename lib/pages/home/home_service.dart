@@ -33,6 +33,7 @@ class PostService extends GetService<PostResultModel, Map<String, dynamic>> {
 
 /// 홈 화면 상단에 표시될 배너 게시글을 가져오는 서비스.
 class PostBannerService extends GetService<PostResultModel, Map<String, dynamic>> {
+
   /// 배너 게시글을 요청하는 API 경로.
   @override
   String get path => "/posts/banner";

@@ -23,6 +23,7 @@ class UserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     // 사용자 인증 상태가 변경될 때마다 화면을 다시 빌드합니다.
     return ListenableBuilder(
       listenable: MyUser.statusNotifier,
@@ -35,9 +36,9 @@ class UserPage extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.all(Dimens.outerPadding),
             children: [
-              // 사용자 관련 메뉴 목록.
               ColumnList(
                 children: [
+
                   // "찜 목록" 메뉴 아이템으로, 로그인된 상태에서만 활성화됩니다.
                   Disableable(
                     isEnabled: MyUser.status == MyUserStatus.loaded,
@@ -50,6 +51,7 @@ class UserPage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: Dimens.innerPadding),
+
               // 앱 설정 관련 메뉴 목록.
               ColumnList(
                 children: [
@@ -80,13 +82,13 @@ class _HeaderAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(50),
-      // 로그인 상태 변경에 따른 UI 크기 변화를 부드럽게 애니메이션으로 처리합니다.
       child: AnimatedSize(
         duration: Animes.transition.duration,
         curve: Animes.transition.curve,
 
         // 사용자 상태가 변화할 때마다 전환 애니메이션 적용.
         child: Transition(
+
           // 사용자 인증 상태가 변경될 때마다 헤더 내용을 갱신합니다.
           child: ListenableBuilder(
             listenable: MyUser.statusNotifier,
@@ -115,9 +117,8 @@ class _HeaderAppBar extends StatelessWidget {
     );
   }
 
-  /// 로그인된 사용자를 위한 위젯을 구성합니다.
+  /// 로그인된 사용자의 프로필 사진, 이름, 이메일, 로그아웃 버튼을 포함하는 레이아웃.
   Widget signedInWidget() {
-    // 로그인된 사용자의 프로필 사진, 이름, 이메일, 로그아웃 버튼을 포함하는 레이아웃.
     return Column(
       spacing: Dimens.innerPadding,
       children: [
@@ -138,11 +139,13 @@ class _HeaderAppBar extends StatelessWidget {
             color: Scheme.current.foreground3,
           ),
         ),
+
         // 사용자 이름과 이메일을 세로로 표시합니다.
         Column(
           mainAxisSize: MainAxisSize.min,
           spacing: Dimens.columnSpacing,
           children: [
+
             // 로그인된 사용자의 이름을 표시합니다.
             Text(
               MyUser.data.userName,
@@ -167,11 +170,13 @@ class _HeaderAppBar extends StatelessWidget {
             ),
           ],
         ),
+
         // 사용자 작업 버튼 목록 (예: 로그아웃).
         Wrap(
           spacing: Dimens.rowSpacing,
           runSpacing: Dimens.columnSpacing,
           children: [
+
             // 로그아웃 버튼.
             Button(
               type: ButtonType.primary,
@@ -186,9 +191,8 @@ class _HeaderAppBar extends StatelessWidget {
     );
   }
 
-  /// 로그인되지 않은 사용자를 위한 위젯을 구성합니다.
+  /// 비로그인 상태의 헤더 UI. 기본 아이콘, 안내 문구, 로그인/회원가입 버튼을 포함합니다.
   Widget signedOutWidget(BuildContext context) {
-    // 비로그인 상태의 헤더 UI. 기본 아이콘, 안내 문구, 로그인/회원가입 버튼을 포함합니다.
     return Column(
       spacing: Dimens.innerPadding,
       children: [
@@ -208,29 +212,28 @@ class _HeaderAppBar extends StatelessWidget {
             color: Scheme.current.foreground3,
           ),
         ),
+
         // 로그인 유도 메시지를 표시하는 영역.
         Column(
           mainAxisSize: MainAxisSize.min,
           spacing: Dimens.columnSpacing,
           children: [
-            // 현재 로그인되어 있지 않음을 나타내는 '오프라인 상태' 텍스트.
             Text(
               "오프라인 상태",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            // 사용자에게 로그인할 것을 권유하는 안내 문구.
             Text(
               "로그인하여 더 많은 기능을 경험하세요!",
               style: TextStyle(color: Scheme.current.foreground2),
             ),
           ],
         ),
-        // 로그인 및 회원가입 버튼을 배치합니다.
+
+        // 로그인 및 회원가입 버튼.
         Wrap(
           spacing: Dimens.rowSpacing,
           runSpacing: Dimens.columnSpacing,
           children: [
-            // 로그인 페이지로 이동하는 버튼.
             Button(
               type: ButtonType.primary,
               label: "로그인",
@@ -239,7 +242,6 @@ class _HeaderAppBar extends StatelessWidget {
                 Navigator.push(context, AppPageRoute(builder: (_) => SignInPage()));
               },
             ),
-            // 회원가입 페이지로 이동하는 버튼.
             Button(
               type: ButtonType.secondary,
               label: "회원가입",

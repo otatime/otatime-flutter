@@ -3,18 +3,20 @@ import 'package:otatime_flutter/components/ui/dimens.dart';
 import 'package:otatime_flutter/components/ui/scheme.dart';
 import 'package:shimmer/shimmer.dart';
 
+/// 해당 위젯은 자식 위젯에 로딩 상태를 나타내는 Shimmer 효과를 적용합니다.
 class Skeleton extends StatelessWidget {
   const Skeleton({
     super.key,
-    required this.child
+    required this.child,
   });
 
+  /// Shimmer 효과가 적용될 위젯.
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      period: Duration(milliseconds: 750),
+      period: const Duration(milliseconds: 750),
       baseColor: Scheme.current.placeholder,
       highlightColor: Scheme.current.highlight,
       child: child,
@@ -32,7 +34,7 @@ class Skeleton extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         borderRadius: borderRadius ?? BorderRadius.circular(Dimens.borderRadius),
-        color: Scheme.current.placeholder
+        color: Scheme.current.placeholder,
       ),
     );
   }

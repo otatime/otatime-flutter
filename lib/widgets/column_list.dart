@@ -9,6 +9,7 @@ class ColumnList extends StatelessWidget {
     required this.children,
   });
 
+  /// 리스트에 표시될 위젯 목록.
   final List<Widget> children;
 
   @override
@@ -25,6 +26,7 @@ class ColumnList extends StatelessWidget {
     );
   }
 
+  /// 아이템 사이에 표시될 구분선을 생성합니다.
   static Widget lineWidget() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: Dimens.innerPadding),

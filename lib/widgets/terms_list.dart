@@ -30,7 +30,7 @@ class TermsItem {
   }
 }
 
-/// 이용약관 항목들을 체크박스로 표시하는 리스트 위젯입니다.
+/// 해당 위젯은 이용약관 항목들을 체크박스로 표시하는 리스트입니다.
 class TermsList extends StatefulWidget {
   const TermsList({
     super.key,
@@ -56,12 +56,14 @@ class _TermsListState extends State<TermsList> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        // '약관 전체 동의' 체크박스.
         checkboxWidget(
           label: "약관 전체 동의",
           link: null,
           required: false,
           isChecked: isCheckedAll,
           onChanged: (newValue) {
+            // 전체 동의 체크 여부에 따라 모든 약관의 상태를 일괄 변경.
             newValue
               ? setState(() => widget.items.forEach((e) => e.isChecked = true))
               : setState(() => widget.items.forEach((e) => e.isChecked = false));
@@ -76,6 +78,7 @@ class _TermsListState extends State<TermsList> {
             required: item.required,
             isChecked: item.isChecked,
             onChanged: (newValue) {
+              // 개별 약관의 동의 상태를 변경.
               setState(() => item.isChecked = newValue);
             },
           );
@@ -102,6 +105,7 @@ class _TermsListState extends State<TermsList> {
         child: Row(
           spacing: Dimens.innerPadding,
           children: [
+            // 체크 상태를 나타내는 아이콘.
             Transition(
               child: SvgPicture.asset(
                 key: ValueKey(isChecked),
@@ -120,7 +124,7 @@ class _TermsListState extends State<TermsList> {
 
                   // 필수 여부를 별표 형태로 표시.
                   if (required)
-                    Text("*", style: TextStyle(fontSize: 18, color: Scheme.negative))
+                    Text("*", style: TextStyle(fontSize: 18, color: Scheme.negative)),
                 ],
               ),
             ),

@@ -191,7 +191,6 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                           borderRadius: BorderRadius.circular(Dimens.borderRadius),
                           color: Scheme.current.deepground,
                         ),
-                        // 상세 내용 텍스트.
                         child: Text(
                           loremText,
                           style: TextStyle(color: Scheme.current.foreground2, height: 1.6),
@@ -236,8 +235,10 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       iconPath: "arrow_left".svg,
                       onTap: () => Navigator.pop(context),
                     ),
-                    // '좋아요' 또는 '북마크' 기능 버튼.
+
+                    // '찜하기' 기능 버튼.
                     ActionButton(iconPath: "heart".svg, onTap: () {}),
+
                     // 링크 공유 기능 버튼.
                     ActionButton(iconPath: "link".svg, onTap: () {}),
                   ],
@@ -330,6 +331,7 @@ class _HeaderAppBar extends StatelessWidget {
           width: double.infinity,
           height: double.infinity,
         ),
+
         // 이미지 위에 어두운 그래디언트를 오버레이하여 가독성을 확보하고 시각적 효과를 줍니다.
         Positioned.fill(
           child: Container(
@@ -368,6 +370,7 @@ class _HeaderAppBar extends StatelessWidget {
       maxExtent: viewHeight / 3.5,
       behavior: MaterialAppBarBehavior(),
       builder: (context, position) {
+
         // 앱바가 축소될 때 내용이 서서히 사라지는 효과를 적용합니다.
         return AppBarFadeEffect.onShrink(
           position: position,

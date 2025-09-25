@@ -13,12 +13,14 @@ import 'package:otatime_flutter/widgets/disableable.dart';
 import 'package:otatime_flutter/widgets/loading_indicator.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
 
+/// 해당 위젯은 사용자가 이미지를 선택하고 미리볼 수 있는 상자형 컴포넌트입니다.
 class ImageSelectBox extends StatefulWidget {
   const ImageSelectBox({
     super.key,
     required this.onChanged,
   });
 
+  /// 사용자가 이미지를 선택했을 때 호출되는 콜백.
   final ValueChanged<XFile> onChanged;
 
   @override
@@ -26,15 +28,16 @@ class ImageSelectBox extends StatefulWidget {
 }
 
 class _ImageSelectBoxState extends State<ImageSelectBox> {
+  /// 이미지 선택 과정의 로딩 상태.
   bool isLoading = false;
 
-  /// 현재 사용자가 선택한 이미지 파일을 정의합니다.
+  /// 사용자가 선택한 이미지 파일.
   XFile? pickedFile;
 
-  /// 현재 사용자가 선택한 이미지의 바이트 수준을 정의합니다.
+  /// 사용자가 선택한 이미지의 바이트 데이터.
   Uint8List? pickedFileBytes;
 
-  /// 사용자에게 이미지 선택을 요청합니다.
+  /// 사용자에게 갤러리를 열어 이미지 선택을 요청합니다.
   void pickImageFile() async {
     final ImagePicker picker = ImagePicker();
 
@@ -54,11 +57,14 @@ class _ImageSelectBoxState extends State<ImageSelectBox> {
     return Stack(
       children: [
         Disableable(
+          // 로딩 중에는 상호작용을 비활성화합니다.
           isEnabled: !isLoading,
           child: AnimatedContainer(
             duration: Animes.transition.duration,
             curve: Animes.transition.curve,
             width: double.infinity,
+
+            // 이미지 선택 여부에 따라 내부 패딩을 조절합니다.
             padding: pickedFile != null
               ? EdgeInsets.all(Dimens.innerPadding)
               : EdgeInsets.all(Dimens.innerPadding * 2),
@@ -66,13 +72,15 @@ class _ImageSelectBoxState extends State<ImageSelectBox> {
               border: Border.all(width: 2, color: Scheme.current.border),
               borderRadius: BorderRadius.circular(Dimens.borderRadius),
             ),
+
+            // 이미지 선택 여부에 따라 다른 위젯(초기 상태/미리보기)을 표시합니다.
             child: pickedFile == null
               ? idleWidget()
               : viewWidget(),
           ),
         ),
 
-        // 로딩 할 때마다 인디케이터 표시.
+        // 로딩 중일 때 화면 중앙에 인디케이터를 표시합니다.
         Positioned.fill(
           child: Center(
             child: Transition(
@@ -87,6 +95,7 @@ class _ImageSelectBoxState extends State<ImageSelectBox> {
     );
   }
 
+  /// 사용자가 이미지를 선택하기 전, 초기 상태의 위젯을 구성합니다.
   Widget idleWidget() {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -96,10 +105,15 @@ class _ImageSelectBoxState extends State<ImageSelectBox> {
           mainAxisSize: MainAxisSize.min,
           spacing: Dimens.columnSpacing,
           children: [
+            // 이미지 업로드를 유도하는 제목.
             Text("이미지 업로드", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
+            // 허용되는 이미지 형식에 대한 안내 문구.
             Text("이미지 형식인 JPG, PNG 파일을 업로드하세요!", style: TextStyle(color: Scheme.current.foreground2)),
           ],
         ),
+
+        // 이미지 선택기를 여는 버튼.
         Button(
           type: ButtonType.primary,
           label: "파일 선택",
@@ -109,11 +123,13 @@ class _ImageSelectBoxState extends State<ImageSelectBox> {
     );
   }
 
+  /// 사용자가 이미지를 선택한 후, 선택된 이미지 정보를 표시하는 위젯을 구성합니다.
   Widget viewWidget() {
     return Row(
       mainAxisSize: MainAxisSize.min,
       spacing: Dimens.innerPadding,
       children: [
+        // 선택된 이미지의 썸네일.
         ClipRRect(
           borderRadius: BorderRadius.circular(1e10),
           child: Image.memory(
@@ -142,6 +158,7 @@ class _ImageSelectBoxState extends State<ImageSelectBox> {
           ),
         ),
 
+        // 이미지를 다시 선택할 수 있는 수정 버튼.
         CircularButton(
           foregroundColor: Scheme.current.foreground2,
           iconPath: "write1".svg,

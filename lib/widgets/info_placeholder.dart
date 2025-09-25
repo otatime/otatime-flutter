@@ -24,6 +24,7 @@ class InfoPlaceholder extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: Dimens.columnSpacing,
         children: [
+          // 정보가 없음을 시각적으로 나타내는 아이콘.
           SvgPicture.asset(
             iconPath,
             width: 64,

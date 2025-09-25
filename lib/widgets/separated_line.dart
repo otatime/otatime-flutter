@@ -11,7 +11,11 @@ class SeparatedLine extends StatelessWidget {
       scaleX: 2.0,
       child: Container(
         color: Scheme.current.separatedLine,
+
+        // 구분선이 화면의 전체 너비를 차지하도록 설정.
         width: double.infinity,
+
+        // 구분선의 시각적인 두께.
         height: 8,
       ),
     );
