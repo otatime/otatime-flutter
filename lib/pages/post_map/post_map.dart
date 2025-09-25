@@ -8,6 +8,7 @@ import 'package:otatime_flutter/extensions/string.dart';
 import 'package:otatime_flutter/main.dart';
 import 'package:otatime_flutter/widgets/action_button.dart';
 
+/// 게시글의 행사 위치를 지도로 보여주는 페이지.
 class PostMapPage extends StatefulWidget {
   const PostMapPage({super.key});
 
@@ -16,8 +17,10 @@ class PostMapPage extends StatefulWidget {
 }
 
 class _PostMapPageState extends State<PostMapPage> {
+  /// 지도의 로딩 상태.
   bool isLoading = true;
 
+  /// 지도의 초기 위치로 사용될 임시 좌표.
   // TODO: 임시 코드.
   static LatLng get testPosition => LatLng(
     37.5182112402056,
@@ -47,20 +50,26 @@ class _PostMapPageState extends State<PostMapPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        // 지도가 로딩되면 부드럽게 표시합니다.
         AnimatedOpacity(
           opacity: isLoading ? 0 : 1,
           duration: Animes.transition.duration,
           curve: Animes.transition.curve,
+
+          // 카카오 지도 위젯.
           child: KakaoMap(
+            // 초기 위치, 확대 수준 등 지도의 표시 옵션을 설정합니다.
             option: KakaoMapOption(
               position: testPosition,
               zoomLevel: 16,
               mapType: MapType.normal,
             ),
+
+            // 지도가 준비되었을 때 호출됩니다.
             onMapReady: (controller) {
               setState(() => isLoading = false);
 
-              // 행사 위치 표시.
+              // 지도에 행사 위치를 마커로 표시합니다.
               controller.labelLayer.addPoi(
                 testPosition,
                 style: PoiStyle(
@@ -71,16 +80,18 @@ class _PostMapPageState extends State<PostMapPage> {
           ),
         ),
 
-        // 액션 버튼 표시.
+        // 화면 좌측 상단의 뒤로가기 버튼.
         Positioned(
           top: Dimens.outerPadding,
           left: Dimens.outerPadding,
           child: SafeArea(
             child: ActionButton(
               iconPath: "arrow_left".svg,
+
+              // 탭하면 이전 화면으로 돌아갑니다.
               onTap: () => Navigator.pop(context),
             ),
-          )
+          ),
         ),
       ],
     );

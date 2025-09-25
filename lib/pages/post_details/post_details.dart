@@ -15,12 +15,14 @@ import 'package:otatime_flutter/widgets/date_button.dart';
 import 'package:otatime_flutter/widgets/separated_line.dart';
 import 'package:otatime_flutter/widgets/wide_button.dart';
 
+/// 게시물 상세 정보를 표시하는 페이지.
 class PostDetailsPage extends StatefulWidget {
   const PostDetailsPage({
     super.key,
     required this.model,
   });
 
+  /// 상세 정보를 표시할 게시물 데이터 모델.
   final PostModel model;
 
   @override
@@ -28,9 +30,11 @@ class PostDetailsPage extends StatefulWidget {
 }
 
 class _PostDetailsPageState extends State<PostDetailsPage> {
+  /// 헤더 앱바의 스크롤 동작을 제어하는 컨트롤러.
   final AppBarController _appBarController = AppBarController();
 
   // TODO: 임시 코드.
+  /// 게시물 상세 내용에 대한 임시 텍스트.
   static const String loremText = """
 안녕하세요, 여러분!
 2025년 8월 9일부터 드디어 기다리던 NIKKE 행사가 시작됩니다.
@@ -49,20 +53,22 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
   void initState() {
     super.initState();
 
-    // 상태 표시줄 아이콘 스타일을 라이트 위주로 변경.
+    // 페이지 진입 시, 헤더 이미지에 맞게 상태 표시줄 아이콘을 밝게 설정합니다.
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Scheme.transparent,
       statusBarIconBrightness: Brightness.light,
     ));
 
+    // 위젯 렌더링이 완료된 후, 스크롤 위치에 따라 상태 표시줄 스타일을 동적으로 변경하는 리스너를 추가합니다.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final AppBarPosition position = _appBarController.positionOf(0)!;
 
       position.addListener(() {
+        // 헤더가 50% 이상 축소되면 기본 시스템 UI 스타일로 복원합니다.
         if (position.shrinkedPercent > 0.5) {
           MainApp.initSystemUIOverlayStyle();
         } else {
-          // 헤더가 펼쳐진 상태에서는 스타일을 라이트 위주로 변경.
+          // 헤더가 펼쳐진 상태에서는 상태 표시줄 아이콘을 다시 밝게 설정합니다.
           SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
             statusBarColor: Scheme.transparent,
             statusBarIconBrightness: Brightness.light,
@@ -76,7 +82,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
   void deactivate() {
     super.deactivate();
 
-    // 기존 상태 표시줄 스타일로 복원.
+    // 페이지를 벗어날 때, 기존 시스템 UI 스타일로 복원합니다.
     MainApp.initSystemUIOverlayStyle();
   }
 
@@ -104,6 +110,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(Dimens.borderRadius2),
+                          // 작성자의 프로필 이미지.
                           child: AppImage.network(
                             url: model.writer.profileImageUrl,
                             width: 50,
@@ -125,7 +132,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                     color: Scheme.current.foreground2,
                                   ),
 
-                                  // 행사 위치 표시.
+                                  // 행사 위치.
                                   Text(
                                     "${model.region} · ${model.location}",
                                     style: TextStyle(color: Scheme.current.foreground2),
@@ -135,6 +142,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
                               SizedBox(height: Dimens.columnSpacing),
 
+                              // 게시물 제목.
                               Text(
                                 model.title,
                                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
@@ -142,7 +150,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
                               SizedBox(height: Dimens.columnSpacing),
 
-                              // 상위 카테고리 및 하위 카테고리 간략히 표시.
+                              // 게시물의 카테고리 태그.
                               Text(
                                 "#${model.sector} #${model.type}",
                                 style: TextStyle(color: Scheme.current.foreground2),
@@ -150,15 +158,17 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
 
                               SizedBox(height: Dimens.innerPadding),
 
-                              // 행사 날짜
+                              // 행사 날짜.
                               Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
                                 runSpacing: Dimens.columnSpacing,
                                 spacing: 5,
                                 children: [
-                                  // D-Day (3일) 임박시 표시.
+                                  // D-Day가 3일 이내로 임박했을 때 D-DAY 배지를 표시합니다.
                                   if (isDDay) dDayWidget(),
+                                  // 행사 시작일.
                                   DateButton(date: model.startDate),
+                                  // 행사 종료일.
                                   DateButton(date: model.endDate),
                                 ],
                               ),
@@ -172,7 +182,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                     SeparatedLine.horizontal(),
                     SizedBox(height: Dimens.innerPadding),
 
-                    // 행사 상세 내용 표시.
+                    // 행사 상세 내용 섹션.
                     labeledBy(
                       label: "상세 내용",
                       child: Container(
@@ -181,6 +191,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                           borderRadius: BorderRadius.circular(Dimens.borderRadius),
                           color: Scheme.current.deepground,
                         ),
+                        // 상세 내용 텍스트.
                         child: Text(
                           loremText,
                           style: TextStyle(color: Scheme.current.foreground2, height: 1.6),
@@ -191,7 +202,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                 ),
               ),
 
-              // 시각적 자연스러움을 위한 액션 영역 위치의 그림자 효과.
+              // 하단 액션 버튼 영역의 가독성을 높이기 위한 그래디언트 그림자 효과.
               Positioned.fill(
                 child: IgnorePointer(
                   ignoring: true,
@@ -206,7 +217,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                           colors: [
                             Scheme.current.background.withAlpha(0),
                             Scheme.current.background,
-                          ]
+                          ],
                         ),
                       ),
                     ),
@@ -220,13 +231,15 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                 child: Row(
                   spacing: Dimens.innerPadding,
                   children: [
-                    // 뒤로가기 버튼.
+                    // 이전 페이지로 돌아가는 버튼.
                     ActionButton(
                       iconPath: "arrow_left".svg,
                       onTap: () => Navigator.pop(context),
                     ),
+                    // '좋아요' 또는 '북마크' 기능 버튼.
                     ActionButton(iconPath: "heart".svg, onTap: () {}),
-                    ActionButton(iconPath: "link".svg, onTap: () {})
+                    // 링크 공유 기능 버튼.
+                    ActionButton(iconPath: "link".svg, onTap: () {}),
                   ],
                 ),
               ),
@@ -240,12 +253,12 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             right: Dimens.outerPadding,
             bottom: Dimens.outerPadding,
           ),
+          // 행사 위치를 지도로 보여주는 페이지로 이동하는 버튼.
           child: WideButton(
             iconPath: "navigation-filled".svg,
             label: "위치 보기",
             onTap: () {
-
-              // 행사 지도 페이지로 이동.
+              // 지도 페이지로 이동합니다.
               Navigator.push(context, AppPageRoute(builder: (_) => PostMapPage()));
             },
           ),
@@ -254,6 +267,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
     );
   }
 
+  /// 라벨과 콘텐츠 위젯을 수직으로 배치하는 헬퍼 함수입니다.
   Widget labeledBy({
     required String label,
     required Widget child,
@@ -292,27 +306,31 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
   }
 }
 
+/// 게시물 상세 페이지의 상단에 표시되는 이미지 헤더 앱바입니다.
 class _HeaderAppBar extends StatelessWidget {
   const _HeaderAppBar({
     super.key,
     required this.model,
   });
 
+  /// 헤더에 표시할 데이터가 담긴 게시물 모델.
   final PostModel model;
 
   @override
   Widget build(BuildContext context) {
-    // 자연스러운 색 보간을 위해 배경색을 기반으로 하는 투명색을 사용함.
+    // 자연스러운 색상 전환을 위해 배경색 기반의 투명색을 사용합니다.
     final Color transparent = Scheme.current.background.withAlpha(0);
 
     return Stack(
       children: [
+        // 헤더의 배경 이미지.
         AppImage.network(
           url: model.imageUrl,
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
         ),
+        // 이미지 위에 어두운 그래디언트를 오버레이하여 가독성을 확보하고 시각적 효과를 줍니다.
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -339,6 +357,7 @@ class _HeaderAppBar extends StatelessWidget {
     );
   }
 
+  /// 주어진 모델을 기반으로 스크롤 가능한 `SizedAppBar`를 생성합니다.
   static AppBar createAppBar(BuildContext context, {required PostModel model}) {
     final MediaQueryData mediaData = MediaQuery.of(context);
     final double statusBarHeight = mediaData.padding.top;
@@ -349,8 +368,7 @@ class _HeaderAppBar extends StatelessWidget {
       maxExtent: viewHeight / 3.5,
       behavior: MaterialAppBarBehavior(),
       builder: (context, position) {
-
-        // 앱바가 접혀질수록 서서히 사라지도록 함.
+        // 앱바가 축소될 때 내용이 서서히 사라지는 효과를 적용합니다.
         return AppBarFadeEffect.onShrink(
           position: position,
           child: _HeaderAppBar(model: model),

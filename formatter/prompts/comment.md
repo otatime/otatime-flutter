@@ -4,9 +4,11 @@
 
 2. 코드 내부 동작이나 너무 뻔한 내용은 작성하지 말 것.
    - 예: `int i = 0; // i를 0으로 초기화`는 불필요.
+   - 관례적으로 이미 알고 있는 언어적 문법은 별도의 주석을 작성하지 말 것.
 
 3. 주석은 제 3자가 코드 내용을 처음 접해도 이해할 수 있도록 작성할 것.
    - 무엇을 하는 코드인지, 어떤 목적을 가지고 있는지 중심으로 설명.
+   - 만약 별도의 주석 없이도 제 3자가 충분히 이해할 수 있는 경우는 주석을 생략할 것.
 
 4. 주석은 **기능 중심**으로 작성하고, 구현 방식보다는 의미/목적을 설명할 것.
 
@@ -132,4 +134,29 @@ class A {
     /// 사용자가 직접 정의한 관례적 테마 유형.
     final String value;
 }
+```
+
+## 작성 여부
+다음과 같은 경우에는 주석 작성을 하지 마십시오:
+
+- `title`, `isEnabled`, `onChanged` 등 이름만으로 의미가 명확한 코드 요소의 경우.
+- 제3자가 코드를 읽었을 때 주석 없이도 기능과 의도를 충분히 이해하고 파악할 수 있는 경우.
+
+❗ 주석은 꼭 필요한 경우에만 작성하고, 중복되거나 설명이 불필요한 부분은 생략합니다.
+
+```dart
+// 사용자가 OS의 테마 설정을 앱에 동기화할지 결정하는 스위치.
+ColumnItem.switcher(
+    title: "OS 테마 사용",
+    isEnabled: SettingsBinding.theme.getValue() == Theme.device,
+    onChanged: (useOSTheme) {
+        // OS 테마 사용 여부에 따라 앱 테마를 설정.
+        useOSTheme
+            ? SettingsBinding.theme.setValue(Theme.device)
+            : SettingsBinding.theme.setValue(Scheme.themeOf(Scheme.device));
+
+        // 앱 전체를 다시 빌드하여 테마 변경을 즉시 적용.
+        RebuildableApp.rebuild();
+    },
+),
 ```

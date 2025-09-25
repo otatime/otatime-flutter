@@ -1,4 +1,3 @@
-
 /// 주소 검색 결과를 정의하는 모델입니다. (공통 정보 + 주소 목록)
 class AddressResultModel {
   const AddressResultModel({
@@ -6,9 +5,13 @@ class AddressResultModel {
     required this.items,
   });
 
+  /// 주소 검색 결과의 공통 정보.
   final AddressCommonAsPageModel common;
+
+  /// 주소 검색 결과 목록.
   final List<AddressModel> items;
 
+  /// JSON 객체로부터 [AddressResultModel] 인스턴스를 생성합니다.
   factory AddressResultModel.fromJson(Map<String, dynamic> obj) {
     return AddressResultModel(
       common: AddressCommonAsPageModel.fromJson(obj["results"]["common"]),
@@ -24,9 +27,13 @@ class LocationResultModel {
     required this.model,
   });
 
+  /// 좌표 검색 결과의 공통 정보.
   final AddressCommonModel common;
+
+  /// 좌표 검색 결과.
   final LocationModel model;
 
+  /// JSON 객체로부터 [LocationResultModel] 인스턴스를 생성합니다.
   factory LocationResultModel.fromJson(Map<String, dynamic> obj) {
     return LocationResultModel(
       common: AddressCommonModel.fromJson(obj["results"]["common"]),
@@ -43,10 +50,16 @@ class AddressCommonModel {
     required this.errorMessage,
   });
 
+  /// 총 검색 결과 수.
   final int totalCount;
+
+  /// 오류 코드.
   final String errorCode;
+
+  /// 오류 메시지.
   final String errorMessage;
 
+  /// JSON 객체로부터 [AddressCommonModel] 인스턴스를 생성합니다.
   factory AddressCommonModel.fromJson(Map<String, dynamic> obj) {
     return AddressCommonModel(
       totalCount: int.parse(obj["totalCount"]),
@@ -66,9 +79,13 @@ class AddressCommonAsPageModel extends AddressCommonModel {
     required super.errorMessage,
   });
 
+  /// 현재 페이지 번호.
   final int currentPage;
+
+  /// 페이지 당 출력할 결과 Row 수.
   final int countPerPage;
 
+  /// JSON 객체로부터 [AddressCommonAsPageModel] 인스턴스를 생성합니다.
   factory AddressCommonAsPageModel.fromJson(Map<String, dynamic> obj) {
     return AddressCommonAsPageModel(
       totalCount: int.parse(obj["totalCount"]),
@@ -111,33 +128,85 @@ class AddressModel {
     required this.hemdNm,
   });
 
-  final String? detBdNmList;      // 상세건물명목록
-  final String engAddr;           // 영문주소
-  final String rn;                // 도로명
-  final String emdNm;             // 읍면동명
-  final String zipNo;             // 우편번호
-  final String? roadAddrPart2;    // 도로명주소(참고항목)
-  final String emdNo;             // 읍면동일련번호
-  final String sggNm;             // 시군구명
-  final String jibunAddr;         // 지번주소
-  final String siNm;              // 시도명
-  final String roadAddrPart1;     // 도로명주소(주요부분)
-  final String? bdNm;             // 건물명
-  final String admCd;             // 행정구역코드
-  final String udrtYn;            // 지하여부 (0: 지상, 1: 지하)
-  final String lnbrMnnm;          // 지번본번(번지)
-  final String roadAddr;          // 도로명주소
-  final String lnbrSlno;          // 지번부번(호)
-  final String buldMnnm;          // 건물본번
-  final String bdKdcd;            // 건물종류코드
-  final String? liNm;             // 법정리명
-  final String rnMgtSn;           // 도로명관리번호
-  final String mtYn;              // 산여부 (0: 대지, 1: 산)
-  final String bdMgtSn;           // 건물관리번호
-  final String buldSlno;          // 건물부번
-  final String? relJibun;         // 관련지번
-  final String? hemdNm;           // 관할주민센터
+  /// 상세 건물명 목록.
+  final String? detBdNmList;
 
+  /// 영문 주소.
+  final String engAddr;
+
+  /// 도로명.
+  final String rn;
+
+  /// 읍/면/동명.
+  final String emdNm;
+
+  /// 우편번호.
+  final String zipNo;
+
+  /// 도로명주소 참고항목.
+  final String? roadAddrPart2;
+
+  /// 읍/면/동 일련번호.
+  final String emdNo;
+
+  /// 시/군/구명.
+  final String sggNm;
+
+  /// 지번 주소.
+  final String jibunAddr;
+
+  /// 시/도명.
+  final String siNm;
+
+  /// 도로명주소 주요부분.
+  final String roadAddrPart1;
+
+  /// 건물명.
+  final String? bdNm;
+
+  /// 행정구역 코드.
+  final String admCd;
+
+  /// 지하 여부 (0: 지상, 1: 지하).
+  final String udrtYn;
+
+  /// 지번 본번(번지).
+  final String lnbrMnnm;
+
+  /// 전체 도로명 주소.
+  final String roadAddr;
+
+  /// 지번 부번(호).
+  final String lnbrSlno;
+
+  /// 건물 본번.
+  final String buldMnnm;
+
+  /// 건물 종류 코드.
+  final String bdKdcd;
+
+  /// 법정리명.
+  final String? liNm;
+
+  /// 도로명 관리 번호.
+  final String rnMgtSn;
+
+  /// 산 여부 (0: 대지, 1: 산).
+  final String mtYn;
+
+  /// 건물 관리 번호.
+  final String bdMgtSn;
+
+  /// 건물 부번.
+  final String buldSlno;
+
+  /// 관련 지번.
+  final String? relJibun;
+
+  /// 관할 주민센터.
+  final String? hemdNm;
+
+  /// JSON 객체로부터 [AddressModel] 인스턴스를 생성합니다.
   factory AddressModel.fromJson(Map<String, dynamic> obj) {
     return AddressModel(
       detBdNmList: obj["detBdNmList"],
@@ -169,6 +238,7 @@ class AddressModel {
     );
   }
 
+  /// JSON 배열로부터 [AddressModel] 객체 목록을 생성합니다.
   static List<AddressModel> fromJsonArray(List<dynamic> list) {
     return list.map((item) => AddressModel.fromJson(item)).toList();
   }
@@ -188,16 +258,34 @@ class LocationModel {
     required this.bdNm,
   });
 
-  final String admCd;     // 행정구역코드
-  final String rnMgtSn;   // 도로명코드
-  final String bdMgtSn;   // 건물관리번호
-  final String udrtYn;    // 지하여부(0 : 지상, 1 : 지하)
-  final int buldMnnm;     // 건물본번
-  final int buldSlno;     // 건물부번
-  final double entX;      // X좌표
-  final double entY;      // Y좌표
-  final String? bdNm;     // 건물명
+  /// 행정구역 코드.
+  final String admCd;
 
+  /// 도로명 코드.
+  final String rnMgtSn;
+
+  /// 건물 관리 번호.
+  final String bdMgtSn;
+
+  /// 지하 여부 (0: 지상, 1: 지하).
+  final String udrtYn;
+
+  /// 건물 본번.
+  final int buldMnnm;
+
+  /// 건물 부번.
+  final int buldSlno;
+
+  /// X좌표.
+  final double entX;
+
+  /// Y좌표.
+  final double entY;
+
+  /// 건물명.
+  final String? bdNm;
+
+  /// JSON 객체로부터 [LocationModel] 인스턴스를 생성합니다.
   factory LocationModel.fromJson(Map<String, dynamic> obj) {
     return LocationModel(
       admCd: obj["admCd"],

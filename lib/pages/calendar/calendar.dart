@@ -21,6 +21,7 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  /// 현재 달력에 표시되고 있는 기준 날짜.
   DateTime current = DateTime.now();
 
   /// 주어진 연도 및 달에 해당하는 일자들을 리스트 형태로 반환합니다.
@@ -51,9 +52,10 @@ class _CalendarPageState extends State<CalendarPage> {
               iconPath: "arrow_left".svg,
               onTap: () {
                 setState(() => current = DateTime(current.year, current.month - 1));
-              }
+              },
             ),
 
+            // 현재 연도와 월을 표시.
             Text(
               "${current.year}년 ${current.month}월",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -64,12 +66,12 @@ class _CalendarPageState extends State<CalendarPage> {
               iconPath: "arrow_right".svg,
               onTap: () {
                 setState(() => current = DateTime(current.year, current.month + 1));
-              }
+              },
             ),
           ],
         ),
 
-        // 추가적인 여백 추가.
+        // 추가적인 여백.
         SizedBox(height: Dimens.innerPadding),
 
         // 일요일부터 토요일까지 요일 텍스트를 가로로 표시.
@@ -85,7 +87,7 @@ class _CalendarPageState extends State<CalendarPage> {
           }).toList(),
         ),
 
-        // 추가적인 여백 추가.
+        // 추가적인 여백.
         SizedBox(height: Dimens.innerPadding),
 
         // 현재 표시 달력이 변화할 때마다 전환 애니메이션 적용.
@@ -94,18 +96,19 @@ class _CalendarPageState extends State<CalendarPage> {
             key: ValueKey(current),
             serviceBuilder: (_) => PostMonthService(date: current),
             builder: (context, service) {
-
               // 로딩 상태가 변화할 때마다 전환 애니메이션 적용.
               return Transition(
                 child: Builder(
                   key: ValueKey(service.isLoading),
                   builder: (context) {
                     if (service.isLoading) {
+                      // 데이터를 불러오는 동안 표시될 스켈레톤 UI.
                       return Skeleton(
                         child: gridWidget(children: buildMonthlySkeletonParts()),
                       );
                     }
 
+                    // 데이터 로딩 완료 후 실제 날짜 그리드를 표시.
                     return gridWidget(children: buildMonthlyGrid(service));
                   },
                 ),
@@ -119,7 +122,8 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Widget gridWidget({required List<Widget> children}) {
     return GridView.count(
-      crossAxisCount: 7, // 1주
+      // 한 주를 7일로 설정.
+      crossAxisCount: 7,
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
       shrinkWrap: true,
@@ -128,31 +132,35 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  // 각 개별 날짜를 렌더링하는 용도입니다.
+  /// 데이터 로딩 중에 표시될 월간 달력의 스켈레톤 UI 목록을 구성합니다.
   List<Widget> buildMonthlySkeletonParts() {
     final days = getDatesInMonth(current.year, current.month);
     final firstWeekday = days.first.weekday % 7; // 일요일 기준
 
     return [
+      // 달의 시작 요일 앞의 빈 칸을 채움.
       for (int i = 0; i < firstWeekday; i++)
-        const SizedBox(), // 앞에 비어 있는 칸
+        const SizedBox(),
 
+      // 각 날짜에 해당하는 스켈레톤 UI 요소를 생성.
       ...days.map((date) {
         return Skeleton.partOf(borderRadius: BorderRadius.circular(1e10));
       }),
     ];
   }
 
-  // 각 개별 날짜를 렌더링하는 용도입니다.
+  /// 데이터를 기반으로 실제 월간 달력의 날짜 위젯 목록을 구성합니다.
   List<Widget> buildMonthlyGrid(PostMonthService service) {
     final days = getDatesInMonth(current.year, current.month);
     final firstWeekday = days.first.weekday % 7; // 일요일 기준
 
     return [
+      // 달의 시작 요일 앞의 빈 칸을 채움.
       for (int i = 0; i < firstWeekday; i++)
-        const SizedBox(), // 앞에 비어 있는 칸
+        const SizedBox(),
 
       ...days.map((date) {
+        // 해당 날짜에 포함된 게시물을 필터링.
         final List<PostModel> posts = service.data.posts.where((model) {
           return !date.isBefore(model.startDate)  // date >= startDate
               && !date.isAfter(model.endDate);    // date <= endDate
@@ -166,19 +174,25 @@ class _CalendarPageState extends State<CalendarPage> {
           && DateTime.now().day == date.day;
 
         return Disableable(
+          // 해당 날짜에 게시물이 있을 때만 상호작용이 가능하도록 설정.
           isEnabled: postCount > 0,
           child: Openable(
+            // 탭하면 해당 날짜의 게시물 목록을 보여주는 상세 페이지로 이동.
             openBuilder: (context) {
               return CalendarResultPage(date: date, models: posts);
             },
             closedShape: CircleBorder(),
+
+            // 닫혀 있을 때(달력에 표시될 때)의 위젯.
             closedBuilder: (context, openContainer) {
               return TouchScale(
+                // 탭하면 Openable 컨테이너가 열리도록 연결.
                 onPress: openContainer,
                 child: Container(
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
+                    // 오늘 날짜인 경우 배경색으로 강조 표시.
                     color: isCurrent
                       ? Scheme.current.deepPrimary
                       : Scheme.transparent,
@@ -186,17 +200,20 @@ class _CalendarPageState extends State<CalendarPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // 날짜 숫자.
                       Text(
                         "${date.day}",
                         style: TextStyle(
+                          // 요일에 따라 다른 색상으로 표시(일요일/토요일/평일).
                           color: switch (date.weekday) {
                             7 => Scheme.sunday,   // 일요일
                             6 => Scheme.saturday, // 토요일
                             int() => Scheme.current.foreground,
-                          }
+                          },
                         ),
                       ),
 
+                      // 해당 날짜에 게시물이 있는 경우, 점을 표시하여 시각적으로 알려줌.
                       Container(
                         width: 5,
                         height: 5,

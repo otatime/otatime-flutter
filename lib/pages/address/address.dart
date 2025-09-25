@@ -35,12 +35,16 @@ class Address {
 
   /// 우편번호.
   final String zipCode;
+
   /// 도로명 주소.
   final String street;
+
   /// 상세 주소.
   final String details;
+
   /// 위도.
   final double latitude;
+
   /// 경도.
   final double longitude;
 }
@@ -56,12 +60,16 @@ class AddressPage extends StatefulWidget {
 class _AddressPageState extends State<AddressPage> {
   /// 사용자가 검색을 통해 선택한 주소 모델.
   AddressModel? selectedModel;
+
   /// 사용자가 입력한 상세 주소.
   String? details;
+
   /// 위치 정보(위도, 경도)를 가져오는 중인지 여부.
   bool isLoading = false;
 
   /// 사용자가 최종적으로 주소 선택을 완료하면 호출됩니다.
+  ///
+  /// 선택된 주소의 위도와 경도를 조회한 후, 모든 주소 정보를 담은 [Address] 객체를 이전 페이지로 반환합니다.
   void done() async {
     setState(() => isLoading = true);
 
@@ -69,7 +77,7 @@ class _AddressPageState extends State<AddressPage> {
     final service = LocationService(model: selectedModel!);
     await service.load();
 
-    // 선택한 주소에 대한 위도 및 경도에 대한 조회 결과.
+    // 선택한 주소에 대한 위도 및 경도 조회 결과.
     final LocationModel location = service.data.model;
 
     final Address result = Address(
@@ -97,6 +105,7 @@ class _AddressPageState extends State<AddressPage> {
         children: [
           Expanded(
             child: Disableable(
+              // 최종 주소 정보를 가져오는 동안 UI 상호작용을 비활성화.
               isEnabled: !isLoading,
               child: HeaderConnection(
                 title: "주소 선택",
@@ -111,7 +120,7 @@ class _AddressPageState extends State<AddressPage> {
                             title: selectedModel?.roadAddr ?? "주소 검색하기",
                             iconPath: "navigation".svg,
                             onTap: () async {
-                              // 도로명 주소 검색 페이지로 이동.
+                              // 도로명 주소 검색 페이지로 이동하고, 결과를 받아 `selectedModel`에 반영.
                               final result = await Navigator.push(
                                 context,
                                 AppPageRoute(builder: (_) => _AddressSearchPage()),
@@ -120,10 +129,10 @@ class _AddressPageState extends State<AddressPage> {
                               if (result != null) {
                                 setState(() => selectedModel = result);
                               }
-                            }
+                            },
                           ),
                         ],
-                      )
+                      ),
                     ),
                     SizedBox(height: Dimens.innerPadding * 2),
                     LabeledBox(
@@ -138,6 +147,7 @@ class _AddressPageState extends State<AddressPage> {
               ),
             ),
           ),
+
           // 하단 선택하기 버튼 영역.
           Padding(
             padding: EdgeInsetsGeometry.only(
@@ -146,6 +156,7 @@ class _AddressPageState extends State<AddressPage> {
               bottom: Dimens.outerPadding,
             ),
             child: Disableable(
+              // 도로명 주소가 선택되었을 때만 버튼을 활성화.
               isEnabled: selectedModel != null,
               child: WideButton(
                 label: "선택하기",
@@ -199,19 +210,20 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
               child: ListenableBuilder(
                 listenable: service ?? ValueNotifier([]),
                 builder: (context, child) {
-                  // 로딩 상태가 변화할 때마다 전환 애니메이션 적용.
+                  // 서비스의 상태가 변경될 때마다 애니메이션과 함께 UI를 갱신.
                   return Transition(
                     child: Builder(
                       key: ValueKey(service?.status),
                       builder: (context) {
+                        // 검색 전 초기 상태.
                         if (service == null) return SizedBox();
 
-                        // 사용자가 검색어를 너무 짧게 입력한 경우.
+                        // 사용자가 검색어를 너무 짧게 입력한 경우 안내 문구 표시.
                         if (service!.keyword.length <= 2) {
                           return InfoPlaceholder(
                             iconPath: "search".svg,
                             title: "검색어가 너무 짧아요",
-                            label: "검색어는 최소 2글자 이상 입력해주세요."
+                            label: "검색어는 최소 2글자 이상 입력해주세요.",
                           );
                         }
 
@@ -220,7 +232,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
                           return _ScrollView.skeletonWidget();
                         }
 
-                        // 검색 결과가 존재하지 않는 경우.
+                        // 검색 결과가 존재하지 않는 경우 안내 문구 표시.
                         if (service!.data.isEmpty) {
                           return InfoPlaceholder(
                             iconPath: "search".svg,
@@ -240,10 +252,11 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
                       },
                     ),
                   );
-                }
+                },
               ),
             ),
           ),
+
           // 하단 선택하기 버튼 영역.
           Padding(
             padding: EdgeInsetsGeometry.only(
@@ -252,8 +265,9 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
               bottom: Dimens.outerPadding,
             ),
             child: Disableable(
+              // 검색 결과에서 주소를 선택해야 버튼이 활성화.
               isEnabled: selectedModel != null,
-              child: WideButton(label: "선택하기", onTap: done)
+              child: WideButton(label: "선택하기", onTap: done),
             ),
           ),
         ],
@@ -277,7 +291,7 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
             onTap: () => Navigator.pop(context),
           ),
 
-          // 검색바 표시.
+          // 검색바.
           Expanded(
             child: Hero(
               tag: "search-bar",
@@ -287,12 +301,13 @@ class _AddressSearchPageState extends State<_AddressSearchPage> {
                 onChanged: (newValue) {
                   setState(() {
                     if (newValue.isEmpty) {
-                      return service = null;
+                      service = null;
+                      return;
                     }
 
                     service = AddressService(keyword: newValue);
 
-                    // 최소 검색어 길이를 충족한 경우 API 요청.
+                    // 최소 검색어 길이를 충족하면 자동으로 API 요청을 시작.
                     if (service!.status == ServiceStatus.none
                      && service!.keyword.length > 2) {
                       service?.load();
@@ -319,8 +334,10 @@ class _ScrollView extends StatelessWidget {
 
   /// 주소 검색 서비스 인스턴스.
   final AddressService service;
+
   /// 현재 선택된 주소 모델.
   final AddressModel? selectedModel;
+
   /// 주소 선택 시 호출될 콜백.
   final ValueChanged<AddressModel> onChanged;
 
@@ -377,8 +394,10 @@ class _ScrollItem extends StatelessWidget {
 
   /// 현재 항목이 선택되었는지 여부.
   final bool isSelected;
+
   /// 이 항목이 표시할 주소 데이터 모델.
   final AddressModel model;
+
   /// 항목을 탭했을 때 호출될 콜백.
   final VoidCallback onTap;
 
@@ -434,7 +453,7 @@ class _ScrollItem extends StatelessWidget {
                       ),
 
                       // 우편 번호 표시.
-                      Text(model.zipNo, style: TextStyle(color: Scheme.current.foreground2))
+                      Text(model.zipNo, style: TextStyle(color: Scheme.current.foreground2)),
                     ],
                   ),
                 ],
@@ -458,7 +477,7 @@ class _ScrollItem extends StatelessWidget {
           FractionallySizedBox(
             widthFactor: 0.5,
             child: Skeleton.partOf(height: 30),
-          )
+          ),
         ],
       ),
     );

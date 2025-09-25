@@ -16,6 +16,7 @@ import 'package:otatime_flutter/widgets/loading_indicator.dart';
 import 'package:otatime_flutter/widgets/shared/post_scroll_view.dart';
 import 'package:otatime_flutter/widgets/transition.dart';
 
+/// 사용자가 키워드를 입력하여 게시물을 검색하는 페이지.
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -24,12 +25,14 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  /// 검색 관련 상태 및 비즈니스 로직을 관리하는 서비스.
   final SearchService service = SearchService();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: ListenableBuilder(
+        // 서비스의 상태 변경을 감지하여 UI를 다시 빌드합니다.
         listenable: service,
         builder: (context, _) {
           return AppBarConnection(
@@ -39,18 +42,20 @@ class _SearchPageState extends State<SearchPage> {
                 body: _HeaderAppBar(service: service),
               ),
             ],
-            // 초기 로딩 상태가 변화할 때마다 전환 애니메이션 적용.
+
+            // 서비스 상태가 변경될 때마다 컨텐츠에 전환 애니메이션을 적용합니다.
             child: Transition(
               child: Builder(
                 key: ValueKey(service.status),
                 builder: (context) {
+                  // 초기 상태에서는 아무것도 표시하지 않습니다.
                   if (service.status == ServiceStatus.none) {
                     return SizedBox();
                   }
 
-                  // 검색 결과가 존재하지 않는 경우.
-                  if (service.status != ServiceStatus.loading
-                  && service.data.posts.isEmpty) {
+                  // 검색 결과가 존재하지 않는 경우, 안내 문구를 표시합니다.
+                  if (service.status != ServiceStatus.loading &&
+                      service.data.posts.isEmpty) {
                     return InfoPlaceholder(
                       iconPath: "search".svg,
                       title: "다시 시도해주세요!",
@@ -58,6 +63,7 @@ class _SearchPageState extends State<SearchPage> {
                     );
                   }
 
+                  // 검색 결과를 표시하며, 새로고침 중에는 상호작용을 비활성화합니다.
                   return Disableable(
                     isEnabled: service.status != ServiceStatus.refresh,
                     child: PostScrollView(service: service),
@@ -72,12 +78,14 @@ class _SearchPageState extends State<SearchPage> {
   }
 }
 
+/// 검색 페이지의 상단에 위치하는 검색 입력 필드 및 관련 UI 위젯.
 class _HeaderAppBar extends StatefulWidget {
   const _HeaderAppBar({
     super.key,
     required this.service,
   });
 
+  /// 검색 관련 상태 및 비즈니스 로직을 관리하는 서비스.
   final SearchService service;
 
   @override
@@ -85,20 +93,24 @@ class _HeaderAppBar extends StatefulWidget {
 }
 
 class _HeaderAppBarState extends State<_HeaderAppBar> {
+  /// 이전에 검색을 실행했던 키워드. 중복 검색을 방지하기 위해 사용됩니다.
   late String previousKeyword = widget.service.keyword;
 
+  /// 현재 입력된 키워드로 검색을 실행합니다.
   void submit() {
-    // 기존에 검색한 키워드와 다르지 않은 경우.
+    // 이전에 검색한 키워드와 동일하면 아무 작업도 수행하지 않습니다.
     if (previousKeyword == widget.service.keyword) {
       return;
     }
 
+    // 이미 검색 결과가 있는 경우, 새로고침을 수행합니다.
     if (widget.service.status == ServiceStatus.loaded) {
       setState(() => previousKeyword = widget.service.keyword);
       widget.service.refresh();
       return;
     }
 
+    // 첫 검색인 경우, 데이터 로드를 시작합니다.
     if (widget.service.status == ServiceStatus.none) {
       setState(() => previousKeyword = widget.service.keyword);
       widget.service.load();
@@ -108,7 +120,7 @@ class _HeaderAppBarState extends State<_HeaderAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    // 기존에 검색한 키워드와 다르지 않는지에 대한 여부.
+    // 현재 입력된 키워드가 이전에 검색한 키워드와 동일한지에 대한 여부.
     bool isSameKeyword = previousKeyword == widget.service.keyword;
 
     return Padding(
@@ -125,6 +137,7 @@ class _HeaderAppBarState extends State<_HeaderAppBar> {
             onTap: () => Navigator.pop(context),
           ),
 
+          // 검색창. 이전 화면으로부터 Hero 애니메이션 효과를 적용받습니다.
           Expanded(
             child: Hero(
               tag: "search-bar",
@@ -149,16 +162,19 @@ class _HeaderAppBarState extends State<_HeaderAppBar> {
     );
   }
 
+  /// 검색어를 제출하는 버튼 위젯을 빌드합니다.
   Widget submitButtonWidget() {
+    // 검색어를 제출할 수 있는지 여부 (검색어가 비어있지 않음).
     final bool canSubmit = widget.service.keyword != "";
-    final bool isLoading =
-        widget.service.status == ServiceStatus.loading ||
+    // 현재 데이터를 로딩하거나 새로고침 중인지 여부.
+    final bool isLoading = widget.service.status == ServiceStatus.loading ||
         widget.service.status == ServiceStatus.refresh;
 
     return AnimatedSize(
       alignment: Alignment.centerRight,
       duration: Animes.transition.duration,
       curve: Animes.transition.curve,
+      // 검색어 입력 여부에 따라 버튼의 크기를 애니메이션으로 조절합니다.
       child: Align(
         alignment: Alignment.centerRight,
         widthFactor: canSubmit ? 1 : 0,
@@ -175,6 +191,7 @@ class _HeaderAppBarState extends State<_HeaderAppBar> {
                 color: Scheme.current.primary,
                 borderRadius: BorderRadius.circular(Dimens.borderRadius),
               ),
+              // 로딩 상태에 따라 버튼 내부의 아이콘을 로딩 인디케이터로 전환합니다.
               child: Transition(
                 child: Builder(
                   key: ValueKey(isLoading),
@@ -184,6 +201,7 @@ class _HeaderAppBarState extends State<_HeaderAppBar> {
                       return LoadingIndicator(size: 18);
                     }
 
+                    // 기본 상태에서는 검색 아이콘을 표시합니다.
                     return SvgPicture.asset(
                       "search".svg,
                       width: 18,
