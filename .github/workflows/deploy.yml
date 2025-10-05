@@ -1,0 +1,60 @@
+name: 자동화 배포
+
+on:
+  workflow_dispatch:
+    inputs:
+      VERSION_NAME:
+        description: "버전 입력 (e.g. 1.2.3)"
+        required: true
+        type: string
+      BUILD_NUMBER:
+        description: "빌드 번호 입력 (e.g. 43)"
+        required: true
+        type: number
+      RELEASE_NOTE:
+        description: "출시 노트 (자동 검토 제출)"
+        required: false
+        default: ""
+        type: string
+
+jobs:
+  deploy:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # TODO: 임시로 개발 중인 깃허브 Action 사용하기 위해 체크아웃.
+      - uses: actions/checkout@v4
+        with:
+          repository: MTtankkeo/flutter-fastlane-action
+          path: "action"
+
+      - name: Java 설치
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: 17
+
+      - name: Android SDK 설치
+        uses: android-actions/setup-android@v3
+
+      - name: Flutter 설치
+        uses: subosito/flutter-action@v2
+        with:
+          channel: main # latest version
+
+      - name: Android, iOS 배포
+        uses: ./action
+        with:
+          app-bundle-id: "com.devttangkong.otatime_flutter"
+          version-name: ${{ github.event.inputs.VERSION_NAME }}
+          build-number: ${{ github.event.inputs.BUILD_NUMBER }}
+          release-note: ${{ github.event.inputs.RELEASE_NOTE }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          match-repository: otatime/otatime-flutter-certs
+          match-password: ${{ secrets.MATCH_PASSWORD }}
+          appstore-connect-issuer-id: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          appstore-connect-key-id: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          appstore-connect-key: ${{ secrets.APP_STORE_CONNECT_KEY }}
+          appstore-team-id: ${{ secrets.APP_STORE_TEAM_ID }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
