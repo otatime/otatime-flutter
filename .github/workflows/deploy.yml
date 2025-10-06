@@ -23,12 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # TODO: 임시로 개발 중인 깃허브 Action 사용하기 위해 체크아웃.
-      - uses: actions/checkout@v4
-        with:
-          repository: MTtankkeo/flutter-fastlane-action
-          path: "action"
-
       - name: keystore.jks 추가
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/keystore.jks
 
@@ -56,15 +50,17 @@ jobs:
           channel: main # latest version
 
       - name: Android, iOS 배포
-        uses: ./action
+        uses: MTtankkeo/flutter-fastlane-action@main
         with:
-          app-bundle-id: "com.devttangkong.otatime-flutter"
+          android-app-id: "com.devttangkong.otatime_flutter"
+          ios-app-id: "com.devttangkong.otatime-flutter"
           version-name: ${{ github.event.inputs.VERSION_NAME }}
           build-number: ${{ github.event.inputs.BUILD_NUMBER }}
           release-note: ${{ github.event.inputs.RELEASE_NOTE }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           match-repository: otatime/otatime-flutter-certs
           match-password: ${{ secrets.MATCH_PASSWORD }}
+          service-account-json: ${{ secrets.SERVICE_ACCOUNT_BASE64 }}
           appstore-connect-issuer-id: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           appstore-connect-key-id: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           appstore-connect-key: ${{ secrets.APP_STORE_CONNECT_KEY }}
