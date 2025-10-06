@@ -29,6 +29,18 @@ jobs:
           repository: MTtankkeo/flutter-fastlane-action
           path: "action"
 
+      - name: keystore.jks 추가
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/keystore.jks
+
+      - name: key.properties 추가
+        run: echo "${{ secrets.KEY_PROPERTIES_BASE64 }}" | base64 --decode > android/key.properties
+
+      - name: .env 생성 및 추가
+        run: |
+          echo "ADDRESS_SEARCH_API_KEY=${{ secrets.ADDRESS_SEARCH_API_KEY }}" >> .env
+          echo "LOCATION_SEARCH_API_KEY=${{ secrets.LOCATION_SEARCH_API_KEY }}" >> .env
+          echo "KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}" >> .env
+
       - name: Java 설치
         uses: actions/setup-java@v3
         with:
@@ -46,7 +58,7 @@ jobs:
       - name: Android, iOS 배포
         uses: ./action
         with:
-          app-bundle-id: "com.devttangkong.otatime-flutter"
+          app-bundle-id: "com.devttangkong.otatime_flutter"
           version-name: ${{ github.event.inputs.VERSION_NAME }}
           build-number: ${{ github.event.inputs.BUILD_NUMBER }}
           release-note: ${{ github.event.inputs.RELEASE_NOTE }}
