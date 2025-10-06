@@ -46,7 +46,7 @@ jobs:
       - name: Android, iOS 배포
         uses: ./action
         with:
-          app-bundle-id: "com.devttangkong.otatime_flutter"
+          app-bundle-id: "com.devttangkong.otatime-flutter"
           version-name: ${{ github.event.inputs.VERSION_NAME }}
           build-number: ${{ github.event.inputs.BUILD_NUMBER }}
           release-note: ${{ github.event.inputs.RELEASE_NOTE }}
