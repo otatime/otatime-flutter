@@ -67,3 +67,4 @@ jobs:
           appstore-connect-key-id: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           appstore-connect-key: ${{ secrets.APP_STORE_CONNECT_KEY }}
           appstore-team-id: ${{ secrets.APP_STORE_TEAM_ID }}
+          build-extra: "--flavor prod \"lib/main_prod.dart\""
